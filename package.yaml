@@ -1,0 +1,76 @@
+name:       imageless
+version:    0.1.0.0
+github:     "reisen/imageless"
+license:    MIT
+author:     "Reisen"
+maintainer: "reisen@morphism.org"
+copyright:  "2018 Reisen"
+
+extra-source-files:
+    - README.md
+
+description: A Booru-like Gallery API.
+
+ghc-options:
+    -Wall
+    -fwarn-tabs
+    -fwarn-unused-imports
+    -fwarn-missing-signatures
+    -fwarn-name-shadowing
+    -fwarn-incomplete-patterns
+
+dependencies:
+    - base
+    - aeson
+    - containers
+    - data-default-class
+    - lens
+    - monad-classes
+    - mtl
+    - protolude
+    - servant
+    - servant-server
+    - sqlite-simple
+    - text
+    - time
+    - wai
+    - warp
+
+default-extensions:
+    - BangPatterns
+    - ConstraintKinds
+    - DataKinds
+    - DeriveGeneric
+    - DeriveDataTypeable
+    - FlexibleContexts
+    - FlexibleInstances
+    - FunctionalDependencies
+    - GADTs
+    - GeneralizedNewtypeDeriving
+    - LambdaCase
+    - MultiParamTypeClasses
+    - NoImplicitPrelude
+    - OverloadedStrings
+    - PatternSynonyms
+    - RankNTypes
+    - RecordWildCards
+    - ScopedTypeVariables
+    - TemplateHaskell
+    - TupleSections
+    - TypeFamilies
+    - TypeFamilyDependencies
+    - TypeOperators
+    - TypeApplications
+    - ViewPatterns
+
+executables:
+    imageless:
+        main:        Main.hs
+        source-dirs: app
+        ghc-options:
+            - -threaded
+            - -rtsopts
+            - -with-rtsopts=-N
+
+        dependencies:
+            - eventless

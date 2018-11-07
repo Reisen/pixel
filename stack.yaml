@@ -1,0 +1,8 @@
+resolver: lts-12.16
+packages:
+    - .
+
+extra-deps:
+    - monad-classes-0.3.2.2
+    - github: Reisen/eventless
+      commit: 1be561b934568a54923daf125638349aba480e9b
