@@ -1,32 +1,43 @@
 module API.Image.Commands
   ( addTag
   , createImage
-  ) where
+  , removeTag
+  )
+where
 
-import Protolude
-import API.Image.Types
-import Control.Lens
-import Eventless       (Command, loadSnapshot, emit)
+import           Protolude
+import           API.Image.Types
+import           Control.Lens
+import           Eventless                      ( Command, loadSnapshot, emit )
 
 
 -- Type Aliases
+--
+-- These don't do anything useful it just makes function types a bit more self
+-- documenting / easier to read.
 type Hash = Text
 type Path = Text
 type Tag  = Text
 
 
-addTag
+-- Adds a tag to the set of tags for an image, only if it doesn't already have
+-- it in the set.
+addTags
   :: Monad m
-  => Tag
+  => Traversable t
+  => t Tag
   -> Command Image m
 
-addTag tag =
+addTag tags =
   loadSnapshot @(Maybe Image) >>= \case
     Nothing    -> pure ()
-    Just image -> unless (elem tag $ image ^. tags)
-      $ emit (TagAppended tag)
+    Just image -> for_ tags $ \tag ->
+      unless (elem tag $ image ^. tags)
+        $ emit (TagAppended tag)
 
 
+-- Create a new image altogether, this can also be used to populate the image
+-- with some existing tags as well.
 createImage
   :: Monad m
   => Traversable t
@@ -41,13 +52,17 @@ createImage hash path tags = do
   for_ tags (emit . TagAppended)
 
 
+-- Remove a tag from an images tag set, this will only succeed if the image
+-- actually has the tag.
 removeTag
   :: Monad m
-  => Tag
+  => Traversable t
+  => t Tag
   -> Command Image m
 
-removeTag tag = do
+removeTag tags = do
   loadSnapshot @(Maybe Image) >>= \case
     Nothing    -> pure ()
-    Just image -> when (elem tag $ image ^. tags)
-      $ emit (TagRemoved tag)
+    Just image -> for_ tags $ \tag ->
+      when (elem tag $ image ^. tags)
+        $ emit (TagRemoved tag)

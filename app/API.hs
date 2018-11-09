@@ -1,18 +1,26 @@
 module API
   ( server
-  ) where
-
-import Protolude
-import Servant
-import Imageless     (runImageless)
-import Configuration (Configuration, Imageless)
-import API.Image
-  ( PostImage      , postImage
-  , GetImage       , getImage
-  , GetImageByUUID , getImageByUUID
   )
+where
+
+import           Protolude
+import           Servant
+import           Imageless                      ( runImageless )
+import           Configuration                  ( Configuration, Imageless )
+import           API.Image.Endpoints            ( PostImage
+                                                , postImage
+                                                , GetImage
+                                                , getImage
+                                                , GetImageByUUID
+                                                , getImageByUUID
+                                                )
 
 
+-- Define a Servant API Type
+--
+-- By using this global API type, we can generate a whole bunch of things
+-- automagically, including: an actual server for it, a client, a JS binding, a
+-- swagger doc, a mock, etc.
 type API =
   ( "api" :>
     ( "image" :>
@@ -23,11 +31,14 @@ type API =
   )
 
 
+-- Proxy for Servant, Ignore.
 proxyAPI :: Proxy API
 proxyAPI = Proxy
 
 
 
+-- Wrap up our actual methods, here we have to chain our methods in the same
+-- order our API type above expects them to be in.
 implAPI :: ServerT API Imageless
 implAPI =
        postImage
@@ -35,12 +46,12 @@ implAPI =
   :<|> getImageByUUID
 
 
+-- Create a Servant Server to run in WAI.
 server
   :: Configuration
   -> Application
 
 server config =
   serve proxyAPI
-    (hoistServer proxyAPI
-      (runImageless config)
-      (implAPI))
+    $ hoistServer proxyAPI
+    $ runImageless config (implAPI)

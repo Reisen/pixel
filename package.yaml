@@ -24,6 +24,7 @@ dependencies:
     - aeson
     - containers
     - data-default-class
+    - generic-lens
     - lens
     - monad-classes
     - mtl
@@ -33,6 +34,7 @@ dependencies:
     - sqlite-simple
     - text
     - time
+    - uuid
     - wai
     - warp
 

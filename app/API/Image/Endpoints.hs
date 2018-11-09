@@ -1,29 +1,27 @@
 module API.Image.Endpoints
   ( ReqImage
-  , PostImage
   , postImage
-  , GetImage
   , getImage
-  , GetImageByUUID
   , getImageByUUID
-  ) where
-
-import Protolude
-import API.Image.Persist (persistImage)
-import Configuration     (MonadImageless, HasConnection)
-import Control.Lens
-import Data.Aeson        (FromJSON, ToJSON)
-import Data.Data         (Data)
-import Eventless         (BackendStore)
-import Servant
-  ( NoContent(..)
-  , (:>)
-  , Get
-  , Post
-  , JSON
-  , Capture
-  , ReqBody
   )
+where
+
+import           Protolude
+import           API.Image.Persist              ( persistImage )
+import           Configuration                  ( MonadImageless, HasConnection )
+import           Control.Lens
+import           Data.Aeson                     ( FromJSON, ToJSON )
+import           Data.Data                      ( Data )
+import           Data.UUID                      ( nextRandom )
+import           Eventless                      ( BackendStore )
+import           Servant                        ( NoContent(..)
+                                                , (:>)
+                                                , Get
+                                                , Post
+                                                , JSON
+                                                , Capture
+                                                , ReqBody
+                                                )
 
 
 data ReqImage = ReqImage
@@ -37,11 +35,6 @@ instance FromJSON ReqImage
 instance ToJSON ReqImage
 
 
-type PostImage
-  =  MultiPartBody
-  :> ReqBody '[JSON] ReqImage
-  :> Post '[JSON] NoContent
-
 postImage
   :: MonadImageless m
   => MonadReader config m
@@ -51,14 +44,12 @@ postImage
   -> m NoContent
 
 postImage multi image = do
-  hash <- calculateFileHash multi
-  tags <- getTagsFrom multi
-  uuid <- generateUUID
+  uuid <- liftIO nextRandom
+  hash <- pure ""
+  tags <- pure []
   _    <- persistImage uuid image
   pure NoContent
 
-
-type GetImage = Get '[JSON] [ReqImage]
 
 getImage
   :: MonadImageless m
@@ -66,10 +57,6 @@ getImage
 
 getImage = undefined
 
-
-type GetImageByUUID
-  =  Capture "uuid" Text
-  :> Get '[JSON] ReqImage
 
 getImageByUUID
   :: MonadImageless m
