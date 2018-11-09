@@ -5,4 +5,4 @@ packages:
 extra-deps:
     - monad-classes-0.3.2.2
     - github: Reisen/eventless
-      commit: 1be561b934568a54923daf125638349aba480e9b
+      commit: 9e3cce5d722061b11ca9be38a0fd51910e2ca487
