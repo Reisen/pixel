@@ -31,6 +31,7 @@ dependencies:
     - protolude
     - servant
     - servant-server
+    - servant-multipart
     - sqlite-simple
     - text
     - time

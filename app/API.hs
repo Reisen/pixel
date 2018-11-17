@@ -7,12 +7,12 @@ import           Protolude
 import           Servant
 import           Imageless                      ( runImageless )
 import           Configuration                  ( Configuration, Imageless )
-import           API.Image.Endpoints            ( PostImage
-                                                , postImage
-                                                , GetImage
-                                                , getImage
+import           API.Image.Endpoints            ( GetImage
                                                 , GetImageByUUID
+                                                , PostImage
+                                                , getImage
                                                 , getImageByUUID
+                                                , postImage
                                                 )
 
 
@@ -53,5 +53,4 @@ server
 
 server config =
   serve proxyAPI
-    $ hoistServer proxyAPI
-    $ runImageless config (implAPI)
+    $ hoistServer proxyAPI (runImageless config) implAPI

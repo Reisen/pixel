@@ -1,67 +1,68 @@
 module API.Image.Endpoints
-  ( ReqImage
-  , postImage
+  ( GetImage
+  , GetImageByUUID
+  , PostImage
   , getImage
   , getImageByUUID
+  , postImage
   )
 where
 
 import           Protolude
-import           API.Image.Persist              ( persistImage )
 import           Configuration                  ( MonadImageless, HasConnection )
 import           Control.Lens
 import           Data.Aeson                     ( FromJSON, ToJSON )
 import           Data.Data                      ( Data )
-import           Data.UUID                      ( nextRandom )
+import           Data.UUID.V4                   ( nextRandom )
 import           Eventless                      ( BackendStore )
 import           Servant                        ( NoContent(..)
                                                 , (:>)
-                                                , Get
-                                                , Post
-                                                , JSON
                                                 , Capture
+                                                , Get
+                                                , JSON
+                                                , Post
                                                 , ReqBody
                                                 )
 
-
-data ReqImage = ReqImage
-  { hash :: Text
-  , path :: Text
-  , tags :: [Text]
-  }
-  deriving (Show, Generic, Typeable, Data)
-
-instance FromJSON ReqImage
-instance ToJSON ReqImage
+import           API.Image.Persist              ( persistImage )
+import           API.Image.Endpoints.PostImage  ( PostImage, PostImageRequest, path, tags )
+import           API.Image.Endpoints.GetImage   ( GetImage, GetImageResponse )
+import           API.Image.Endpoints.GetImageByUUID
+                                                ( GetImageByUUID
+                                                , GetImageByUUIDResponse
+                                                )
 
 
 postImage
   :: MonadImageless m
   => MonadReader config m
   => HasConnection config BackendStore
-  => MultiPartBody
-  -> ReqImage
+  => PostImageRequest
   -> m NoContent
 
-postImage multi image = do
-  uuid <- liftIO nextRandom
-  hash <- pure ""
-  tags <- pure []
-  _    <- persistImage uuid image
+postImage image = do
+  uuid    <- liftIO nextRandom
+  content <- liftIO $ readFile (image ^. path)
+  putText "Welcome to the NHK"
+  putText content
+  putText $ show $ image ^. tags
   pure NoContent
 
 
 getImage
   :: MonadImageless m
-  => m [ReqImage]
+  => m [GetImageResponse]
 
-getImage = undefined
+getImage = do
+  putText "Mother Fucker"
+  undefined
 
 
 getImageByUUID
   :: MonadImageless m
   => Text
-  -> m ReqImage
+  -> m GetImageByUUIDResponse
 
-getImageByUUID = undefined
-
+getImageByUUID _ = do
+  putText "Mother Fucker"
+  undefined

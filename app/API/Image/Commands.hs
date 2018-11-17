@@ -1,7 +1,7 @@
 module API.Image.Commands
-  ( addTag
+  ( addTags
   , createImage
-  , removeTag
+  , removeTags
   )
 where
 
@@ -28,10 +28,10 @@ addTags
   => t Tag
   -> Command Image m
 
-addTag tags =
+addTags newtags =
   loadSnapshot @(Maybe Image) >>= \case
     Nothing    -> pure ()
-    Just image -> for_ tags $ \tag ->
+    Just image -> for_ newtags $ \tag ->
       unless (elem tag $ image ^. tags)
         $ emit (TagAppended tag)
 
@@ -54,15 +54,15 @@ createImage hash path tags = do
 
 -- Remove a tag from an images tag set, this will only succeed if the image
 -- actually has the tag.
-removeTag
+removeTags
   :: Monad m
   => Traversable t
   => t Tag
   -> Command Image m
 
-removeTag tags = do
+removeTags newtags = do
   loadSnapshot @(Maybe Image) >>= \case
     Nothing    -> pure ()
-    Just image -> for_ tags $ \tag ->
+    Just image -> for_ newtags $ \tag ->
       when (elem tag $ image ^. tags)
         $ emit (TagRemoved tag)

@@ -9,9 +9,9 @@ import           API.Image.Types                ( Image )
 import           API.Image.Commands             ( createImage )
 import           Configuration                  ( HasConnection(..) )
 import           Control.Lens
+import           Data.UUID
 import           Eventless                      ( BackendStore
-                                                , UUID
-                                                , loadAggregate
+                                                , loadLatest
                                                 , runCommand
                                                 , value
                                                 )
@@ -45,6 +45,6 @@ fetchImage
   -> m (Maybe Image)
 
 fetchImage uuid =
-      view connection
-  >>= flip loadAggregate uuid
-  >>= pure . map value
+  view connection
+    >>= flip loadLatest uuid
+    >>= pure . map (^. value)

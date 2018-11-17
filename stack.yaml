@@ -4,5 +4,6 @@ packages:
 
 extra-deps:
     - monad-classes-0.3.2.2
+    - servant-multipart-0.11.2
     - github: Reisen/eventless
-      commit: 9e3cce5d722061b11ca9be38a0fd51910e2ca487
+      commit: 23ceae5eff093f87073e36e70afbdcec97b2769d
