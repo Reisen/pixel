@@ -9,11 +9,11 @@ module API.Image.Endpoints
 where
 
 import           Protolude
-import           Configuration                  ( MonadImageless, HasConnection )
+import           Configuration                  ( MonadImageless, HasConnection, HasStaticLocation(..) )
 import           Control.Lens
 import           Data.Aeson                     ( FromJSON, ToJSON )
 import           Data.Data                      ( Data )
-import           Data.UUID.V4                   ( nextRandom )
+import qualified Data.ByteString               as ByteString
 import           Eventless                      ( BackendStore )
 import           Servant                        ( NoContent(..)
                                                 , (:>)
@@ -37,15 +37,18 @@ postImage
   :: MonadImageless m
   => MonadReader config m
   => HasConnection config BackendStore
+  => HasStaticLocation config Text
   => PostImageRequest
   -> m NoContent
 
 postImage image = do
-  uuid    <- liftIO nextRandom
-  content <- liftIO $ readFile (image ^. path)
+  config    <- ask
+  content   <- liftIO $ ByteString.readFile (image ^. path)
+  let static = toS $ config ^. staticLocation <> "doodar"
+  liftIO $ ByteString.writeFile static content
   putText "Welcome to the NHK"
-  putText content
   putText $ show $ image ^. tags
+  putText $ show $ image ^. path
   pure NoContent
 
 

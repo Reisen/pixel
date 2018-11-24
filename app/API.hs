@@ -36,7 +36,6 @@ proxyAPI :: Proxy API
 proxyAPI = Proxy
 
 
-
 -- Wrap up our actual methods, here we have to chain our methods in the same
 -- order our API type above expects them to be in.
 implAPI :: ServerT API Imageless

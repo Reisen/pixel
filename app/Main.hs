@@ -20,9 +20,9 @@ main = do
   -- TODO: Make Backend Choice Configurable
   config <-
     Configuration
-    <$> readTextEnv "IMAGELESS_STATIC"
-    <*> readNumericEnv "IMAGELESS_PORT"
-    <*> map makeSQLite3Backend (SQLite.open "imageless.db")
+      <$> readTextEnv "IMAGELESS_STATIC"
+      <*> readNumericEnv "IMAGELESS_PORT"
+      <*> map makeSQLite3Backend (SQLite.open "imageless.db")
 
   -- WAI Run Application
   run (config ^. port) (server config)

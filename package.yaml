@@ -21,7 +21,9 @@ ghc-options:
 
 dependencies:
     - base
+    - bytestring
     - aeson
+    - cryptonite
     - containers
     - data-default-class
     - generic-lens

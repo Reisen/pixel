@@ -10,6 +10,7 @@ import           API.Image.Commands             ( createImage )
 import           Configuration                  ( HasConnection(..) )
 import           Control.Lens
 import           Data.UUID
+import           Data.UUID.V4                   ( nextRandom )
 import           Eventless                      ( BackendStore
                                                 , loadLatest
                                                 , runCommand
@@ -21,18 +22,20 @@ import           Eventless                      ( BackendStore
 -- To do this we use runCommand.
 persistImage
   :: MonadIO m
+  => Traversable t
   => MonadReader config m
   => HasConnection config BackendStore
   => UUID
-  -> Image
-  -> m ()
+  -> FilePath
+  -> t Text
+  -> m UUID
 
-persistImage uuid _ =
-  view connection >>= \backend ->
-    runCommand backend uuid $ do
-      let hash = ""
-      let tags = []
-      createImage hash "static/" tags
+persistImage userUUID filePath tags = do
+  backend <- view connection
+  uuid    <- liftIO nextRandom
+  hashed  <- liftIO undefined
+  runCommand backend uuid $ createImage hashed "static/" tags
+  pure uuid
 
 
 -- We always attempt to fetch the latest aggregate value when pulling an Image
@@ -45,6 +48,4 @@ fetchImage
   -> m (Maybe Image)
 
 fetchImage uuid =
-  view connection
-    >>= flip loadLatest uuid
-    >>= pure . map (^. value)
+  map (^. value) <$> (view connection >>= flip loadLatest uuid)
