@@ -23,10 +23,15 @@ type PostImage
 
 -- Define a type to wrap up the MultipartData coming over the wire.
 data PostImageRequest = PostImageRequest
-  { postImageRequestPath :: FilePath
-  , postImageRequestTags :: [Text]
-  }
-  deriving (Show, Generic)
+  { postImageRequestPath :: !FilePath
+  , postImageRequestTags :: ![Text]
+  } deriving (Show, Generic)
+
+
+data PostImageResponse = PostImageResponse
+  { postImageResponseUUID :: !Text
+  , postImageResponseHash :: !Text
+  } deriving (Show, Generic)
 
 
 -- Provide an implementation to parse incoming data into our type above.
@@ -43,4 +48,6 @@ instance FromMultipart Tmp PostImageRequest where
 -- Generate Lenses & JSON
 makeFields ''PostImageRequest
 instance ToJSON PostImageRequest where
+instance FromJSON PostImageResponse where
 instance FromJSON PostImageRequest where
+instance ToJSON PostImageResponse where

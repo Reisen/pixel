@@ -1,8 +1,8 @@
 module API.Image.Types.Image
   ( Image(..)
   , HasHash(..)
-  , HasPath(..)
   , HasTags(..)
+  , HasUploader(..)
   )
 where
 
@@ -13,15 +13,16 @@ import           Data.Aeson                     ( FromJSON, ToJSON )
 import           Data.Data                      ( Data )
 import           Data.Default.Class             ( Default, def )
 import           Data.List                      ( nub, delete )
+import           Data.UUID                      ( UUID )
 import           Eventless                      ( Project(..), Events )
 
 
 -- Define core Image datatype, this defines our representation of any uploaded
 -- image when represented in our backend.
 data Image = Image
-  { _imageHash :: Text
-  , _imagePath :: Text
-  , _imageTags :: [Text]
+  { _imageHash     :: Text
+  , _imageTags     :: [Text]
+  , _imageUploader :: Maybe UUID
   }
   deriving (Show, Generic, Typeable, Data)
 
@@ -38,19 +39,19 @@ instance FromJSON Image where
 -- Define a Default for it.
 instance Default Image where
   def = Image
-    { _imageHash = mempty
-    , _imagePath = mempty
-    , _imageTags = mempty
+    { _imageHash     = mempty
+    , _imageTags     = mempty
+    , _imageUploader = Nothing
     }
 
 
 -- Provide a Projection to actually apply this event to an Image.
 instance Project Image where
   foldEvent image = \case
-    HashChanged v -> image { _imageHash = v }
-    PathChanged v -> image { _imagePath = v }
-    TagAppended v -> image { _imageTags = nub (_imageTags image <> [v]) }
-    TagRemoved  v -> image { _imageTags = delete v (_imageTags image) }
+    HashChanged v        -> image & hash     .~ v
+    TagAppended v        -> image & tags     .~ nub (_imageTags image <> [v])
+    TagRemoved  v        -> image & tags     .~ delete v (_imageTags image)
+    AssociatedWithUser v -> image & uploader ?~ v
 
 
 -- Associate the Event with the Image.

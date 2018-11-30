@@ -8,16 +8,19 @@ where
 import           Protolude
 import           API.Image.Types
 import           Control.Lens
-import           Eventless                      ( Command, loadSnapshot, emit )
+import           Data.UUID                      ( UUID )
+import           Eventless                      ( Command
+                                                , loadSnapshot
+                                                , emit
+                                                )
 
 
 -- Type Aliases
 --
 -- These don't do anything useful it just makes function types a bit more self
 -- documenting / easier to read.
-type Hash = Text
-type Path = Text
-type Tag  = Text
+type FileHash = Text
+type Tag      = Text
 
 
 -- Create a new image altogether, this can also be used to populate the image
@@ -25,15 +28,15 @@ type Tag  = Text
 createImage
   :: Monad m
   => Traversable t
-  => Hash
-  -> Path
+  => UUID
+  -> FileHash
   -> t Tag
   -> Command Image m
 
-createImage hash path tags = do
-  emit (HashChanged hash)
-  emit (PathChanged $ fold ["/", hash, ".png"])
-  for_ tags (emit . TagAppended)
+createImage userUUID fileHash tags_ = do
+  emit (AssociatedWithUser userUUID)
+  emit (HashChanged fileHash)
+  for_ tags_ (emit . TagAppended)
 
 
 -- Adds a tag to the set of tags for an image, only if it doesn't already have
@@ -60,7 +63,7 @@ removeTags
   => t Tag
   -> Command Image m
 
-removeTags newtags = do
+removeTags newtags =
   loadSnapshot @(Maybe Image) >>= \case
     Nothing    -> pure ()
     Just image -> for_ newtags $ \tag ->

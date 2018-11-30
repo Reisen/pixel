@@ -6,15 +6,16 @@ where
 import           Protolude
 import           Data.Aeson                     ( FromJSON, ToJSON )
 import           Data.Data                      ( Data )
+import           Data.UUID                      ( UUID )
 
 
 -- Define an ImageEvent, so we can emit and project events that happen against
 -- an Image in our backend.
 data ImageEvent
   = HashChanged Text
-  | PathChanged Text
   | TagAppended Text
-  | TagRemoved  Text
+  | TagRemoved Text
+  | AssociatedWithUser UUID
   deriving (Show, Generic, Typeable, Data)
 
 
