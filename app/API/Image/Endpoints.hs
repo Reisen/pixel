@@ -13,11 +13,13 @@ import           Crypto.Hash                    ( Digest, SHA1, hash )
 import           Configuration                  ( MonadImageless, HasConnection, HasStaticLocation(..) )
 import           Control.Lens
 import qualified Data.ByteString               as ByteString
+import           Data.UUID                      ( fromText )
 import           Eventless                      ( BackendStore )
 import           Servant                        ( NoContent(..) )
 
-import           API.Token                      ( Token )
-import           API.Image.Persist              ( PersistImage(..), persistImage )
+import           API.Token                      ( Token(..) )
+import           API.Image.Types                ( Image(..) )
+import           API.Image.Persist              ( persistImage )
 import           API.Image.Endpoints.PostImage  ( PostImage, PostImageRequest, path, tags )
 import           API.Image.Endpoints.GetImage   ( GetImage, GetImageResponse )
 import           API.Image.Endpoints.GetImageByUUID ( GetImageByUUID , GetImageByUUIDResponse )
@@ -38,21 +40,26 @@ postImage
 
 postImage Nothing _          = pure NoContent
 postImage (Just token) image = do
-  -- Static Location
-  putText "WTF"
-  static    <- view staticLocation
-  content   <- liftIO $ ByteString.readFile (image ^. path)
-  let hashed = show (hash content :: Digest SHA1)
-  liftIO $ ByteString.writeFile (toS static <> "/" <> toS hashed) content
-
-  -- Persist Image to Disk
-  persistImage PersistImage
-    { _piUser = token
-    , _piHash = hashed
-    , _piTags = image ^. tags
-    }
-
+  digest <- storeImageOnDisk image
+  persistImageMetadata token image digest
   pure NoContent
+
+  where
+    storeImageOnDisk image = do
+      static  <- view staticLocation
+      content <- liftIO $ ByteString.readFile (image ^. path)
+      let digest = show (hash content :: Digest SHA1)
+      liftIO $ ByteString.writeFile (toS static <> "/" <> toS digest) content
+      pure digest
+
+    persistImageMetadata mayToken image hash =
+      case fromText . tokenText $ mayToken of
+        Nothing    -> pure ()
+        Just token -> persistImage Image
+          { _imageHash     = hash
+          , _imageTags     = image ^. tags
+          , _imageUploader = Just token
+          }
 
 
 -- Fetch images from the backend, this endpoint accepts a filter to decide what

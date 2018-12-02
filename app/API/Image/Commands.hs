@@ -5,8 +5,8 @@ module API.Image.Commands
   )
 where
 
-import           Protolude
-import           API.Image.Types
+import           Protolude               hiding ( hash )
+import           API.Image.Types                ( Image(..), ImageEvent(..), HasTags(..), HasHash(..) )
 import           Control.Lens
 import           Data.UUID                      ( UUID )
 import           Eventless                      ( Command
@@ -14,29 +14,27 @@ import           Eventless                      ( Command
                                                 , emit
                                                 )
 
+--------------------------------------------------------------------------------
 
 -- Type Aliases
 --
 -- These don't do anything useful it just makes function types a bit more self
 -- documenting / easier to read.
-type FileHash = Text
-type Tag      = Text
+type Tag = Text
 
 
 -- Create a new image altogether, this can also be used to populate the image
 -- with some existing tags as well.
 createImage
   :: Monad m
-  => Traversable t
   => UUID
-  -> FileHash
-  -> t Tag
+  -> Image
   -> Command Image m
 
-createImage userUUID fileHash tags_ = do
+createImage userUUID image = do
   emit (AssociatedWithUser userUUID)
-  emit (HashChanged fileHash)
-  for_ tags_ (emit . TagAppended)
+  emit (HashChanged $ image ^. hash)
+  traverse_ (emit . TagAppended) (image ^. tags)
 
 
 -- Adds a tag to the set of tags for an image, only if it doesn't already have

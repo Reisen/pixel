@@ -27,16 +27,19 @@ data Image = Image
   deriving (Show, Generic, Typeable, Data)
 
 
--- Derive Lenses for it.
+-- Derive Lenses & JSON
 makeFields ''Image
 
-
--- Derive JSON for it.
 instance ToJSON Image where
 instance FromJSON Image where
 
 
--- Define a Default for it.
+-- Associate the Events for Images to be used during projection.
+type instance Events Image = ImageEvent
+
+
+-- Define a Default for it, this is required so we can do persistance with
+-- Eventless/Event Sourcing.
 instance Default Image where
   def = Image
     { _imageHash     = mempty
@@ -45,14 +48,10 @@ instance Default Image where
     }
 
 
--- Provide a Projection to actually apply this event to an Image.
+-- Provide an Eventless Projection for saving into the backend.
 instance Project Image where
   foldEvent image = \case
     HashChanged v        -> image & hash     .~ v
     TagAppended v        -> image & tags     .~ nub (_imageTags image <> [v])
     TagRemoved  v        -> image & tags     .~ delete v (_imageTags image)
     AssociatedWithUser v -> image & uploader ?~ v
-
-
--- Associate the Event with the Image.
-type instance Events Image = ImageEvent
