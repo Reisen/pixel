@@ -26,14 +26,12 @@ persistImage
   => Image
   -> m ()
 
-persistImage image =
-  case image ^. uploader of
-    Nothing       -> undefined
-    Just userUUID -> do
-      backend <- view connection
-      uuid    <- liftIO nextRandom
-      void $ runCommand backend uuid $
-        createImage userUUID image
+persistImage image = case (image ^. uploader) of
+  Nothing       -> undefined
+  Just userUUID -> do
+    backend <- view connection
+    uuid    <- liftIO nextRandom
+    void . runCommand backend uuid $ createImage userUUID image
 
 
 -- We always attempt to fetch the latest aggregate value when pulling an Image

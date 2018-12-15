@@ -57,6 +57,7 @@ default-extensions:
     - NoImplicitPrelude
     - OverloadedStrings
     - PatternSynonyms
+    - PatternGuards
     - RankNTypes
     - RecordWildCards
     - ScopedTypeVariables

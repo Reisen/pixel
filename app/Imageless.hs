@@ -45,18 +45,11 @@ runImageless
   -> Handler a
 
 runImageless config m =
-  unwrapImageless m >>= \case
-    Right res -> pure res
-    Left  err -> do
-      -- TODO: Use a real logging library.
-      liftIO $ putText $ "[Imageless] Unhandled Exception: " <> (show err)
-      throwError $ err500
-        { errBody = "Oops!"
-        }
+  unwrapImageless m >>= flip either pure (\err -> do
+    putText $ "[Imageless] Exception: " <> show err
+    throwError err500
+      { errBody = "Oops!"
+      })
 
   where
-    unwrapImageless endpoint =
-        liftIO
-      . flip runReaderT config
-      . runExceptT
-      $ endpoint
+    unwrapImageless = liftIO . flip runReaderT config . runExceptT
