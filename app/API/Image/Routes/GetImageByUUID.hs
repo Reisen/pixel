@@ -50,8 +50,8 @@ createImageResponse uuid API.Image{..} = Response
 --------------------------------------------------------------------------------
 
 getImageByUUID :: Maybe API.Token -> API.DigestText -> C.Pixel Response
-getImageByUUID Nothing _         = throwError ()
-getImageByUUID (Just token) uuid = handleImageRequest token uuid >>= \case
+getImageByUUID Nothing _     = throwError ()
+getImageByUUID (Just _) uuid = handleImageRequest uuid >>= \case
   Nothing       -> throwError ()
   Just response -> pure response
 
@@ -60,11 +60,10 @@ getImageByUUID (Just token) uuid = handleImageRequest token uuid >>= \case
 handleImageRequest
   :: Monad m
   => API.MonadImage m
-  => API.Token
-  -> API.DigestText
+  => API.DigestText
   -> m (Maybe Response)
 
-handleImageRequest token uuidText = case U.fromText uuidText of
+handleImageRequest uuidText = case U.fromText uuidText of
   Nothing   -> pure Nothing
   Just uuid -> API.loadImage uuid >>= \case
     Nothing    -> pure Nothing

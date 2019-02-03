@@ -13,13 +13,24 @@ import qualified Eventless.Backend.SQLite      as E
 
 --------------------------------------------------------------------------------
 
+handleProjections
+  :: MonadIO m
+  => Text
+  -> m ()
+
+handleProjections event = do
+  putText event
+  pure ()
+
+--------------------------------------------------------------------------------
+
 main :: IO ()
 main = do
   -- Create configuration from IO.
   config <- C.readConfig $ C.Config
     { C._configStaticLocation = C.readTextEnv "IMAGELESS_STATIC"
     , C._configPort           = C.readNumericEnv "IMAGELESS_PORT"
-    , C._configConnection     = E.makeSQLite3Backend <$> S.open "imageless.db"
+    , C._configConnection     = E.makeSQLite3Backend handleProjections <$> S.open "imageless.db"
     }
 
   -- WAI Run Application

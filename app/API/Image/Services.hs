@@ -57,11 +57,15 @@ class MonadImage m where
   -- Attempts to retrieve a saved image from somewhere.
   loadImage :: U.UUID -> m (Maybe API.Image)
 
+  -- Retrieve all images (lmited to a max) from backend.
+  loadImages :: Int -> m [(U.UUID, API.Image)]
+
 --------------------------------------------------------------------------------
 
 instance MonadImage C.Pixel where
-  saveImage = pixelSaveImage
-  loadImage = pixelLoadImage
+  saveImage  = pixelSaveImage
+  loadImage  = pixelLoadImage
+  loadImages = pixelLoadImages
 
 instance MonadStatic C.Pixel where
   writeStaticImage = pixelWriteStaticImage
@@ -81,8 +85,11 @@ pixelSaveImage uuid image = case image ^. API.imageUploader of
 pixelLoadImage :: U.UUID -> C.Pixel (Maybe API.Image)
 pixelLoadImage uuid =
   map (^. E.value)
-    <$> (view C.configConnection
-    >>= flip E.loadLatest uuid)
+    <$> (view C.configConnection >>= flip E.loadLatest uuid)
+
+-- Attempt to load all images from Pixel monad's event sourced backend.
+pixelLoadImages :: Int -> C.Pixel [(U.UUID, API.Image)]
+pixelLoadImages limit = undefined
 
 -- Write static data to directory under the digest name.
 pixelWriteStaticImage

@@ -1,9 +1,5 @@
 module API.Image.Routes.GetImage
   ( GetImage
-  , GetImageResponse(..)
-  , ImageMetadata(..)
-  , ImageResponse(..)
-  , ImageTag(..)
   , getImage
   )
 where
@@ -19,6 +15,7 @@ import qualified API.Image.Types               as API
 import qualified API.Token                     as API
 import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
+import qualified Data.UUID                     as U
 
 --------------------------------------------------------------------------------
 
@@ -26,48 +23,34 @@ import qualified Data.Aeson                    as A
 -- away from the backend.
 type GetImage =
   Header "Authorization" API.Token
-    :> Get '[JSON] GetImageResponse
+    :> Get '[JSON] Response
 
 --------------------------------------------------------------------------------
 
--- Tagging Data
-data ImageTag = ImageTag
-  { imageTagKind :: Text
-  , imageTagName :: Text
-  } deriving (Show, Generic)
-
-instance A.ToJSON ImageTag where
-
---------------------------------------------------------------------------------
-
-data ImageMetadata = ImageMetadata
-  { imageMetadataPath  :: Text
-  , imageMetadataThumb :: Text
-  } deriving (Show, Generic)
-
-instance A.ToJSON ImageMetadata where
-
---------------------------------------------------------------------------------
-
--- What an Image is rendered as in the response.
 data ImageResponse = ImageResponse
-  { imageResponseUUID :: Text
-  , imageResponseHash :: Text
-  , imageResponseTags :: [ImageTag]
-  , imageResponseDate :: Text
-  , imageResponseMeta :: ImageMetadata
+  { imageResponsePath  :: !Text
+  , imageResponseTags  :: !API.TagList
+  , imageResponseThumb :: !Text
+  , imageResponseUUID  :: !API.DigestText
   } deriving (Show, Generic)
 
 instance A.ToJSON ImageResponse where
 
---------------------------------------------------------------------------------
-
--- Return a list of matching images for the request.
-newtype GetImageResponse = GetImageResponse
-  { getImageResponseImages :: [ImageResponse]
+newtype Response = Response
+  { responseImages :: [ImageResponse]
   } deriving (Show, Generic)
 
-instance A.ToJSON GetImageResponse where
+instance A.ToJSON Response where
+
+--------------------------------------------------------------------------------
+
+createImageResponse :: API.DigestText -> API.Image -> ImageResponse
+createImageResponse uuid API.Image{..} = ImageResponse
+  { imageResponsePath  = fold ["/static/images/", _imageHash]
+  , imageResponseTags  = _imageTags
+  , imageResponseThumb = fold ["/static/thumbs/", _imageHash]
+  , imageResponseUUID  = uuid
+  }
 
 --------------------------------------------------------------------------------
 
@@ -75,28 +58,19 @@ instance A.ToJSON GetImageResponse where
 -- to return from the backend. By default this is all images ordered by upload
 -- date and the filter should encompass all possible queries a user might have,
 -- from tags to uploader, to ordering.
-getImage
-  :: C.MonadPixel m
-  => Maybe API.Token
-  -> m GetImageResponse
+getImage :: Maybe API.Token -> C.Pixel Response
+getImage Nothing      = throwError ()
+getImage (Just token) = handleImagesRquest
 
-getImage _token = do
-  images <- undefined
-  pure GetImageResponse
-    { getImageResponseImages = flip map images $ \image ->
-        ImageResponse
-          { imageResponseUUID = undefined
-          , imageResponseHash = image ^. API.imageHash
-          , imageResponseTags = map (ImageTag "tag") (image ^. API.imageTags)
-          , imageResponseDate = undefined
-          , imageResponseMeta = ImageMetadata
-              { imageMetadataPath  = makeImagePath image
-              , imageMetadataThumb = makeImageThumb image
-              }
-          }
+--------------------------------------------------------------------------------
+
+handleImagesRquest
+  :: Monad m
+  => API.MonadImage m
+  => m Response
+
+handleImagesRquest = do
+  images <- API.loadImages 10
+  pure Response
+    { responseImages = map (uncurry createImageResponse . first show) images
     }
-
-  where
-    -- Build Canonical Paths
-    makeImagePath image  = fold [ "/static/images/" , image ^. API.imageHash , ".png" ]
-    makeImageThumb image = fold [ "/static/thumbs/" , image ^. API.imageHash , ".png" ]
