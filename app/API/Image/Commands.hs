@@ -5,21 +5,18 @@ module API.Image.Commands
   )
 where
 
-import           Protolude               hiding ( hash )
-import           API.Image.Types                ( Image(..), ImageEvent(..), HasTags(..), HasHash(..) )
+--------------------------------------------------------------------------------
+
+import           Protolude
 import           Control.Lens
-import           Data.UUID                      ( UUID )
-import           Eventless                      ( Command
-                                                , loadSnapshot
-                                                , emit
-                                                )
+
+import qualified API.Image.Types               as API
+import qualified Data.UUID                     as U
+import qualified Eventless                     as E
 
 --------------------------------------------------------------------------------
 
--- Type Aliases
---
--- These don't do anything useful it just makes function types a bit more self
--- documenting / easier to read.
+-- Useful Type Aliases
 type Tag = Text
 
 
@@ -27,15 +24,16 @@ type Tag = Text
 -- with some existing tags as well.
 createImage
   :: Monad m
-  => UUID
-  -> Image
-  -> Command Image m
+  => U.UUID
+  -> API.Image
+  -> E.Command API.Image m
 
 createImage userUUID image = do
-  emit (AssociatedWithUser userUUID)
-  emit (HashChanged $ image ^. hash)
-  traverse_ (emit . TagAppended) (image ^. tags)
+  E.emit (API.AssociatedWithUser userUUID)
+  E.emit (API.HashChanged $ image ^. API.imageHash)
+  traverse_ (E.emit . API.TagAppended) (image ^. API.imageTags)
 
+--------------------------------------------------------------------------------
 
 -- Adds a tag to the set of tags for an image, only if it doesn't already have
 -- it in the set.
@@ -43,15 +41,16 @@ addTags
   :: Monad m
   => Traversable t
   => t Tag
-  -> Command Image m
+  -> E.Command API.Image m
 
 addTags newtags =
-  loadSnapshot @(Maybe Image) >>= \case
+  E.loadSnapshot @(Maybe API.Image) >>= \case
     Nothing    -> pure ()
     Just image -> for_ newtags $ \tag ->
-      unless (elem tag $ image ^. tags)
-        $ emit (TagAppended tag)
+      unless (elem tag $ image ^. API.imageTags)
+        $ E.emit (API.TagAppended tag)
 
+--------------------------------------------------------------------------------
 
 -- Remove a tag from an images tag set, this will only succeed if the image
 -- actually has the tag.
@@ -59,11 +58,11 @@ removeTags
   :: Monad m
   => Traversable t
   => t Tag
-  -> Command Image m
+  -> E.Command API.Image m
 
 removeTags newtags =
-  loadSnapshot @(Maybe Image) >>= \case
+  E.loadSnapshot @(Maybe API.Image) >>= \case
     Nothing    -> pure ()
     Just image -> for_ newtags $ \tag ->
-      when (elem tag $ image ^. tags)
-        $ emit (TagRemoved tag)
+      when (elem tag $ image ^. API.imageTags)
+        $ E.emit (API.TagRemoved tag)

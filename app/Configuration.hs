@@ -1,50 +1,71 @@
 module Configuration
-  ( Configuration(..)
-  , readTextEnv
+  ( Config'(..)
+  , Config
+  , configConnection
+  , configPort
+  , configStaticLocation
+  , readConfig
   , readNumericEnv
-
-  -- Lens
-  , HasStaticLocation(..)
-  , HasPort(..)
-  , HasConnection(..)
+  , readTextEnv
 
   -- Monad Transformer
-  , Imageless
-  , MonadImageless
+  , Pixel
+  , MonadPixel
   )
 where
 
+--------------------------------------------------------------------------------
 
 import           Protolude
 import           Control.Lens
-import           Eventless                      ( BackendStore(..) )
-import           Imageless                      ( MakeImageless, MakeMonadImageless )
-import           System.Environment             ( getEnv )
-import           Text.Read                      ( read )
+import           HKD
 
+import qualified Eventless                     as E
+import qualified Pixel                         as P
+import qualified System.Environment            as S.E
+import qualified Text.Read                     as T.R
+
+--------------------------------------------------------------------------------
 
 -- See `Imageless.hs` for an explanation of why we use `Make` functions to
 -- generate Monads here. Otherwise, these are your standard Monad and MTL
 -- constraints.
-type Imageless = MakeImageless () Configuration
-type MonadImageless m = MakeMonadImageless () Configuration m
+type Pixel = P.MakePixel () Config
+type MonadPixel m = P.MakeMonadPixel () Config m
 
+--------------------------------------------------------------------------------
 
--- Configuration used as our MonadReader context for the application.
-data Configuration = Configuration
-  { _configurationStaticLocation :: Text
-  , _configurationPort           :: Int
-  , _configurationConnection     :: BackendStore
+-- HKD Configuration Definition
+data Config' f = Config
+  { _configStaticLocation :: HKD f Text
+  , _configPort           :: HKD f Int
+  , _configConnection     :: HKD f E.BackendStore
   }
 
-makeFields ''Configuration
+-- Concrete Configuration
+type Config = Config' Identity
 
+-- Derivations
+makeLenses ''Config'
+
+--------------------------------------------------------------------------------
+
+-- Read configuration into a concrete value from withing some functor. Similar
+-- to using traverse_ for types.
+readConfig :: Config' IO -> IO Config
+readConfig Config {..} =
+  Config
+    <$> _configStaticLocation
+    <*> _configPort
+    <*> _configConnection
 
 -- Environment Reading Helpers
+--
 -- These are intentionally partial, crashing on failing to read the Environment
--- is the behaviour we want.
+-- is pretty much fine as the exception thrown is useful and it is before the
+-- application has started doing anything meaningful.
 readTextEnv :: Text -> IO Text
-readTextEnv key = toS <$> getEnv (toS key)
+readTextEnv key = toS <$> S.E.getEnv (toS key)
 
 readNumericEnv :: Text -> IO Int
-readNumericEnv key = read . toS <$> getEnv (toS key)
+readNumericEnv key = T.R.read . toS <$> S.E.getEnv (toS key)

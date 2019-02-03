@@ -1,9 +1,9 @@
-resolver: lts-12.20
+resolver: lts-13.4
 packages:
     - .
 
 extra-deps:
     - monad-classes-0.3.2.2
-    - servant-multipart-0.11.2
+    - servant-multipart-0.11.3
     - github: Reisen/eventless
       commit: 1ec04aabc7274f3f8e46e6eb9f0d9cdb921c4bba

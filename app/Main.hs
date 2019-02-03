@@ -1,28 +1,26 @@
 module Main where
 
-import Protolude
-import API                         (server)
-import Configuration
-import Control.Lens
-import Network.Wai.Handler.Warp    (run)
-import Database.SQLite.Simple   as SQLite
-import Eventless.Backend.SQLite    (makeSQLite3Backend)
+--------------------------------------------------------------------------------
 
+import           Protolude
+import           Control.Lens
+
+import qualified API                           as API
+import qualified Configuration                 as C
+import qualified Network.Wai.Handler.Warp      as W
+import qualified Database.SQLite.Simple        as S
+import qualified Eventless.Backend.SQLite      as E
+
+--------------------------------------------------------------------------------
 
 main :: IO ()
 main = do
-  -- Read Configuration
-  --
-  -- Of interest here is the backend construction, the application uses
-  -- event sourcing to manage data. You can swap out backends here and
-  -- everything should continue to work.
-  --
-  -- TODO: Make Backend Choice Configurable
-  config <-
-    Configuration
-      <$> readTextEnv "IMAGELESS_STATIC"
-      <*> readNumericEnv "IMAGELESS_PORT"
-      <*> map makeSQLite3Backend (SQLite.open "imageless.db")
+  -- Create configuration from IO.
+  config <- C.readConfig $ C.Config
+    { C._configStaticLocation = C.readTextEnv "IMAGELESS_STATIC"
+    , C._configPort           = C.readNumericEnv "IMAGELESS_PORT"
+    , C._configConnection     = E.makeSQLite3Backend <$> S.open "imageless.db"
+    }
 
   -- WAI Run Application
-  run (config ^. port) (server config)
+  W.run (config ^. C.configPort) (API.server config)

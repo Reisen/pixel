@@ -1,16 +1,17 @@
-module Imageless
-  ( MakeImageless
-  , MakeMonadImageless
-  , runImageless
+module Pixel
+  ( MakePixel
+  , MakeMonadPixel
+  , runPixel
   ) where
 
-import Control.Monad.Classes
-import Servant
-import Protolude hiding
-  ( MonadReader
-  )
+--------------------------------------------------------------------------------
 
--- Imageless Monad Transformer
+import Protolude
+import Servant
+
+--------------------------------------------------------------------------------
+
+-- Pixel Monad Transformer
 --
 -- We're relying on Servant's ability to hoist our endpoints into our own
 -- custom monad. Rather than provide a concrete monad, here we have type level
@@ -20,15 +21,15 @@ import Protolude hiding
 -- Example:
 --
 --   ```
---   type Imageless = MakeImageless ApplicationError Configuration
+--   type Pixel = MakePixel ApplicationError Configuration
 --   ```
 --
-type MakeImageless err context =
+type MakePixel err context =
   ExceptT err
     (ReaderT context IO)
 
 
-type MakeMonadImageless err context m =
+type MakeMonadPixel err context m =
   ( MonadIO m
   , MonadReader context m
   , MonadError err m
@@ -38,18 +39,17 @@ type MakeMonadImageless err context m =
 -- This is our Monad Transformer runner, note that we unwrap to Handler and not
 -- IO, this means once fully unwrapped we still need to liftIO into Servant's
 -- monad.
-runImageless
+runPixel
   :: Show err
   => config
-  -> MakeImageless err config a
+  -> MakePixel err config a
   -> Handler a
 
-runImageless config m =
-  unwrapImageless m >>= flip either pure (\err -> do
-    putText $ "[Imageless] Exception: " <> show err
-    throwError err500
-      { errBody = "Oops!"
-      })
+runPixel config m =
+  unwrapPixel m >>= flip either pure (\err -> do
+    putText $ "[PIXEL] Exception: " <> show err
+    throwError err500 { errBody = "Oops!" }
+  )
 
   where
-    unwrapImageless = liftIO . flip runReaderT config . runExceptT
+    unwrapPixel = liftIO . flip runReaderT config . runExceptT
