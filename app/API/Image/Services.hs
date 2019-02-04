@@ -60,12 +60,20 @@ class MonadImage m where
   -- Retrieve all images (lmited to a max) from backend.
   loadImages :: Int -> m [(U.UUID, API.Image)]
 
+  -- Append tags to a specific image UUID.
+  appendTags :: U.UUID -> API.TagList -> m ()
+
+  -- Remove tags from a specific image UUID.
+  removeTags :: U.UUID -> API.TagList -> m ()
+
 --------------------------------------------------------------------------------
 
 instance MonadImage C.Pixel where
   saveImage  = pixelSaveImage
   loadImage  = pixelLoadImage
   loadImages = pixelLoadImages
+  appendTags = pixelAppendTags
+  removeTags = pixelRemoveTags
 
 instance MonadStatic C.Pixel where
   writeStaticImage = pixelWriteStaticImage
@@ -90,6 +98,18 @@ pixelLoadImage uuid =
 -- Attempt to load all images from Pixel monad's event sourced backend.
 pixelLoadImages :: Int -> C.Pixel [(U.UUID, API.Image)]
 pixelLoadImages limit = undefined
+
+-- Append tags
+pixelAppendTags :: U.UUID -> API.TagList -> C.Pixel ()
+pixelAppendTags uuid tags =
+  view C.configConnection >>= \backend ->
+    void . E.runCommand backend uuid $ API.addTags tags
+
+-- Remove tags
+pixelRemoveTags :: U.UUID -> API.TagList -> C.Pixel ()
+pixelRemoveTags uuid tags =
+  view C.configConnection >>= \backend ->
+    void . E.runCommand backend uuid $ API.removeTags tags
 
 -- Write static data to directory under the digest name.
 pixelWriteStaticImage
