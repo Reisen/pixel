@@ -10,12 +10,14 @@ import           Protolude
 import           Control.Lens
 import           Servant
 
-import qualified API.Image.Types               as API
+import qualified API.Image.Error               as API
 import qualified API.Image.Services            as API
+import qualified API.Image.Types               as API
 import qualified API.Token                     as API
 import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
 import qualified Data.UUID                     as U
+import qualified Error                         as E
 
 --------------------------------------------------------------------------------
 
@@ -46,7 +48,7 @@ postTags
   -> Request
   -> C.Pixel NoContent
 
-postTags Nothing _ _           = throwError ()
+postTags Nothing _ _           = throwError (E.ImageError API.MissingToken)
 postTags (Just token) uuid req =
   handleTagsRequest uuid (req ^. tags) >> pure NoContent
 

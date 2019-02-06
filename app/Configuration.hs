@@ -20,7 +20,8 @@ import           Protolude
 import           Control.Lens
 import           HKD
 
-import qualified Eventless                     as E
+import qualified Error                         as E
+import qualified Eventless                     as Ev
 import qualified Pixel                         as P
 import qualified System.Environment            as S.E
 import qualified Text.Read                     as T.R
@@ -30,8 +31,8 @@ import qualified Text.Read                     as T.R
 -- See `Imageless.hs` for an explanation of why we use `Make` functions to
 -- generate Monads here. Otherwise, these are your standard Monad and MTL
 -- constraints.
-type Pixel = P.MakePixel () Config
-type MonadPixel m = P.MakeMonadPixel () Config m
+type Pixel = P.MakePixel E.PixelError Config
+type MonadPixel m = P.MakeMonadPixel E.PixelError Config m
 
 --------------------------------------------------------------------------------
 
@@ -39,7 +40,7 @@ type MonadPixel m = P.MakeMonadPixel () Config m
 data Config' f = Config
   { _configStaticLocation :: HKD f Text
   , _configPort           :: HKD f Int
-  , _configConnection     :: HKD f E.BackendStore
+  , _configConnection     :: HKD f Ev.BackendStore
   }
 
 -- Concrete Configuration

@@ -10,12 +10,14 @@ import           Protolude
 import           Control.Lens
 import           Servant
 
+import qualified API.Image.Error               as API
 import qualified API.Image.Services            as API
 import qualified API.Image.Types               as API
 import qualified API.Token                     as API
 import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
 import qualified Data.UUID                     as U
+import qualified Error                         as E
 
 --------------------------------------------------------------------------------
 
@@ -59,7 +61,7 @@ createImageResponse uuid API.Image{..} = ImageResponse
 -- date and the filter should encompass all possible queries a user might have,
 -- from tags to uploader, to ordering.
 getImage :: Maybe API.Token -> C.Pixel Response
-getImage Nothing      = throwError ()
+getImage Nothing      = throwError (E.ImageError API.MissingToken)
 getImage (Just token) = handleImagesRquest
 
 --------------------------------------------------------------------------------

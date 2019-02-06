@@ -38,13 +38,6 @@ class MonadStatic m where
     -> ByteString
     -> m ()
 
-  -- Given a static directory, and a file hash, read the bytes from disk into
-  -- memory.
-  readStaticImage
-    :: BaseDirectory
-    -> API.DigestText
-    -> m ByteString
-
 --------------------------------------------------------------------------------
 
 -- Tagless Final provider for methods that deal with metadata persistance of
@@ -77,7 +70,6 @@ instance MonadImage C.Pixel where
 
 instance MonadStatic C.Pixel where
   writeStaticImage = pixelWriteStaticImage
-  readStaticImage  = undefined
 
 --------------------------------------------------------------------------------
 

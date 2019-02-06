@@ -22,12 +22,12 @@ import qualified API.Image.Routes              as API
 
 type ImageAPI =
   "image"
-    :> (    API.PostImage       -- POST  /image/
-       :<|> API.GetImage        -- GET   /image/
-       :<|> API.GetImageByUUID  -- GET   /image/:uuid
-       :<|> API.GetTags         -- GET   /image/:uuid/tags
-       :<|> API.PostTags        -- POST  /image/:uuid/tags
-       :<|> API.DeleteTags      -- POST  /image/:uuid/tags
+    :> (    API.PostImage       -- POST    /image/
+       :<|> API.GetImage        -- GET     /image/
+       :<|> API.GetImageByUUID  -- GET     /image/:uuid
+       :<|> API.GetTags         -- GET     /image/:uuid/tags
+       :<|> API.PostTags        -- POST    /image/:uuid/tags
+       :<|> API.DeleteTags      -- DELETE  /image/:uuid/tags
        )
 
 type API = "api" :> ImageAPI

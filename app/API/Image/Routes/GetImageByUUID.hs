@@ -10,12 +10,14 @@ import           Protolude
 import           Control.Lens
 import           Servant
 
-import qualified API.Image.Types               as API
+import qualified API.Image.Error               as API
 import qualified API.Image.Services            as API
+import qualified API.Image.Types               as API
 import qualified API.Token                     as API
 import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
 import qualified Data.UUID                     as U
+import qualified Error                         as E
 
 --------------------------------------------------------------------------------
 
@@ -50,9 +52,9 @@ createImageResponse uuid API.Image{..} = Response
 --------------------------------------------------------------------------------
 
 getImageByUUID :: Maybe API.Token -> API.DigestText -> C.Pixel Response
-getImageByUUID Nothing _     = throwError ()
+getImageByUUID Nothing _     = throwError (E.ImageError API.MissingToken)
 getImageByUUID (Just _) uuid = handleImageRequest uuid >>= \case
-  Nothing       -> throwError ()
+  Nothing       -> throwError (E.ImageError API.InvalidUUID)
   Just response -> pure response
 
 --------------------------------------------------------------------------------

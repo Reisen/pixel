@@ -11,6 +11,7 @@ import           Control.Lens
 import           Servant
 import           Servant.Multipart
 
+import qualified API.Image.Error               as API
 import qualified API.Image.Types               as API
 import qualified API.Image.Services            as API
 import qualified API.Token                     as API
@@ -20,6 +21,7 @@ import qualified Data.Aeson                    as A
 import qualified Data.ByteString               as B
 import qualified Data.UUID                     as U
 import qualified Data.UUID.V4                  as U
+import qualified Error                         as E
 
 --------------------------------------------------------------------------------
 
@@ -75,7 +77,7 @@ processImage tags token content = API.Image
 -- request object, copies the uploaded content to our local static directory
 -- and persists meta information to the DB.
 postImage :: Maybe API.Token -> Request -> C.Pixel Text
-postImage Nothing _        = throwError ()
+postImage Nothing _        = throwError (E.ImageError API.MissingToken)
 postImage (Just token) req = do
   directory <- view C.configStaticLocation
   content   <- liftIO . B.readFile $ req ^. path

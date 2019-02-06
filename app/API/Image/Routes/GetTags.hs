@@ -10,12 +10,14 @@ import           Protolude
 import           Control.Lens
 import           Servant
 
-import qualified API.Image.Types               as API
+import qualified API.Image.Error               as API
 import qualified API.Image.Services            as API
+import qualified API.Image.Types               as API
 import qualified API.Token                     as API
 import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
 import qualified Data.UUID                     as U
+import qualified Error                         as E
 
 --------------------------------------------------------------------------------
 
@@ -38,9 +40,9 @@ instance A.ToJSON Response where
 --------------------------------------------------------------------------------
 
 getTags :: Maybe API.Token -> API.DigestText -> C.Pixel Response
-getTags Nothing _     = throwError ()
+getTags Nothing _     = throwError (E.ImageError API.MissingToken)
 getTags (Just _) uuid = handleTagsRequest uuid >>= \case
-  Nothing       -> throwError ()
+  Nothing       -> throwError (E.ImageError API.InvalidUUID)
   Just response -> pure (Response response)
 
 --------------------------------------------------------------------------------
