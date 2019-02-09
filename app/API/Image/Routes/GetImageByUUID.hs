@@ -7,7 +7,6 @@ where
 --------------------------------------------------------------------------------
 
 import           Protolude
-import           Control.Lens
 import           Servant
 
 import qualified API.Image.Error               as API

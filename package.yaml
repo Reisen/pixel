@@ -13,6 +13,7 @@ description: A Booru-like Gallery API.
 
 ghc-options:
     -Wall
+    -Werror
     -fwarn-tabs
     -fwarn-unused-imports
     -fwarn-missing-signatures
@@ -28,7 +29,6 @@ dependencies:
     - data-default-class
     - generic-lens
     - lens
-    - monad-classes
     - mtl
     - protolude
     - servant

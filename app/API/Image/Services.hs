@@ -12,12 +12,10 @@ import           Control.Lens
 
 import qualified API.Image.Commands            as API
 import qualified API.Image.Types               as API
-import qualified API.Token                     as API
 import qualified Configuration                 as C
-import qualified Crypto.Hash                   as H
-import qualified Data.Aeson                    as A
 import qualified Data.ByteString               as B
 import qualified Data.UUID                     as U
+import qualified Database.SQLite.Simple        as S
 import qualified Eventless                     as E
 
 --------------------------------------------------------------------------------
@@ -76,7 +74,7 @@ instance MonadStatic C.Pixel where
 -- Attempt to write image to Pixel monad's event sourced backend.
 pixelSaveImage :: U.UUID -> API.Image -> C.Pixel ()
 pixelSaveImage uuid image = case image ^. API.imageUploader of
-  Nothing       -> undefined
+  Nothing       -> pure ()
   Just userUUID -> do
     view C.configConnection >>= \backend ->
       void $ E.runCommand backend uuid $ API.createImage userUUID image
@@ -89,7 +87,21 @@ pixelLoadImage uuid =
 
 -- Attempt to load all images from Pixel monad's event sourced backend.
 pixelLoadImages :: Int -> C.Pixel [(U.UUID, API.Image)]
-pixelLoadImages limit = undefined
+pixelLoadImages _limit = do
+  view C.configReadSchema >>= \schema -> do
+    images <- liftIO $ S.query_ schema "SELECT i.uuid, i.hash, i.created FROM images i LIMIT 10"
+    pure . catMaybes $ images <&> \(textUUID, imageHash, date) ->
+      case U.fromText textUUID of
+        Nothing   -> Nothing
+        Just uuid -> Just
+          ( uuid
+          , API.Image
+            { API._imageHash      = imageHash
+            , API._imageTags      = []
+            , API._imageUploader  = Nothing
+            , API._imageCreatedAt = Just date
+            }
+          )
 
 -- Append tags
 pixelAppendTags :: U.UUID -> API.TagList -> C.Pixel ()

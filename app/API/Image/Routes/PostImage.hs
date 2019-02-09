@@ -21,6 +21,7 @@ import qualified Data.Aeson                    as A
 import qualified Data.ByteString               as B
 import qualified Data.UUID                     as U
 import qualified Data.UUID.V4                  as U
+import qualified Data.Time                     as T
 import qualified Error                         as E
 
 --------------------------------------------------------------------------------
@@ -64,11 +65,12 @@ digestImage :: ByteString -> Text
 digestImage = show . (H.hash :: ByteString -> H.Digest H.SHA3_224)
 
 -- Given all uploaded data, produce a valid API image type.
-processImage :: [Text] -> API.Token -> ByteString -> API.Image
-processImage tags token content = API.Image
-  { _imageHash     = digestImage content
-  , _imageTags     = tags
-  , _imageUploader = U.fromText . API._tokenText $ token
+processImage :: T.UTCTime -> [Text] -> API.Token -> ByteString -> API.Image
+processImage createdAt newTags token content = API.Image
+  { _imageHash      = digestImage content
+  , _imageTags      = newTags
+  , _imageUploader  = U.fromText . API._tokenText $ token
+  , _imageCreatedAt = Just createdAt
   }
 
 --------------------------------------------------------------------------------
@@ -82,7 +84,8 @@ postImage (Just token) req = do
   directory <- view C.configStaticLocation
   content   <- liftIO . B.readFile $ req ^. path
   uuid      <- liftIO U.nextRandom
-  handleImageUpload $ ImageDetails content directory (req ^. tags) token uuid
+  createdAt <- liftIO T.getCurrentTime
+  handleImageUpload $ ImageDetails content directory (req ^. tags) token uuid createdAt
   pure (show uuid)
 
 --------------------------------------------------------------------------------
@@ -95,6 +98,7 @@ data ImageDetails = ImageDetails
   , uploadedTags :: API.TagList
   , token        :: API.Token
   , uuid         :: U.UUID
+  , createdAt    :: T.UTCTime
   }
 
 -- Actual logic for handling an upload.
@@ -107,6 +111,6 @@ handleImageUpload
 
 handleImageUpload ImageDetails{..} = do
   let digest = digestImage content
-  let image  = processImage uploadedTags token content
+  let image  = processImage createdAt uploadedTags token content
   API.writeStaticImage directory digest content
   API.saveImage uuid image

@@ -3,7 +3,9 @@ packages:
     - .
 
 extra-deps:
-    - monad-classes-0.3.2.2
     - servant-multipart-0.11.3
+
     - github: Reisen/eventless
-      commit: f23af875211ebdeb720a962ed30fd8a28f49fd36
+      commit: db8929b197c5c2b6334338ce6853ef19113c46d3
+    - github: IreneKnapp/direct-sqlite
+      commit: 8e3da41c46b5de19942cc7bf421c3deb5117ba7a

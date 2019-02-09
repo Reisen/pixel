@@ -7,7 +7,6 @@ where
 --------------------------------------------------------------------------------
 
 import           Protolude
-import           Control.Lens
 import           Servant
 
 import qualified API.Image.Error               as API
@@ -16,7 +15,6 @@ import qualified API.Image.Types               as API
 import qualified API.Token                     as API
 import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
-import qualified Data.UUID                     as U
 import qualified Error                         as E
 
 --------------------------------------------------------------------------------
@@ -31,7 +29,6 @@ type GetImage =
 
 data ImageResponse = ImageResponse
   { imageResponsePath  :: !Text
-  , imageResponseTags  :: !API.TagList
   , imageResponseThumb :: !Text
   , imageResponseUUID  :: !API.DigestText
   } deriving (Show, Generic)
@@ -49,7 +46,6 @@ instance A.ToJSON Response where
 createImageResponse :: API.DigestText -> API.Image -> ImageResponse
 createImageResponse uuid API.Image{..} = ImageResponse
   { imageResponsePath  = fold ["/static/images/", _imageHash]
-  , imageResponseTags  = _imageTags
   , imageResponseThumb = fold ["/static/thumbs/", _imageHash]
   , imageResponseUUID  = uuid
   }
@@ -61,8 +57,8 @@ createImageResponse uuid API.Image{..} = ImageResponse
 -- date and the filter should encompass all possible queries a user might have,
 -- from tags to uploader, to ordering.
 getImage :: Maybe API.Token -> C.Pixel Response
-getImage Nothing      = throwError (E.ImageError API.MissingToken)
-getImage (Just token) = handleImagesRquest
+getImage Nothing  = throwError (E.ImageError API.MissingToken)
+getImage (Just _) = handleImagesRquest
 
 --------------------------------------------------------------------------------
 

@@ -8,6 +8,7 @@ module API.Image.Types
   , imageHash
   , imageTags
   , imageUploader
+  , imageCreatedAt
 
   -- Prisms
   , _HashChanged
@@ -25,6 +26,7 @@ import           Data.Aeson                     ( FromJSON, ToJSON )
 import           Data.Data                      ( Data )
 import           Data.Default.Class             ( Default, def )
 import           Data.List                      ( nub, delete )
+import           Data.Time                      ( UTCTime )
 import           Data.UUID                      ( UUID )
 import           Eventless                      ( Project(..), Events )
 
@@ -39,9 +41,10 @@ type DigestText = Text
 -- Define core Image datatype, this defines our representation of any uploaded
 -- image when represented in our backend.
 data Image = Image
-  { _imageHash     :: Text
-  , _imageTags     :: [Text]
-  , _imageUploader :: Maybe UUID
+  { _imageHash      :: Text
+  , _imageTags      :: [Text]
+  , _imageUploader  :: Maybe UUID
+  , _imageCreatedAt :: Maybe UTCTime
   } deriving (Show, Generic, Typeable, Data)
 
 -- Derivations
@@ -55,10 +58,11 @@ makeLenses ''Image
 -- Define an ImageEvent, so we can emit and project events that happen against
 -- an Image in our backend.
 data ImageEvent
-  = HashChanged Text
-  | TagAppended Text
-  | TagRemoved Text
-  | AssociatedWithUser UUID
+  = HashChanged !Text
+  | TagAppended !Text
+  | TagRemoved !Text
+  | AssociatedWithUser !UUID
+  | CreatedAt !UTCTime
   deriving (Show, Generic, Typeable, Data)
 
 -- Derivations
@@ -76,15 +80,17 @@ type instance Events Image = ImageEvent
 -- Eventless/Event Sourcing.
 instance Default Image where
   def = Image
-    { _imageHash     = mempty
-    , _imageTags     = mempty
-    , _imageUploader = Nothing
+    { _imageHash      = mempty
+    , _imageTags      = mempty
+    , _imageUploader  = Nothing
+    , _imageCreatedAt = Nothing
     }
 
 -- Provide an Eventless Projection for saving into the backend.
 instance Project Image where
   foldEvent image = \case
-    HashChanged v        -> image { _imageHash     = v }
-    TagAppended v        -> image { _imageTags     = nub (_imageTags image <> [v]) }
-    TagRemoved  v        -> image { _imageTags     = delete v (_imageTags image) }
-    AssociatedWithUser v -> image { _imageUploader = Just v }
+    HashChanged v        -> image { _imageHash      = v }
+    TagAppended v        -> image { _imageTags      = nub (_imageTags image <> [v]) }
+    TagRemoved  v        -> image { _imageTags      = delete v (_imageTags image) }
+    AssociatedWithUser v -> image { _imageUploader  = Just v }
+    CreatedAt v          -> image { _imageCreatedAt = Just v }

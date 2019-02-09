@@ -28,10 +28,11 @@ createImage
   -> API.Image
   -> E.Command API.Image m
 
-createImage userUUID image = do
+createImage userUUID API.Image {..} = do
   E.emit (API.AssociatedWithUser userUUID)
-  E.emit (API.HashChanged $ image ^. API.imageHash)
-  traverse_ (E.emit . API.TagAppended) (image ^. API.imageTags)
+  E.emit (API.HashChanged _imageHash)
+  traverse_ (E.emit . API.TagAppended) _imageTags
+  traverse_ (E.emit . API.CreatedAt) _imageCreatedAt
 
 --------------------------------------------------------------------------------
 
@@ -43,12 +44,11 @@ addTags
   => t Tag
   -> E.Command API.Image m
 
-addTags newtags =
-  E.loadSnapshot @(Maybe API.Image) >>= \case
-    Nothing    -> pure ()
-    Just image -> for_ newtags $ \tag ->
-      unless (elem tag $ image ^. API.imageTags)
-        $ E.emit (API.TagAppended tag)
+addTags newtags = E.loadSnapshot @(Maybe API.Image) >>= \case
+  Nothing    -> pure ()
+  Just image -> for_ newtags $ \tag ->
+    unless (elem tag $ image ^. API.imageTags)
+      $ E.emit (API.TagAppended tag)
 
 --------------------------------------------------------------------------------
 
@@ -60,9 +60,8 @@ removeTags
   => t Tag
   -> E.Command API.Image m
 
-removeTags newtags =
-  E.loadSnapshot @(Maybe API.Image) >>= \case
-    Nothing    -> pure ()
-    Just image -> for_ newtags $ \tag ->
-      when (elem tag $ image ^. API.imageTags)
-        $ E.emit (API.TagRemoved tag)
+removeTags newtags = E.loadSnapshot @(Maybe API.Image) >>= \case
+  Nothing    -> pure ()
+  Just image -> for_ newtags $ \tag ->
+    when (elem tag $ image ^. API.imageTags)
+      $ E.emit (API.TagRemoved tag)

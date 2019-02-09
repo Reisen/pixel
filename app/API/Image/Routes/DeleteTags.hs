@@ -48,8 +48,8 @@ deleteTags
   -> Request
   -> C.Pixel NoContent
 
-deleteTags Nothing _ _           = throwError (E.ImageError API.MissingToken)
-deleteTags (Just token) uuid req =
+deleteTags Nothing _ _ = throwError (E.ImageError API.MissingToken)
+deleteTags (Just _) uuid req =
   handleTagsRequest uuid (req ^. tags) >> pure NoContent
 
 --------------------------------------------------------------------------------
@@ -61,6 +61,6 @@ handleTagsRequest
   -> API.TagList
   -> m ()
 
-handleTagsRequest uuidText tags = case U.fromText uuidText of
+handleTagsRequest uuidText newTags = case U.fromText uuidText of
   Nothing   -> pure ()
-  Just uuid -> API.removeTags uuid tags
+  Just uuid -> API.removeTags uuid newTags

@@ -3,6 +3,7 @@ module Configuration
   , Config
   , configConnection
   , configPort
+  , configReadSchema
   , configStaticLocation
   , readConfig
   , readNumericEnv
@@ -20,6 +21,7 @@ import           Protolude
 import           Control.Lens
 import           HKD
 
+import qualified Database.SQLite.Simple        as S
 import qualified Error                         as E
 import qualified Eventless                     as Ev
 import qualified Pixel                         as P
@@ -41,6 +43,7 @@ data Config' f = Config
   { _configStaticLocation :: HKD f Text
   , _configPort           :: HKD f Int
   , _configConnection     :: HKD f Ev.BackendStore
+  , _configReadSchema     :: HKD f S.Connection
   }
 
 -- Concrete Configuration
@@ -59,14 +62,19 @@ readConfig Config {..} =
     <$> _configStaticLocation
     <*> _configPort
     <*> _configConnection
+    <*> _configReadSchema
 
 -- Environment Reading Helpers
 --
 -- These are intentionally partial, crashing on failing to read the Environment
 -- is pretty much fine as the exception thrown is useful and it is before the
 -- application has started doing anything meaningful.
-readTextEnv :: Text -> IO Text
-readTextEnv key = toS <$> S.E.getEnv (toS key)
+readTextEnv :: Text -> Text ->  IO Text
+readTextEnv key def =
+  fromMaybe def . map toS
+    <$> S.E.lookupEnv (toS key)
 
-readNumericEnv :: Text -> IO Int
-readNumericEnv key = T.R.read . toS <$> S.E.getEnv (toS key)
+readNumericEnv :: Text -> Int -> IO Int
+readNumericEnv key def =
+  fromMaybe def . map (T.R.read . toS)
+    <$> S.E.lookupEnv (toS key)
