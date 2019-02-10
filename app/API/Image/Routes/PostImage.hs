@@ -23,6 +23,7 @@ import qualified Data.UUID                     as U
 import qualified Data.UUID.V4                  as U
 import qualified Data.Time                     as T
 import qualified Error                         as E
+import qualified JSON                          as J
 
 --------------------------------------------------------------------------------
 
@@ -42,6 +43,7 @@ data Request = Request
   } deriving (Show, Generic)
 
 instance A.ToJSON Request where
+  toEncoding = A.genericToEncoding J.pixelJsonEncoding
 
 makeFields ''Request
 

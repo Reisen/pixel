@@ -22,13 +22,14 @@ where
 
 import           Protolude               hiding ( hash )
 import           Control.Lens
-import           Data.Aeson                     ( FromJSON, ToJSON )
+import qualified Data.Aeson                    as A
 import           Data.Data                      ( Data )
 import           Data.Default.Class             ( Default, def )
 import           Data.List                      ( nub, delete )
 import           Data.Time                      ( UTCTime )
 import           Data.UUID                      ( UUID )
-import           Eventless                      ( Project(..), Events )
+import qualified Eventless                     as E
+import qualified JSON                          as J
 
 --------------------------------------------------------------------------------
 
@@ -48,8 +49,11 @@ data Image = Image
   } deriving (Show, Generic, Typeable, Data)
 
 -- Derivations
-instance ToJSON Image where
-instance FromJSON Image where
+instance A.ToJSON Image where
+  toEncoding = A.genericToEncoding J.pixelJsonEncoding
+
+instance A.FromJSON Image where
+  parseJSON = A.genericParseJSON J.pixelJsonEncoding
 
 makeLenses ''Image
 
@@ -66,15 +70,15 @@ data ImageEvent
   deriving (Show, Generic, Typeable, Data)
 
 -- Derivations
-instance ToJSON ImageEvent where
-instance FromJSON ImageEvent where
+instance A.ToJSON ImageEvent where
+instance A.FromJSON ImageEvent where
 
 makePrisms ''ImageEvent
 
 --------------------------------------------------------------------------------
 
 -- Associate the Events for Images to be used during projection.
-type instance Events Image = ImageEvent
+type instance E.Events Image = ImageEvent
 
 -- Define a Default for it, this is required so we can do persistance with
 -- Eventless/Event Sourcing.
@@ -87,7 +91,7 @@ instance Default Image where
     }
 
 -- Provide an Eventless Projection for saving into the backend.
-instance Project Image where
+instance E.Project Image where
   foldEvent image = \case
     HashChanged v        -> image { _imageHash      = v }
     TagAppended v        -> image { _imageTags      = nub (_imageTags image <> [v]) }

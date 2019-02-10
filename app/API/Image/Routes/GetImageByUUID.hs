@@ -17,6 +17,7 @@ import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
 import qualified Data.UUID                     as U
 import qualified Error                         as E
+import qualified JSON                          as J
 
 --------------------------------------------------------------------------------
 
@@ -37,6 +38,7 @@ data Response = Response
   } deriving (Show, Generic)
 
 instance A.ToJSON Response where
+  toEncoding = A.genericToEncoding J.pixelJsonEncoding
 
 --------------------------------------------------------------------------------
 

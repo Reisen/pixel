@@ -16,6 +16,7 @@ import qualified API.Token                     as API
 import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
 import qualified Error                         as E
+import qualified JSON                          as J
 
 --------------------------------------------------------------------------------
 
@@ -34,12 +35,14 @@ data ImageResponse = ImageResponse
   } deriving (Show, Generic)
 
 instance A.ToJSON ImageResponse where
+  toEncoding = A.genericToEncoding J.pixelJsonEncoding
 
 newtype Response = Response
   { responseImages :: [ImageResponse]
   } deriving (Show, Generic)
 
 instance A.ToJSON Response where
+  toEncoding = A.genericToEncoding J.pixelJsonEncoding
 
 --------------------------------------------------------------------------------
 

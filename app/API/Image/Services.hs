@@ -75,7 +75,7 @@ instance MonadStatic C.Pixel where
 pixelSaveImage :: U.UUID -> API.Image -> C.Pixel ()
 pixelSaveImage uuid image = case image ^. API.imageUploader of
   Nothing       -> pure ()
-  Just userUUID -> do
+  Just userUUID ->
     view C.configConnection >>= \backend ->
       void $ E.runCommand backend uuid $ API.createImage userUUID image
 
@@ -87,9 +87,13 @@ pixelLoadImage uuid =
 
 -- Attempt to load all images from Pixel monad's event sourced backend.
 pixelLoadImages :: Int -> C.Pixel [(U.UUID, API.Image)]
-pixelLoadImages _limit = do
+pixelLoadImages _limit =
   view C.configReadSchema >>= \schema -> do
-    images <- liftIO $ S.query_ schema "SELECT i.uuid, i.hash, i.created FROM images i LIMIT 10"
+    images <- liftIO $ S.query_ schema
+      "  SELECT i.uuid, i.hash, i.created \
+       \ FROM images i                    \
+       \ LIMIT 25"
+
     pure . catMaybes $ images <&> \(textUUID, imageHash, date) ->
       case U.fromText textUUID of
         Nothing   -> Nothing
