@@ -1,0 +1,15 @@
+.SearchSideBar {
+    width: 240px;
+}
+
+.TagList {
+    margin-top: 24px;
+}
+
+.TagList a {
+    color: #5588FF;
+    text-decoration: none;
+    display: block;
+    margin: 4px 0px;
+    font-size: 15px;
+}
