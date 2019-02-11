@@ -1,0 +1,28 @@
+.Image {
+    border-left: 10px solid white;
+    border-bottom: 10px solid white;
+    width: 160px;
+    display: inline-block;
+    background-image: url('https://phz8.petinsurance.com/-/media/all-phz-images/2016-images-breeds-850/bernese_mountain_dog850.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: #CCC;
+    min-height: 160px;
+    position: relative;
+}
+
+.Image--empty {
+    background-color: #EEE;
+}
+
+.Resolution {
+    background-color: #222;
+    color: white;
+    display: inline-block;
+    width: 100%;
+    font-size: 12px;
+    line-height: 24px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+}

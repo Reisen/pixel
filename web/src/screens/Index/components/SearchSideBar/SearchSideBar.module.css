@@ -1,5 +1,7 @@
 .SearchSideBar {
     width: 240px;
+    float: left;
+    padding-right: 8px;
 }
 
 .TagList {

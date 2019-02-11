@@ -1,6 +1,20 @@
 import React     from 'react';
-import TextInput from '../TextInput'
+import TextInput from '../../../../components/TextInput'
 import styles    from './SearchSideBar.module.css';
+
+/* -------------------------------------------------------------------------- */
+
+interface TagProps {
+    tag: string;
+}
+
+const Tag = (props: TagProps) => (
+    <a href="#">
+        # {props.tag}
+    </a>
+);
+
+/* -------------------------------------------------------------------------- */
 
 interface Props {
     tags?: string[];

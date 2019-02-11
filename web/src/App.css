@@ -4,3 +4,8 @@
     margin: 0px;
     font-family: Lato, sans-serif;
 }
+
+.Page {
+    width: 1200px;
+    margin: 0 auto;
+}
