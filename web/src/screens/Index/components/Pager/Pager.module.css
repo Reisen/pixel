@@ -1,5 +1,8 @@
 .Pager {
     text-align: right;
+    border-top: 1px solid #CCF;
+    margin-left: 16px;
+    padding-top: 16px;
 }
 
 .IconRow {

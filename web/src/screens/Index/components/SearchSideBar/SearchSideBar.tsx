@@ -6,10 +6,11 @@ import styles    from './SearchSideBar.module.css';
 
 interface TagProps {
     tag: string;
+    category?: string;
 }
 
 const Tag = (props: TagProps) => (
-    <a href="#">
+    <a href="#" className={styles[`Category--${props.category}`]}>
         {props.tag}
     </a>
 );
@@ -27,11 +28,11 @@ const SearchSideBar = (props: Props) => (
         <div className={styles.TagList}>
             {
                 !props.tags ? null : props.tags.map(tag => (
-                    <a href="#">
-                        # { tag }
-                    </a>
+                    <Tag tag={tag}/>
                 ))
             }
+            <Tag tag="yoshimitsu" category="artist" />
+            <Tag tag="fighter" />
         </div>
     </div>
 );

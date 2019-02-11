@@ -12,8 +12,12 @@
     color: #5588FF;
     text-decoration: none;
     display: block;
-    margin: 0px 0px;
-    font-size: 14px;
+    margin: 2px 0px;
+    font-size: 15px;
+}
+
+.Category--artist {
+    color: #FF6677 !important;
 }
 
 .TagList a:hover {
