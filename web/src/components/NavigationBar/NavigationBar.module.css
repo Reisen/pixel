@@ -1,11 +1,10 @@
 .NavigationBar {
-    border-bottom: 1px solid #EEE;
     color: #336699;
     font-size: 32px;
     line-height: 96px;
     font-weight: bold;
     margin: 0 auto;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
     width: 1200px;
     letter-spacing: 32px;
 }

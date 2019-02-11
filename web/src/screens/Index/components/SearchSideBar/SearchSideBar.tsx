@@ -10,7 +10,7 @@ interface TagProps {
 
 const Tag = (props: TagProps) => (
     <a href="#">
-        # {props.tag}
+        {props.tag}
     </a>
 );
 
