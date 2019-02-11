@@ -2,15 +2,23 @@ import React  from 'react';
 import styles from './Image.module.css';
 
 interface Props {
-    resolution: string;
+    empty?: boolean;
+    resolution?: string;
 }
 
-const Image = (props: Props) => (
-    <div className={styles.Image}>
-        <span className={styles.Resolution}>
-            {props.resolution}
-        </span>
-    </div>
-);
+const Image = (props: Props) => {
+    const classes = [
+        styles['Image'],
+        props.empty ? styles['Image--empty'] : ""
+    ].join(' ');
+
+    return (
+        <div className={classes}>
+            <span className={styles.Resolution}>
+                {props.resolution}
+            </span>
+        </div>
+    );
+}
 
 export default Image;

@@ -12,6 +12,10 @@
     color: #5588FF;
     text-decoration: none;
     display: block;
-    margin: 4px 0px;
-    font-size: 15px;
+    margin: 0px 0px;
+    font-size: 14px;
+}
+
+.TagList a:hover {
+    color: black;
 }

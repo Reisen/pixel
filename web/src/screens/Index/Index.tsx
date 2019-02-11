@@ -3,13 +3,7 @@ import NavigationBar from '../../components/NavigationBar';
 import SearchSidebar from './components/SearchSideBar';
 import ImageGrid     from './components/ImageGrid';
 import styles        from './Index.module.css';
-
-interface Image {
-    hash: string;
-    tags: string[];
-    uploader: string;
-    createdAt: string;
-}
+import { image }     from '../../types/image';
 
 const tags: string[] = [
     "dog",
@@ -18,28 +12,28 @@ const tags: string[] = [
     "bernese"
 ];
 
-const imgs: Image[] = [
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "2398fh23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "848djslk", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999" },
+const imgs: image[] = [
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "2398fh23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "848djslk", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
 ];
 
 const Index = () => (

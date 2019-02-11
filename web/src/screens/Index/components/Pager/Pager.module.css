@@ -1,0 +1,17 @@
+.Pager {
+    text-align: right;
+    border-top: 1px solid #EEE;
+    padding-top: 16px;
+}
+
+.IconRow {
+    display: inline-block;
+    border-right: 1px solid #EEE;
+    padding-right: 16px;
+    margin-left: 16px;
+}
+
+.IconRow:last-of-type {
+    border-right: 0px;
+    padding-right: 0px;
+}

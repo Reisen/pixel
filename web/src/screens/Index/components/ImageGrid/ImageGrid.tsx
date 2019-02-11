@@ -1,29 +1,35 @@
-import React  from 'react';
-import Image  from '../Image';
-import styles from './ImageGrid.module.css';
-
-interface Image {
-}
+import Image     from '../Image';
+import Pager     from '../Pager';
+import React     from 'react';
+import styles    from './ImageGrid.module.css';
+import { image } from '../../../../types/image';
 
 interface Props {
-    images: Image[];
+    images: image[];
     width: number;
+}
+
+const renderValidImages = (images: image[]) => images.map(image =>
+    <Image resolution="800x600" />
+);
+
+const renderEmptyImages = (total: number, width: number) => {
+    const emptyCount = width - (total % width);
+    const fillSlice  = Array(emptyCount).fill(0);
+    return fillSlice.map(x =>
+        <Image empty />
+    );
 }
 
 const ImageGrid = (props: Props) => (
     <div className={styles.ImageGrid}>
-        {
-            props.images.map(image => (
-                <Image resolution="800x600" />
-            ))
-        }
+        { renderValidImages(props.images) }
+        { renderEmptyImages(props.images.length, props.width) }
 
-        {
-            Array(props.width - (props.images.length % props.width))
-                .fill(0)
-                .map(_ => <Image resolution="1200x800" />
-            )
-        }
+        <Pager
+          current={1}
+          total={Math.floor(props.images.length / 24)}
+        />
     </div>
 );
 

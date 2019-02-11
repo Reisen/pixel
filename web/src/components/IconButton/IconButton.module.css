@@ -1,0 +1,8 @@
+.IconButton {
+    display: inline-block;
+    border: 1px solid #EEE;
+    margin: 0px 4px;
+    padding: 8px;
+    color: #5599FF;
+    cursor: pointer;
+}
