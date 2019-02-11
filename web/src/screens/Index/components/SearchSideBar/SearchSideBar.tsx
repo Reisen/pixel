@@ -11,7 +11,7 @@ interface TagProps {
 
 const Tag = (props: TagProps) => (
     <a href="#" className={styles[`Category--${props.category}`]}>
-        {props.tag}
+        # {props.tag}
     </a>
 );
 
