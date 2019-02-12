@@ -35,14 +35,16 @@ data ImageResponse = ImageResponse
   } deriving (Show, Generic)
 
 instance A.ToJSON ImageResponse where
-  toEncoding = A.genericToEncoding J.pixelJsonEncoding
+  toEncoding = J.pixelToEncoding
+  toJSON     = J.pixelToJSON
 
 newtype Response = Response
   { responseImages :: [ImageResponse]
   } deriving (Show, Generic)
 
 instance A.ToJSON Response where
-  toEncoding = A.genericToEncoding J.pixelJsonEncoding
+  toEncoding = J.pixelToEncoding
+  toJSON     = J.pixelToJSON
 
 --------------------------------------------------------------------------------
 

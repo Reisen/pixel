@@ -37,7 +37,8 @@ newtype Response = Response
   } deriving (Show, Generic)
 
 instance A.ToJSON Response where
-  toEncoding = A.genericToEncoding J.pixelJsonEncoding
+  toEncoding = J.pixelToEncoding
+  toJSON     = J.pixelToJSON
 
 --------------------------------------------------------------------------------
 

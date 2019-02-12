@@ -43,7 +43,8 @@ data Request = Request
   } deriving (Show, Generic)
 
 instance A.ToJSON Request where
-  toEncoding = A.genericToEncoding J.pixelJsonEncoding
+  toEncoding = J.pixelToEncoding
+  toJSON     = J.pixelToJSON
 
 makeFields ''Request
 

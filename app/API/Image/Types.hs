@@ -50,10 +50,11 @@ data Image = Image
 
 -- Derivations
 instance A.ToJSON Image where
-  toEncoding = A.genericToEncoding J.pixelJsonEncoding
+  toJSON     = J.pixelToJSON
+  toEncoding = J.pixelToEncoding
 
 instance A.FromJSON Image where
-  parseJSON = A.genericParseJSON J.pixelJsonEncoding
+  parseJSON = J.pixelParseJSON
 
 makeLenses ''Image
 
