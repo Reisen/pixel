@@ -1,4 +1,5 @@
-.Image {
+/* Components */
+.Root {
     border-left: 16px solid white;
     border-bottom: 16px solid white;
     width: 160px;
@@ -10,11 +11,6 @@
     min-height: 160px;
     position: relative;
     cursor: pointer;
-}
-
-.Image--empty {
-    background-color: #EEF;
-    background-image: none;
 }
 
 .Resolution {
@@ -34,3 +30,10 @@
 .Image:hover .Resolution {
     opacity: 1;
 }
+
+/* States */
+.empty {
+    background-color: #EEF;
+    background-image: none;
+}
+
