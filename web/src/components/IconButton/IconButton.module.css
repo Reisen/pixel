@@ -6,3 +6,11 @@
     color: #5599FF;
     cursor: pointer;
 }
+
+.Active,
+.IconButton:hover {
+    background-color: #5599FF;
+    border: 1px solid white;
+    outline: 1px solid #5599FF;
+    color: white;
+}

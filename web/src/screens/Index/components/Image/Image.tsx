@@ -7,13 +7,8 @@ interface Props {
 }
 
 const Image = (props: Props) => {
-    const classes = [
-        styles['Image'],
-        props.empty ? styles['Image--empty'] : ""
-    ].join(' ');
-
     return (
-        <div className={classes}>
+        <div className={styles.Root}>
             <span className={styles.Resolution}>
                 {props.resolution}
             </span>
