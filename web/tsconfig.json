@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "noImplicitAny": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
     "target": "es5",
     "lib": [
       "dom",

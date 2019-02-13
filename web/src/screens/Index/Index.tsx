@@ -1,6 +1,6 @@
 import React         from 'react';
 import NavigationBar from '../../components/NavigationBar';
-import SearchSidebar from './components/SearchSideBar';
+import SearchSidebar from '../../components/SearchSideBar';
 import ImageGrid     from './components/ImageGrid';
 import styles        from './Index.module.css';
 import { image }     from '../../types/image';
@@ -47,4 +47,4 @@ const Index = () => (
     </div>
 );
 
-export default Index
+export default Index;

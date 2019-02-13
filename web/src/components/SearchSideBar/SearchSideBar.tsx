@@ -1,5 +1,5 @@
 import React     from 'react';
-import TextInput from '../../../../components/TextInput'
+import TextInput from '../TextInput';
 import styles    from './SearchSideBar.module.css';
 
 /* -------------------------------------------------------------------------- */

@@ -27,7 +27,7 @@
     font-family: 'Titillium Web', sans-serif;
 }
 
-.Image:hover .Resolution {
+.Root:hover .Resolution {
     opacity: 1;
 }
 
@@ -36,4 +36,3 @@
     background-color: #EEF;
     background-image: none;
 }
-

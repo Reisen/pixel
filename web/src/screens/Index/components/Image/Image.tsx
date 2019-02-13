@@ -1,5 +1,6 @@
-import React  from 'react';
-import styles from './Image.module.css';
+import React       from 'react';
+import styles      from './Image.module.css';
+import mergeStyles from '../../../../utilities/mergeStyles';
 
 interface Props {
     empty?: boolean;
@@ -8,7 +9,7 @@ interface Props {
 
 const Image = (props: Props) => {
     return (
-        <div className={styles.Root}>
+        <div className={mergeStyles(styles.Root, props.empty && 'empty')}>
             <span className={styles.Resolution}>
                 {props.resolution}
             </span>

@@ -1,7 +1,8 @@
 import Index                    from './screens/Index/Index';
+import Image                    from './screens/Image/Image';
 import React, { Component }     from 'react';
 import { render }               from 'react-dom';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { HashRouter as BrowserRouter, Route } from 'react-router-dom';
 
 import './App.css';
 
@@ -9,7 +10,10 @@ import './App.css';
 
 const App = () => (
     <BrowserRouter>
-        <Route exact path="/" component={Index} />
+        <div>
+            <Route exact path="/" component={Index} />
+            <Route       path="/i/:uuid" component={Image} />
+        </div>
     </BrowserRouter>
 );
 
