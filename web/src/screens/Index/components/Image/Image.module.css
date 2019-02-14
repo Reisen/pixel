@@ -1,16 +1,16 @@
 /* Components */
 .Root {
-    border-left: 16px solid white;
-    border-bottom: 16px solid white;
-    width: 160px;
-    display: inline-block;
-    background-image: url('https://i.imgur.com/aG7C0Zx.jpg');
-    background-size: cover;
-    background-position: center;
     background-color: #EEF;
-    min-height: 160px;
-    position: relative;
+    background-image: url('https://i.imgur.com/aG7C0Zx.jpg');
+    background-position: center;
+    background-size: cover;
+    border-bottom: 16px solid white;
+    border-left: 16px solid white;
     cursor: pointer;
+    display: inline-block;
+    height: 160px;
+    position: relative;
+    width: 160px;
 }
 
 .Resolution {

@@ -1,16 +1,19 @@
 .IconButton {
     display: inline-block;
-    border: 1px solid #CCF;
+    border: 1px solid white;
     margin: 0px 4px;
     padding: 8px;
     color: #5599FF;
     cursor: pointer;
+    text-align: center;
+    outline: 1px solid #DDF;
+    vertical-align: middle;
+    min-width: 40px;
 }
 
 .Active,
 .IconButton:hover {
     background-color: #5599FF;
-    border: 1px solid white;
     outline: 1px solid #5599FF;
     color: white;
 }

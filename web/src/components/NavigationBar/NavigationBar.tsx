@@ -10,14 +10,17 @@ interface Props {
 
 const NavigationBar = (props: Props) => (
     <div className={styles.NavigationBar}>
-        <Link to="/">
-            PIXEL - {props.username}
-        </Link>
+        <Link className={styles.Logo} to="/">PIXEL</Link>
+
+        <div className={styles.RightNavigation}>
+            <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">{props.username}</Link>
+            <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">Logout</Link>
+        </div>
     </div>
 );
 
-const mapState = (state: State) => ({
-    username: state.user.username
-});
-
-export default connect(mapState)(NavigationBar);
+export default connect(
+    (state: State) => ({
+        username: state.user.username
+    })
+)(NavigationBar);

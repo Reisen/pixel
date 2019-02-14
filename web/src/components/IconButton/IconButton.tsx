@@ -3,13 +3,15 @@ import styles      from './IconButton.module.css';
 import altStyles   from '../../utilities/altStyles';
 
 interface Props {
-    icon: string;
     active?: boolean;
+    icon?: string;
+    letter?: string;
+    onClick?: () => void;
 }
 
 const IconButton = (props: Props) => {
     return (
-        <div className={`${styles.IconButton} ${props.active && styles.Active}`}>
+        <div onClick={props.onClick} className={`${styles.IconButton} ${props.active && styles.Active}`}>
             {props.icon}
         </div>
     );

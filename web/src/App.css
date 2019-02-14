@@ -5,6 +5,10 @@
     font-family: Lato, sans-serif;
 }
 
+html, body {
+    padding-bottom: 32px;
+}
+
 .Page {
     width: 1200px;
     margin: 0 auto;

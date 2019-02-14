@@ -1,11 +1,24 @@
 .NavigationBar {
     border-bottom: 1px solid #DDF;
-    color: #6688FF;
-    font-size: 32px;
     line-height: 96px;
-    font-weight: bold;
     margin: 0 auto;
     margin-bottom: 32px;
     width: 1200px;
+}
+
+.Logo {
     letter-spacing: 24px;
+    font-size: 32px;
+    font-weight: bold;
+    color: #6688FF;
+    vertical-align: middle;
+}
+
+.RightNavigation {
+    display: inline-block;
+    float: right;
+}
+
+.RightNavigation a {
+    margin-left: 16px;
 }
