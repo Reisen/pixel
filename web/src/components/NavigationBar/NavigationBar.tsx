@@ -1,13 +1,23 @@
-import React    from 'react';
-import styles   from './NavigationBar.module.css';
-import { Link } from 'react-router-dom';
+import React       from 'react';
+import styles      from './NavigationBar.module.css';
+import { Link }    from 'react-router-dom';
+import { connect } from 'react-redux';
+import { State }   from '../../store/reducers';
 
-const NavigationBar = () => (
+interface Props {
+    username: string;
+}
+
+const NavigationBar = (props: Props) => (
     <div className={styles.NavigationBar}>
         <Link to="/">
-            PIXEL
+            PIXEL - {props.username}
         </Link>
     </div>
 );
 
-export default NavigationBar;
+const mapState = (state: State) => ({
+    username: state.user.username
+});
+
+export default connect(mapState)(NavigationBar);

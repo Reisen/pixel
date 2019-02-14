@@ -4,6 +4,8 @@ import SearchSidebar from '../../components/SearchSideBar';
 import ImageGrid     from './components/ImageGrid';
 import styles        from './Index.module.css';
 import { image }     from '../../types/image';
+import { connect }   from 'react-redux';
+import { State }     from '../../store/reducers';
 
 const tags: string[] = [
     "dog",
@@ -12,39 +14,22 @@ const tags: string[] = [
     "bernese"
 ];
 
-const imgs: image[] = [
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "2398fh23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "848djslk", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-    { "hash": "asd98u23", tags: [], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-];
+interface Props {
+    images: image[]
+}
 
-const Index = () => (
+const Index = (props: Props) => (
     <div className="Page">
         <NavigationBar />
-
         <div className={styles.PanelContainer}>
             <SearchSidebar tags={tags} />
-            <ImageGrid width={6} images={imgs} />
+            <ImageGrid width={6} images={props.images} />
         </div>
     </div>
 );
 
-export default Index;
+const mapState = (state: State) => ({
+    images: state.images.images
+});
+
+export default connect(mapState)(Index);
