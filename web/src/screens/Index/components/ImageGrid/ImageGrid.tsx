@@ -2,6 +2,7 @@ import Image     from '../Image';
 import Pager     from '../Pager';
 import React     from 'react';
 import styles    from './ImageGrid.module.css';
+import { Link }  from 'react-router-dom';
 import { image } from '../../../../types/image';
 
 interface Props {
@@ -10,7 +11,9 @@ interface Props {
 }
 
 const renderValidImages = (images: image[]) => images.map(image =>
-    <Image resolution="800x600" />
+    <Link to="/i/8ac5928b-9caa3ac1-cb488a9a-938ac938">
+        <Image resolution="800x600" />
+    </Link>
 );
 
 const renderEmptyImages = (total: number, width: number) => {
