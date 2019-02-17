@@ -24,13 +24,21 @@ const renderButtons = (page: number, setPage: (page: number) => void) =>
 const Pager = (props: Props) => {
     return (
         <div className={styles.Pager}>
-            <div className={styles.IconRow}>
-                { renderButtons(props.page, props.setPage) }
+            <div className={styles.LeftIcons}>
+                <IconButton icon="pixels" onClick={() => props.setPage(props.page - 1)} />
+                <IconButton icon="transparent" onClick={() => props.setPage(props.page - 1)} />
+                <IconButton icon="man-in-glasses" onClick={() => props.setPage(props.page - 1)} />
             </div>
 
-            <div className={styles.IconRow}>
-                <IconButton icon="simple-left" onClick={() => props.setPage(props.page - 1)} />
-                <IconButton icon="simple-right" onClick={() => props.setPage(props.page + 1)} />
+            <div className={styles.RightIcons}>
+                <div className={styles.IconRow}>
+                    { renderButtons(props.page, props.setPage) }
+                </div>
+
+                <div className={styles.IconRow}>
+                    <IconButton icon="simple-left" onClick={() => props.setPage(props.page - 1)} />
+                    <IconButton icon="simple-right" onClick={() => props.setPage(props.page + 1)} />
+                </div>
             </div>
         </div>
     );
