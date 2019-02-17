@@ -1,6 +1,6 @@
 import React       from 'react';
-import styles      from './Image.module.css';
 import mergeStyles from '../../../../utilities/mergeStyles';
+import styles      from './Image.module.css';
 
 interface Props {
     empty?: boolean;

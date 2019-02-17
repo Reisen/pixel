@@ -1,7 +1,6 @@
 .IconButton {
     display: inline-block;
     border: 1px solid white;
-    margin: 0px 4px;
     padding: 8px;
     color: #5599FF;
     cursor: pointer;
@@ -9,6 +8,11 @@
     outline: 1px solid #DDF;
     vertical-align: middle;
     min-width: 40px;
+    margin-right: 8px;
+}
+
+.IconButton:last-of-type {
+    margin-right: 0px;
 }
 
 .Active,

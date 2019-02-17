@@ -1,0 +1,27 @@
+.Toggle {
+    display: inline-block;
+    font-size: 14px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.Toggler {
+    display: inline-block;
+    vertical-align: middle;
+    width: 48px;
+    height: 16px;
+    border: 1px solid white;
+    outline: 1px solid #5599FF;
+    margin-right: 8px;
+}
+
+.ToggleBlock {
+    width: 24px;
+    height: 100%;
+    background-color: #5599FF;
+}
+
+.Toggle span {
+    vertical-align: middle;
+}
