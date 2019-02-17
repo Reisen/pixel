@@ -1,6 +1,6 @@
 # Pixel 
 [![Build Status](https://travis-ci.com/Reisen/pixel.svg?branch=master)](https://travis-ci.com/Reisen/pixel)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ebb000c46ebf467dacf130268437a94f)](https://www.codacy.com/app/david_64/pixel?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Reisen/pixel&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ebb000c46ebf467dacf130268437a94f)](https://www.codacy.com/app/Reisen/pixel?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Reisen/pixel&amp;utm_campaign=Badge_Grade)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/1465e221-f7a0-4520-bf79-cd91bda2f5b6/deploy-status)](https://app.netlify.com/sites/pixelized/deploys)
 
 A self-hosted gallery for power users.
