@@ -11,26 +11,26 @@ The goal behind Pixel is to provide a way for user's to manage their own image c
 
 The number one feature, is the ability to host private image galleries. The current goal (and roadmap) for this:
 
-- [ ] Upload Images from Any Device
-- [ ] Upload Images in Bulk (as .zip files or tracked collections)
-- [ ] Group Images using Categories and Tagging
-- [ ] Optionally Analyze Images for smart filtering (NSFW detection, Scenery Detection, Face Detection)
+  - [ ] Upload Images from Any Device
+  - [ ] Upload Images in Bulk (as .zip files or tracked collections)
+  - [ ] Group Images using Categories and Tagging
+  - [ ] Optionally Analyze Images for smart filtering (NSFW detection, Scenery Detection, Face Detection)
 
 ## Instagram
 
 User's accounts are able to publish an Instagram-like feed. The feed by default is disabled, but can be shown in four different privacy modes:
 
-* Public (Anyone can see it)
-* Friends Only (Only friends can see it)
-* Private (Only the user themselves can see it)
-* Hidden (Anyone can see it, but the URL is un-published/uncrawleable)
+- Public (Anyone can see it)
+- Friends Only (Only friends can see it)
+- Private (Only the user themselves can see it)
+- Hidden (Anyone can see it, but the URL is un-published/uncrawleable)
 
 Feature-wise:
 
-- [ ] Upoad Images from Any Device
-- [ ] Image Commenting
-- [ ] Images can be Tagged
-- [ ] Public Images that have Tags (in #hashtag form) go to a public filterable gallery.
+  - [ ] Upoad Images from Any Device
+  - [ ] Image Commenting
+  - [ ] Images can be Tagged
+  - [ ] Public Images that have Tags (in #hashtag form) go to a public filterable gallery.
 
 ## Gallery Subreddit/Booru
 
