@@ -1,11 +1,12 @@
-import React         from 'react';
-import NavigationBar from '../../components/NavigationBar';
-import SearchSidebar from '../../components/SearchSideBar';
-import ImageGrid     from './components/ImageGrid';
-import styles        from './Index.module.css';
-import { image }     from '../../types/image';
-import { connect }   from 'react-redux';
-import { State }     from '../../store/reducers';
+import React                    from 'react';
+import NavigationBar            from '../../components/NavigationBar';
+import SearchSidebar            from '../../components/SearchSideBar';
+import ImageGrid                from './components/ImageGrid';
+import styles                   from './Index.module.css';
+import { image }                from '../../types/image';
+import { connect }              from 'react-redux';
+import { State }                from '../../store/reducers';
+import { getImages }            from '../../store/reducers/images';
 
 const tags: string[] = [
     "dog",
@@ -15,7 +16,12 @@ const tags: string[] = [
 ];
 
 interface Props {
-    images: image[]
+    images: image[];
+    page: number;
+    pageWidth: number;
+    pageCount: number;
+    nextPage: () => void;
+    prevPage: () => void;
 }
 
 const Index = (props: Props) => (
@@ -23,13 +29,13 @@ const Index = (props: Props) => (
         <NavigationBar />
         <div className={styles.PanelContainer}>
             <SearchSidebar tags={tags} />
-            <ImageGrid width={8} images={props.images} />
+            <ImageGrid images={props.images} rows={4} width={6} />
         </div>
     </div>
 );
 
 const mapState = (state: State) => ({
-    images: state.images.images
+    images: getImages(state.images),
 });
 
 export default connect(mapState)(Index);

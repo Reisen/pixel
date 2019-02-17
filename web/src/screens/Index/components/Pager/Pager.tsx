@@ -1,30 +1,36 @@
-import IconButton          from '../../../../components/IconButton';
-import React, { useState } from 'react';
-import styles              from './Pager.module.css';
+import IconButton             from '../../../../components/IconButton';
+import React, { useState }    from 'react';
+import { connect }            from 'react-redux';
+import { range, lt }          from 'ramda';
+import styles                 from './Pager.module.css';
 
 interface Props {
-    total: number;
+    page: number;
+    pageCount: number;
+    setPage: (page: number) => void;
 }
 
-const Pager = (props: Props) => {
-    const [page, setPage] = useState(1);
+const renderButtons = (page: number, setPage: (page: number) => void) =>
+    range(page - 3, page + 3)
+        .filter(lt(0))
+        .map(v =>
+            <IconButton
+                letter={v.toString()}
+                active={v === page}
+                onClick={() => setPage(v)}
+            />
+        );
 
+const Pager = (props: Props) => {
     return (
         <div className={styles.Pager}>
             <div className={styles.IconRow}>
-            {
-                Array(7).fill(0).map((_, k) =>
-                    <IconButton
-                        active={(k + 1) === page}
-                        icon={String(k + 1)}
-                    />
-                )
-            }
+                { renderButtons(props.page, props.setPage) }
             </div>
 
             <div className={styles.IconRow}>
-                <IconButton icon="<" onClick={() => setPage(a => a - 1)} />
-                <IconButton icon=">" onClick={() => setPage(a => a + 1)} />
+                <IconButton icon="simple-left" onClick={() => props.setPage(props.page - 1)} />
+                <IconButton icon="simple-right" onClick={() => props.setPage(props.page + 1)} />
             </div>
         </div>
     );

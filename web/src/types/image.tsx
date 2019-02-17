@@ -4,4 +4,5 @@ export interface image {
     resolution: string;
     tags:       string[];
     uploader:   string;
+    path:       string;
 }

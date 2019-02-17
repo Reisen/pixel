@@ -4,18 +4,20 @@ import mergeStyles from '../../../../utilities/mergeStyles';
 
 interface Props {
     empty?: boolean;
+    path?: string;
     resolution?: string;
     width: number;
 }
 
 const Image = (props: Props) => {
     const styleOverrides = {
+        backgroundImage: `url(${props.path})`,
+        height: `${props.width}px`,
         width: `${props.width}px`,
-        height: `${props.width}px`
     };
 
     return (
-        <div style={styleOverrides} className={mergeStyles(styles.Root, props.empty && 'empty')}>
+        <div style={styleOverrides} className={mergeStyles(styles.Root, props.empty && styles.empty)}>
             <span className={styles.Resolution}>
                 {props.resolution}
             </span>

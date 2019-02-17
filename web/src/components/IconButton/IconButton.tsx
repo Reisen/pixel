@@ -12,7 +12,11 @@ interface Props {
 const IconButton = (props: Props) => {
     return (
         <div onClick={props.onClick} className={`${styles.IconButton} ${props.active && styles.Active}`}>
-            {props.icon}
+            {
+                props.icon
+                    ? <i className={`icofont-${props.icon}`}></i>
+                    : props.letter
+            }
         </div>
     );
 };

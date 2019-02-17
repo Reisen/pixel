@@ -7,7 +7,7 @@ export interface State {
     user: UserState
 }
 
-export {
-    imageReducer as images ,
-    userReducer as user
+export default {
+    images: imageReducer,
+    user: userReducer
 };

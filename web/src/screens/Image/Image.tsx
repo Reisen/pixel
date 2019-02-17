@@ -6,11 +6,12 @@ import styles        from './Image.module.css';
 import { image }     from '../../types/image';
 
 const onlyImage: image = {
-    createdAt: "01/01/1999",
-    hash: "asd98u23",
-    resolution: "800x600",
+    createdAt: '01/01/1999',
+    hash: 'asd98u23',
+    path: 'https://i.imgur.com/aG7C0Zx.jpg',
+    resolution: '800x600',
     tags: [],
-    uploader: "Reisen"
+    uploader: 'Reisen',
 };
 
 interface Props {
