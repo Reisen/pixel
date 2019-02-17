@@ -1,0 +1,20 @@
+* {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+    font-family: Lato, sans-serif;
+}
+
+html, body {
+    padding-bottom: 32px;
+}
+
+.Page {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+    color: #336699;
+}
