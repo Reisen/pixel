@@ -1,5 +1,4 @@
 import React       from 'react';
-import mergeStyles from '../../../../utilities/mergeStyles';
 import styles      from './Image.module.css';
 
 interface Props {
@@ -17,7 +16,10 @@ const Image = (props: Props) => {
     };
 
     return (
-        <div style={styleOverrides} className={mergeStyles(styles.Root, props.empty && styles.empty)}>
+        <div
+            style={styleOverrides}
+            className={props.empty ? styles.Root__empty : styles.Root} >
+
             <span className={styles.Resolution}>
                 {props.resolution}
             </span>

@@ -30,7 +30,7 @@ const SearchSideBar = (props: Props) => {
     const [page, changePage] = useState('tags');
 
     return (
-        <div className={styles.SearchSideBar}>
+        <div className={styles.Root}>
             <TextInput placeholder="Search" />
             <div className={styles.Buttons}>
                 <IconButton icon="tag" onClick={() => changePage('tags')} />

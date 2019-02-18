@@ -1,15 +1,15 @@
-.SearchSideBar {
+.Root {
     width: 240px;
     float: left;
     padding-right: 8px;
 }
 
-.SearchSideBar h1 {
+.Root h1 {
     font-size: 18px;
+    border-bottom: 1px solid #DDF;
+    padding-bottom: 8px;
     color: #336699;
     font-weight: normal;
-    text-transform: uppercase;
-    letter-spacing: 3px;
     margin: 0px;
     margin-top: 40px;
     margin-bottom: 8px;
@@ -22,7 +22,7 @@
 .Tag i {
     font-size: 13px;
     margin-right: 8px;
-    color: #5588FF;
+    color: #5588CC;
 }
 
 .TagList {
@@ -30,7 +30,7 @@
 }
 
 .TagList a {
-    color: #5588FF;
+    color: #5588CC;
     text-decoration: none;
     margin: 2px 0px;
     font-size: 15px;

@@ -4,6 +4,7 @@
     margin-bottom: 4px;
     cursor: pointer;
     width: 100%;
+    color: #444444;
 }
 
 .Toggler {
@@ -12,14 +13,14 @@
     width: 48px;
     height: 16px;
     border: 1px solid white;
-    outline: 1px solid #5599FF;
+    outline: 1px solid #5599CC;
     margin-right: 8px;
 }
 
 .ToggleBlock {
     width: 24px;
     height: 100%;
-    background-color: #5599FF;
+    background-color: #5599CC;
 }
 
 .Toggle span {

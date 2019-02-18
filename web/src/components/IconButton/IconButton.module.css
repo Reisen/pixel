@@ -1,8 +1,8 @@
-.IconButton {
+.Root {
     display: inline-block;
     border: 1px solid white;
     padding: 8px;
-    color: #5599FF;
+    color: #5588CC;
     cursor: pointer;
     text-align: center;
     outline: 1px solid #DDF;
@@ -11,13 +11,20 @@
     margin-right: 8px;
 }
 
-.IconButton:last-of-type {
+.Root:last-of-type {
     margin-right: 0px;
 }
 
-.Active,
-.IconButton:hover {
-    background-color: #5599FF;
-    outline: 1px solid #5599FF;
+.Root:hover {
+    background-color: #5588CC;
+    outline: 1px solid #5588CC;
     color: white;
 }
+
+.Root__active {
+    composes: Root;
+    background-color: #5588CC;
+    outline: 1px solid #5588CC;
+    color: white;
+}
+

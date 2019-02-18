@@ -1,4 +1,4 @@
-.NavigationBar {
+.Root {
     border-bottom: 1px solid #DDF;
     line-height: 96px;
     margin: 0 auto;
@@ -7,11 +7,12 @@
 }
 
 .Logo {
-    letter-spacing: 24px;
+    letter-spacing: 8px;
     font-size: 32px;
-    font-weight: bold;
-    color: #6688FF;
+    font-weight: normal;
+    color: #5588CC;
     vertical-align: middle;
+    font-family: 'Baumans';
 }
 
 .RightNavigation {

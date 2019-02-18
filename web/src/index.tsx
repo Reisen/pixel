@@ -19,7 +19,7 @@ const store = createStore(combineReducers(reducers));
 const App = () => (
     <Provider store={store}>
         <Router>
-            <div>
+            <div className="dark">
                 <Route exact path="/" component={Index} />
                 <Route       path="/i/:uuid" component={Image} />
             </div>

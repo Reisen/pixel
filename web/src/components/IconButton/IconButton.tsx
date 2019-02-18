@@ -1,6 +1,5 @@
 import React       from 'react';
 import styles      from './IconButton.module.css';
-import altStyles   from '../../utilities/altStyles';
 
 interface Props {
     active?: boolean;
@@ -11,7 +10,10 @@ interface Props {
 
 const IconButton = (props: Props) => {
     return (
-        <div onClick={props.onClick} className={`${styles.IconButton} ${props.active && styles.Active}`}>
+        <div
+            onClick={props.onClick}
+            className={props.active ? styles.Root__active : styles.Root} >
+
             {
                 props.icon
                     ? <i className={`icofont-${props.icon}`}></i>

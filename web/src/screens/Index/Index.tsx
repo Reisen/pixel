@@ -29,7 +29,7 @@ const Index = (props: Props) => (
         <NavigationBar />
         <div className={styles.PanelContainer}>
             <SearchSidebar tags={tags} />
-            <ImageGrid images={props.images} rows={4} width={6} />
+            <ImageGrid images={props.images} rows={5} width={6} />
         </div>
     </div>
 );
