@@ -27,10 +27,10 @@ User's accounts are able to publish an Instagram-like feed. The feed by default 
 
 Feature-wise:
 
-- [ ] Upoad Images from Any Device
-- [ ] Image Commenting
-- [ ] Images can be Tagged
-- [ ] Public Images that have Tags (in #hashtag form) go to a public filterable gallery.
+  - [ ] Upoad Images from Any Device
+  - [ ] Image Commenting
+  - [ ] Images can be Tagged
+  - [ ] Public Images that have Tags (in #hashtag form) go to a public filterable gallery.
 
 ## Gallery Subreddit/Booru
 
