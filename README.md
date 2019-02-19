@@ -11,10 +11,10 @@ The goal behind Pixel is to provide a way for user's to manage their own image c
 
 The number one feature, is the ability to host private image galleries. The current goal (and roadmap) for this:
 
-- [ ] Upload Images from Any Device
-- [ ] Upload Images in Bulk (as .zip files or tracked collections)
-- [ ] Group Images using Categories and Tagging
-- [ ] Optionally Analyze Images for smart filtering (NSFW detection, Scenery Detection, Face Detection)
+  - [ ] Upload Images from Any Device
+  - [ ] Upload Images in Bulk (as .zip files or tracked collections)
+  - [ ] Group Images using Categories and Tagging
+  - [ ] Optionally Analyze Images for smart filtering (NSFW detection, Scenery Detection, Face Detection)
 
 ## Instagram
 
