@@ -2,12 +2,12 @@ import React       from 'react';
 import IconButton  from '../IconButton';
 import styles      from './NavigationBar.module.css';
 import { Link }    from 'react-router-dom';
-import { State }   from '../../store/reducers';
-import { connect } from 'react-redux';
+
 
 interface Props {
     username: string;
 }
+
 
 const NavigationBar = (props: Props) => (
     <div className={styles.Root}>
@@ -21,8 +21,5 @@ const NavigationBar = (props: Props) => (
     </div>
 );
 
-export default connect(
-    (state: State) => ({
-        username: state.user.username
-    })
-)(NavigationBar);
+
+export default NavigationBar;

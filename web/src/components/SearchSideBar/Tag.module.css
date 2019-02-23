@@ -1,0 +1,10 @@
+.Root {
+    display: block;
+}
+
+.Root i {
+    font-size: 13px;
+    margin-right: 8px;
+    color: #5588CC;
+}
+

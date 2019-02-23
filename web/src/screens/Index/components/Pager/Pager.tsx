@@ -1,8 +1,7 @@
-import IconButton             from '../../../../components/IconButton';
-import React, { useState }    from 'react';
-import { connect }            from 'react-redux';
-import { range, lt }          from 'ramda';
-import styles                 from './Pager.module.css';
+import React         from 'react';
+import IconButton    from '../../../../components/IconButton';
+import { range, lt } from 'ramda';
+import styles        from './Pager.module.css';
 
 interface Props {
     page: number;

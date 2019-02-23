@@ -4,6 +4,8 @@ import SearchSidebar from '../../components/SearchSideBar';
 import ImagePanel    from './components/ImagePanel';
 import styles        from './Image.module.css';
 import { image }     from '../../types/image';
+import { State }     from '../../store';
+import { connect }   from 'react-redux';
 
 const onlyImage: image = {
     createdAt: '01/01/1999',
@@ -16,11 +18,12 @@ const onlyImage: image = {
 
 interface Props {
     image?: image;
+    username: string;
 }
 
 const Image = (props: Props) => (
     <div className="Page">
-        <NavigationBar />
+        <NavigationBar username={props.username} />
 
         <div className={styles.Root}>
             <SearchSidebar tags={onlyImage.tags} />
@@ -29,4 +32,9 @@ const Image = (props: Props) => (
     </div>
 );
 
-export default Image;
+
+export default connect(
+    (state: State) => ({
+        username: state.user.username
+    })
+)(Image);

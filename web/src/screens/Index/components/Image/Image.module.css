@@ -32,7 +32,6 @@
 
 /* States */
 .Root__empty {
-    composes: Root;
     background-color: #F3F3FF;
     background-size: auto;
 }

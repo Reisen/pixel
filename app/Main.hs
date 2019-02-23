@@ -23,10 +23,10 @@ main = do
     { C._configStaticLocation = C.readTextEnv "PIXEL_STATIC" "tmp/"
     , C._configPort           = C.readNumericEnv "PIXEL_PORT" 6666
     , C._configReadSchema     = pure readSchema
-    , C._configConnection     = S.open "event.db"
-      >>= pure
+    , C._configConnection     = identity
       .   E.hookMiddleware (P.handleProjections readSchema)
       .   E.makeSQLite3Backend
+      <$> S.open "event.db"
     }
 
   -- WAI Run Application

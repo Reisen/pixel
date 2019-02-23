@@ -5,8 +5,8 @@ import ImageGrid                from './components/ImageGrid';
 import styles                   from './Index.module.css';
 import { image }                from '../../types/image';
 import { connect }              from 'react-redux';
-import { State }                from '../../store/reducers';
-import { getImages }            from '../../store/reducers/images';
+import { State }                from '../../store';
+import { getImages }            from '../../store/images';
 
 const tags: string[] = [
     "dog",
@@ -22,11 +22,12 @@ interface Props {
     pageCount: number;
     nextPage: () => void;
     prevPage: () => void;
+    username: string;
 }
 
 const Index = (props: Props) => (
     <div className="Page">
-        <NavigationBar />
+        <NavigationBar username={props.username} />
         <div className={styles.PanelContainer}>
             <SearchSidebar tags={tags} />
             <ImageGrid images={props.images} rows={5} width={6} />
@@ -36,6 +37,7 @@ const Index = (props: Props) => (
 
 const mapState = (state: State) => ({
     images: getImages(state.images),
+    username: state.user.username
 });
 
 export default connect(mapState)(Index);

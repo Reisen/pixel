@@ -1,0 +1,21 @@
+.TagList {
+    margin-top: 8px;
+}
+
+.TagList a {
+    color: #5588CC;
+    text-decoration: none;
+    margin: 2px 0px;
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+.TagList a:hover {
+    color: black;
+}
+
+.Category--artist {
+    color: #FF6677 !important;
+}
+
+

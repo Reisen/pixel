@@ -1,26 +1,12 @@
-import IconButton          from '../IconButton';
-import Toggle              from '../Toggle';
 import React, { useState } from 'react';
-import TextInput           from '../TextInput';
 import styles              from './SearchSideBar.module.css';
 
-/* -------------------------------------------------------------------------- */
+import IconButton          from '../IconButton';
+import SettingsPanel       from './panels/SettingsPanel';
+import TagsPanel           from './panels/TagPanel';
+import TextInput           from '../TextInput';
+import Toggle              from '../Toggle';
 
-interface TagProps {
-    tag: string;
-    category?: string;
-}
-
-const Tag = (props: TagProps) => (
-    <div className={styles.Tag}>
-        <i className="icofont-tag"></i>
-        <a href="#" className={styles[`Category--${props.category}`]}>
-            {props.tag}
-        </a>
-    </div>
-);
-
-/* -------------------------------------------------------------------------- */
 
 interface Props {
     tags?: string[];
@@ -39,38 +25,11 @@ const SearchSideBar = (props: Props) => {
 
             {
                 page === 'tags'     ? <TagsPanel {...props}/> :
-                page === 'settings' ? <SettingsPanel {...props}/> :
+                page === 'settings' ? <SettingsPanel /> :
                 null
             }
         </div>
     );
 }
-
-// -----------------------------------------------------------------------------
-
-const TagsPanel = (props: Props) => (
-    <div className={styles.Panel}>
-        <h1>Taglist</h1>
-        <div className={styles.TagList}>
-            {
-                !props.tags ? null : props.tags.map(tag => (
-                    <Tag tag={tag}/>
-                ))
-            }
-            <Tag tag="yoshimitsu" category="artist" />
-            <Tag tag="fighter" />
-        </div>
-    </div>
-);
-
-const SettingsPanel = (props: Props) => (
-    <div className={styles.Panel}>
-        <h1>Search Settings</h1>
-
-        <Toggle on text="Hide NSFW" onPress={() => {}} />
-        <Toggle on text="Hide Favorites" onPress={() => {}} />
-        <Toggle on text="Only Untagged" onPress={() => {}} />
-    </div>
-);
 
 export default SearchSideBar;

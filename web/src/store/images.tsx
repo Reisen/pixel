@@ -1,4 +1,4 @@
-import { image }                              from '../../types/image';
+import { image }                              from '../types/image';
 import { createAction, handleActions }        from 'redux-actions';
 import { when, lt, inc, dec, over, lensProp } from 'ramda';
 

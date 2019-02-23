@@ -1,5 +1,6 @@
-import React       from 'react';
-import styles      from './Image.module.css';
+import React      from 'react';
+import classnames from 'classnames';
+import styles     from './Image.module.css';
 
 interface Props {
     empty?: boolean;
@@ -7,6 +8,11 @@ interface Props {
     resolution?: string;
     width: number;
 }
+
+const classes = (props: Props) => classnames({
+    [styles.Root]: true,
+    [styles.Root__empty]: props.empty
+})
 
 const Image = (props: Props) => {
     const styleOverrides = {
@@ -16,10 +22,7 @@ const Image = (props: Props) => {
     };
 
     return (
-        <div
-            style={styleOverrides}
-            className={props.empty ? styles.Root__empty : styles.Root} >
-
+        <div style={styleOverrides} className={classes(props)}>
             <span className={styles.Resolution}>
                 {props.resolution}
             </span>

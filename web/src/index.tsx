@@ -1,4 +1,4 @@
-import reducers                         from './store/reducers';
+import { reducers }                     from './store';
 import Image                            from './screens/Image/Image';
 import Index                            from './screens/Index/Index';
 import React                            from 'react';

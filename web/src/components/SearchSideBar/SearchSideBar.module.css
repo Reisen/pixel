@@ -15,36 +15,6 @@
     margin-bottom: 8px;
 }
 
-.Tag {
-    display: block;
-}
-
-.Tag i {
-    font-size: 13px;
-    margin-right: 8px;
-    color: #5588CC;
-}
-
-.TagList {
-    margin-top: 8px;
-}
-
-.TagList a {
-    color: #5588CC;
-    text-decoration: none;
-    margin: 2px 0px;
-    font-size: 15px;
-    vertical-align: middle;
-}
-
-.TagList a:hover {
-    color: black;
-}
-
-.Category--artist {
-    color: #FF6677 !important;
-}
-
 .Buttons {
     margin-top: 8px;
 }
