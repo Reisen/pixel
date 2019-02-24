@@ -16,7 +16,6 @@ const NavigationBar = (props: Props) => (
         <div className={styles.RightNavigation}>
             <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">{props.username}</Link>
             <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">Logout</Link>
-            <IconButton icon="simple-up" />
         </div>
     </div>
 );
