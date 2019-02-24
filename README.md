@@ -5,6 +5,8 @@
 
 A semi-decent self-hosted image gallery.
 
+![Screenshot](https://user-images.githubusercontent.com/158967/53294074-bf63dd00-37d7-11e9-97b7-4507cc0e3358.png)
+
 This project exists for my own needs for a private image gallery that isn't mined 24/7 by various corporations. The goal is relatively simple, provide a self-hosted gallery and optional Instagram-like social feed for user's who don't want to upload everything they own to the internet.
 
 
