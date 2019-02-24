@@ -50,7 +50,7 @@ const ImageGrid = (props: Props) => {
             <Pager
                 page={page}
                 pageCount={5}
-                setPage={setPage}
+                setPage={(n: number) => setPage(Math.max(1, n))}
             />
         </div>
     );
