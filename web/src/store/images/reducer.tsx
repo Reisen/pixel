@@ -1,15 +1,8 @@
-import { image }                              from '../types/image';
-import { createAction, handleActions }        from 'redux-actions';
-import { when, lt, inc, dec, over, lensProp } from 'ramda';
+import { State }                  from './types';
+import { handleActions }          from 'redux-actions';
+import { compose, lensProp, set } from 'ramda';
 
-// State
-export interface ImageState {
-    images: image[];
-}
-
-type State = ImageState | undefined;
-
-const initialState: ImageState = {
+const initialState: State = {
     images: [
         // Page 1
         { "hash": "asd98u23", path: "https://i.redd.it/v6ug5bnh51h21.jpg", tags: ["dogs", "cats"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
@@ -61,6 +54,8 @@ const initialState: ImageState = {
     ],
 };
 
-export const imageReducer = handleActions<State>({}, initialState);
-export const getImages    = (state: ImageState) =>
-    state.images;
+export const imageReducer = handleActions<State>({
+    'LOAD_IMAGES': (state, action) =>
+        set(lensProp('images'), action.payload)(state)
+
+}, initialState);

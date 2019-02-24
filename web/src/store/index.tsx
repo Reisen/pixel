@@ -1,5 +1,10 @@
-import { ImageState, imageReducer } from './images';
-import { UserState, userReducer } from './user';
+// Types
+import { ImageState } from './images/types';
+import { UserState } from './user';
+
+// Reducers
+import { imageReducer } from './images';
+import { userReducer } from './user';
 
 
 // State represents the full state type for our entire Redux store once it

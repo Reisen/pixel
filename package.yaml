@@ -39,6 +39,8 @@ dependencies:
     - time
     - uuid
     - wai
+    - wai-cors
+    - wai-extra
     - warp
 
 default-extensions:

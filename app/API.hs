@@ -8,9 +8,11 @@ where
 import           Protolude
 import           Servant
 
-import qualified Pixel                         as P
-import qualified Configuration                 as C
-import qualified API.Image.Routes              as API
+import qualified API.Image.Routes                     as API
+import qualified Configuration                        as C
+import qualified Network.Wai.Middleware.Cors          as Cors
+import qualified Network.Wai.Middleware.RequestLogger as Logger
+import qualified Pixel                                as P
 
 --------------------------------------------------------------------------------
 
@@ -54,5 +56,16 @@ implAPI =
 -- Create a Servant Server to run in WAI.
 server :: C.Config -> Application
 server config =
-  serve proxyAPI
+  Logger.logStdout
+    $ corsHandler
+    $ serve proxyAPI
     $ hoistServer proxyAPI (P.runPixel config) implAPI
+
+  where
+    corsHandler =
+      Cors.cors . const $ Just $ Cors.simpleCorsResourcePolicy
+        { Cors.corsRequestHeaders =
+          [ "Content-Type"
+          , "Authorization"
+          ]
+        }
