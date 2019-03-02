@@ -5,7 +5,7 @@ module Main where
 import           Protolude
 import           Control.Lens
 
-import qualified API
+import qualified Server
 import qualified Configuration                 as C
 import qualified Database.SQLite.Simple        as S
 import qualified Eventless.Backend.Hook        as E
@@ -30,4 +30,4 @@ main = do
     }
 
   -- WAI Run Application
-  W.run (config ^. C.configPort) (API.server config)
+  W.run (config ^. C.configPort) (Server.server config)

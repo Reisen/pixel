@@ -27,9 +27,7 @@ interface Props {
 }
 
 const Index = (props: Props) => {
-    useEffect(() => {
-        props.fetchImages()
-    });
+    useEffect(() => props.fetchImages());
 
     return (
         <div className="Page">
