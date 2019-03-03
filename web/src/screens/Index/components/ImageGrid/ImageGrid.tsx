@@ -14,7 +14,7 @@ interface Props {
 // Render images that have actually got valid paths.
 const renderValidImages = (slice: image[], props: Props) =>
     slice.map(image =>
-        <Link to="/i/8ac5928b-9caa3ac1-cb488a9a-938ac938">
+        <Link key={image.path} to="/i/8ac5928b-9caa3ac1-cb488a9a-938ac938">
             <Image
                 path={image.path}
                 width={960 / props.width}
@@ -29,7 +29,9 @@ const renderValidImages = (slice: image[], props: Props) =>
 const renderEmptyImages = (slice: image[], props: Props) =>
     Array(props.width * props.rows - slice.length)
         .fill(0)
-        .map(_ => <Image width={960 / props.width} empty />);
+        .map(k =>
+            <Image key={k.toString()} width={960 / props.width} empty />
+        );
 
 
 // Render a fixed grid, calculating which images to display depending on page

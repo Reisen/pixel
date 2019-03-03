@@ -1,18 +1,18 @@
-import React                            from 'react';
-import thunk                            from 'redux-thunk';
-import { HashRouter as Router, Route }  from 'react-router-dom';
-import { Provider }                     from 'react-redux';
-import { reducers }                     from './store';
-import { render }                       from 'react-dom';
+import React                              from 'react';
+import thunk                              from 'redux-thunk';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Provider }                       from 'react-redux';
+import { reducers }                       from './store';
+import { render }                         from 'react-dom';
 import {
     applyMiddleware,
     combineReducers,
     createStore
-} from 'redux';
+}                                         from 'redux';
 
 // Routes
-import Index                            from './screens/Index/Index';
-import ImageView                        from './screens/ImageView';
+import Index                              from './screens/Index/Index';
+import ImageView                          from './screens/ImageView';
 
 // Global Styles
 import './App.css';

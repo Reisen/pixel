@@ -14,6 +14,7 @@ const renderButtons = (page: number, setPage: (page: number) => void) =>
         .filter(lt(0))
         .map(v =>
             <IconButton
+                key={v.toString()}
                 letter={v.toString()}
                 active={v === page}
                 onClick={() => setPage(v)}

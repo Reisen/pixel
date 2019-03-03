@@ -12,7 +12,7 @@ export default (props: Props) =>
         <div className={styles.TagList}>
             {
                 !props.tags ? null : props.tags.map(tag => (
-                    <Tag tag={tag}/>
+                    <Tag key={tag} tag={tag}/>
                 ))
             }
             <Tag tag="yoshimitsu" category="artist" />
