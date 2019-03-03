@@ -1,9 +1,14 @@
 .Root {
     border-bottom: 1px solid #DDF;
-    line-height: 96px;
+    line-height: 64px;
     margin: 0 auto;
     margin-bottom: 32px;
+    width: 100%;
+}
+
+.InnerRoot {
     width: 1200px;
+    margin: 0 auto;
 }
 
 .Logo {

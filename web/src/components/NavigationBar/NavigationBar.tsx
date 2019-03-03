@@ -11,11 +11,13 @@ interface Props {
 
 const NavigationBar = (props: Props) => (
     <div className={styles.Root}>
-        <Link className={styles.Logo} to="/">PIXEL</Link>
+        <div className={styles.InnerRoot}>
+            <Link className={styles.Logo} to="/">PIXEL</Link>
 
-        <div className={styles.RightNavigation}>
-            <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">{props.username}</Link>
-            <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">Logout</Link>
+            <div className={styles.RightNavigation}>
+                <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">{props.username}</Link>
+                <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">Logout</Link>
+            </div>
         </div>
     </div>
 );

@@ -1,14 +1,15 @@
 .Root {
-    display: inline-block;
     border: 1px solid white;
-    padding: 8px;
     color: #5588CC;
     cursor: pointer;
-    text-align: center;
-    outline: 1px solid #DDF;
-    vertical-align: middle;
-    min-width: 40px;
+    display: inline-block;
     margin-right: 8px;
+    min-width: 40px;
+    outline: 1px solid #DDF;
+    padding: 8px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .Root:last-of-type {
@@ -21,10 +22,13 @@
     color: white;
 }
 
+.Root:hover :global(.ToolTip) {
+    display: block;
+}
+
 .Root__active {
     composes: Root;
     background-color: #5588CC;
     outline: 1px solid #5588CC;
     color: white;
 }
-

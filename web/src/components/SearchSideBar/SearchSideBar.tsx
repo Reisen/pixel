@@ -19,8 +19,8 @@ const SearchSideBar = (props: Props) => {
         <div className={styles.Root}>
             <TextInput placeholder="Search" />
             <div className={styles.Buttons}>
-                <IconButton icon="tag" onClick={() => changePage('tags')} />
-                <IconButton icon="gears" onClick={() => changePage('settings')} />
+                <IconButton tooltip="Tag List" icon="tag" onClick={() => changePage('tags')} />
+                <IconButton tooltip="Settings" icon="gears" onClick={() => changePage('settings')} />
             </div>
 
             {

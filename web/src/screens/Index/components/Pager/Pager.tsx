@@ -24,9 +24,23 @@ const Pager = (props: Props) => {
     return (
         <div className={styles.Pager}>
             <div className={styles.LeftIcons}>
-                <IconButton icon="pixels" onClick={() => props.setPage(props.page - 1)} />
-                <IconButton icon="transparent" onClick={() => props.setPage(props.page - 1)} />
-                <IconButton icon="man-in-glasses" onClick={() => props.setPage(props.page - 1)} />
+                <IconButton
+                    tooltip="Toggle Infinite Scroll"
+                    icon="infinite"
+                    onClick={() => props.setPage(props.page - 1)}
+                />
+
+                <IconButton
+                    tooltip="Change Grid Size"
+                    icon="layout"
+                    onClick={() => props.setPage(props.page - 1)}
+                />
+
+                <IconButton
+                    tooltip="Toggle NSFW Filter"
+                    icon="business-man-alt-1"
+                    onClick={() => props.setPage(props.page - 1)}
+                />
             </div>
 
             <div className={styles.RightIcons}>

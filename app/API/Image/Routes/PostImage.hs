@@ -97,11 +97,11 @@ postImage (Just token) req = do
 -- signature a bite cleaner.
 data ImageDetails = ImageDetails
   { content      :: ByteString
-  , directory    :: API.BaseDirectory
-  , uploadedTags :: API.TagList
-  , token        :: API.Token
-  , uuid         :: U.UUID
   , createdAt    :: T.UTCTime
+  , directory    :: API.BaseDirectory
+  , token        :: API.Token
+  , uploadedTags :: API.TagList
+  , uuid         :: U.UUID
   }
 
 -- Actual logic for handling an upload.
