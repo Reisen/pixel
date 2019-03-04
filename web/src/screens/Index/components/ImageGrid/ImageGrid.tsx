@@ -13,7 +13,7 @@ interface Props {
 
 // Render images that have actually got valid paths.
 const renderValidImages = (slice: image[], props: Props) =>
-    slice.map(image =>
+    slice.map((image, k) =>
         <Link key={image.path} to="/i/8ac5928b-9caa3ac1-cb488a9a-938ac938">
             <Image
                 path={image.path}

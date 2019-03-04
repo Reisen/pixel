@@ -25,10 +25,12 @@
     "redux": "^4.0.1",
     "redux-actions": "^2.6.4",
     "redux-thunk": "^2.3.0",
+    "source-map-explorer": "^1.7.0",
     "typescript": "3.3.3",
     "whatwg-fetch": "^3.0.0"
   },
   "scripts": {
+    "analyze": "source-map-explorer build/static/js/main.*",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
