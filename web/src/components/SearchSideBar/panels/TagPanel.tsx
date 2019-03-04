@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles              from './TagPanel.module.css';
 import Tag                 from '../Tag';
+import Attribute from '../../../components/Attribute';
 
 interface Props {
     tags?: string[];
@@ -12,10 +13,8 @@ export default (props: Props) =>
         <div className={styles.TagList}>
             {
                 !props.tags ? null : props.tags.map(tag => (
-                    <Tag key={tag} tag={tag}/>
+                    <Attribute key={tag} icon="tag" name={tag} value="1" />
                 ))
             }
-            <Tag tag="yoshimitsu" category="artist" />
-            <Tag tag="fighter" />
         </div>
     </div>

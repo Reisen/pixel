@@ -1,0 +1,23 @@
+.Root {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.Root i {
+    margin-right: 8px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.Root span {
+    display: inline-block;
+    width: 50%;
+    font-size: 14px;
+    color: #5588CC;
+    vertical-align: middle;
+}
+
+.Root span:last-of-type {
+    text-align: right;
+    color: #333;
+}
