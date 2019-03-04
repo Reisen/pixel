@@ -14,7 +14,7 @@
 
 .Resolution {
     background-color: rgba(22, 22, 22, 0.8);
-    border-bottom: 1px solid white;
+    border-top: 1px solid white;
     color: white;
     display: inline-block;
     font-family: 'Titillium Web', sans-serif;
@@ -24,6 +24,8 @@
     position: absolute;
     text-align: center;
     width: 100%;
+    left: 0px;
+    bottom: 0px;
 }
 
 .Root:hover .Resolution {
