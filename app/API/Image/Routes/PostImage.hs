@@ -88,7 +88,7 @@ postImage (Just token) req = do
   content   <- liftIO . B.readFile $ req ^. path
   uuid      <- liftIO U.nextRandom
   createdAt <- liftIO T.getCurrentTime
-  handleImageUpload $ ImageDetails content directory (req ^. tags) token uuid createdAt
+  handleImageUpload $ ImageDetails content createdAt directory token (req ^. tags) uuid
   pure (show uuid)
 
 --------------------------------------------------------------------------------
