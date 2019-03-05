@@ -19,4 +19,3 @@ State of the repository, badge style:
 ![GitHub language count](https://img.shields.io/github/languages/count/Reisen/pixel.svg?style=flat-square)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Reisen/pixel.svg?style=flat-square)
 ![GitHub repo size in bytes](https://img.shields.io/github/repo-size/Reisen/pixel.svg?style=flat-square)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Reisen/pixel.svg?style=flat-square)
