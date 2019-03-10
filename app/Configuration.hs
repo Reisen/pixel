@@ -24,7 +24,7 @@ import           HKD
 import qualified Database.SQLite.Simple        as S
 import qualified Error                         as E
 import qualified Eventless                     as Ev
-import qualified Pixel                         as P
+import qualified MonadPixel                    as P
 import qualified System.Environment            as S.E
 import qualified Text.Read                     as T.R
 

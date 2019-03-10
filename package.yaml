@@ -83,3 +83,11 @@ executables:
 
         dependencies:
             - eventless
+            - imageless
+
+library:
+  source-dirs: lib
+  dependencies:
+    - aeson
+    - eventless
+    - uuid

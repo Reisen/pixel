@@ -13,6 +13,7 @@ import           Control.Lens
 import qualified API.Image.Types               as API
 import qualified Data.UUID                     as U
 import qualified Eventless                     as E
+import qualified Pixel                         as Pixel
 
 --------------------------------------------------------------------------------
 
@@ -25,10 +26,10 @@ type Tag = Text
 createImage
   :: Monad m
   => U.UUID
-  -> API.Image
-  -> E.Command API.Image m
+  -> Pixel.Image
+  -> E.Command Pixel.Image m
 
-createImage userUUID API.Image {..} = do
+createImage userUUID Pixel.Image {..} = do
   E.emit (API.AssociatedWithUser userUUID)
   E.emit (API.HashChanged _imageHash)
   traverse_ (E.emit . API.TagAppended) _imageTags
@@ -42,12 +43,12 @@ addTags
   :: Monad m
   => Traversable t
   => t Tag
-  -> E.Command API.Image m
+  -> E.Command Pixel.Image m
 
-addTags newtags = E.loadSnapshot @(Maybe API.Image) >>= \case
+addTags newtags = E.loadSnapshot @(Maybe Pixel.Image) >>= \case
   Nothing    -> pure ()
   Just image -> for_ newtags $ \tag ->
-    unless (elem tag $ image ^. API.imageTags)
+    unless (elem tag $ image ^. Pixel.imageTags)
       $ E.emit (API.TagAppended tag)
 
 --------------------------------------------------------------------------------
@@ -58,10 +59,10 @@ removeTags
   :: Monad m
   => Traversable t
   => t Tag
-  -> E.Command API.Image m
+  -> E.Command Pixel.Image m
 
-removeTags newtags = E.loadSnapshot @(Maybe API.Image) >>= \case
+removeTags newtags = E.loadSnapshot @(Maybe Pixel.Image) >>= \case
   Nothing    -> pure ()
   Just image -> for_ newtags $ \tag ->
-    when (elem tag $ image ^. API.imageTags)
+    when (elem tag $ image ^. Pixel.imageTags)
       $ E.emit (API.TagRemoved tag)

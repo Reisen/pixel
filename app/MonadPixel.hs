@@ -1,4 +1,4 @@
-module Pixel
+module MonadPixel
   ( MakePixel
   , MakeMonadPixel
   , runPixel
