@@ -3,7 +3,13 @@
 ![GitHub](https://img.shields.io/github/license/Reisen/pixel.svg?style=flat-square)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/fae31afd-3ec0-4de8-9204-48b437ce57b6/deploy-status)](https://pixelized.netlify.com/#/)
 
-A semi-decent self-hosted image gallery. Host large, organized, rapidly searcheable galleries of your private images while maintaining full control of your data.
+A private image gallery for high-speed photo categorization.
+
+❗ Import all your Instagram, Facebook, iPhone, and Google Cloud Images.  
+❗ Quickly discover similar photos and eliminate duplicates.  
+❗ Sort by date, size, and photo content.  
+❗ Search photos by text content with OCR detection of content.  
+❗ Privacy respecting. Your data is yours, and if you're still worried. Host your own.  
 
 ![Screenshot](https://user-images.githubusercontent.com/158967/53294123-86783800-37d8-11e9-8ff6-f3a744e6bfdb.png)
 
