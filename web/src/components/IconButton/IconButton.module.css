@@ -22,8 +22,16 @@
     color: white;
 }
 
+.Root :global(.ToolTip) {
+    bottom: -48px;
+    transition:
+        0.1s opacity,
+        0.1s bottom;
+}
+
 .Root:hover :global(.ToolTip) {
-    display: block;
+    opacity: 1;
+    bottom: -38px;
 }
 
 .Root__active {

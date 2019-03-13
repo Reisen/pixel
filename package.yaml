@@ -49,6 +49,7 @@ default-extensions:
     - DataKinds
     - DeriveGeneric
     - DeriveDataTypeable
+    - DerivingStrategies
     - DuplicateRecordFields
     - FlexibleContexts
     - FlexibleInstances
@@ -83,3 +84,11 @@ executables:
 
         dependencies:
             - eventless
+            - imageless
+
+library:
+  source-dirs: lib
+  dependencies:
+    - aeson
+    - eventless
+    - uuid

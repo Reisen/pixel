@@ -1,4 +1,4 @@
-module API.Image.Types
+module Pixel.API.Images.Types
   ( DigestText
   , Image(..)
   , ImageEvent(..)
@@ -29,7 +29,7 @@ import           Data.List                      ( nub, delete )
 import           Data.Time                      ( UTCTime )
 import           Data.UUID                      ( UUID )
 import qualified Eventless                     as E
-import qualified JSON                          as J
+import qualified Pixel.JSON                    as J
 
 --------------------------------------------------------------------------------
 

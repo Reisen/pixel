@@ -8,7 +8,7 @@
     width: 138px;
     text-align: center;
     bottom: -38px;
-    display: none;
+    opacity: 0;
 }
 
 :global .ToolTip:after {

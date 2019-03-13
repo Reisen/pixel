@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 
-module JSON where
+module Pixel.JSON where
 
 --------------------------------------------------------------------------------
 
@@ -90,3 +90,4 @@ shortIdentifier prefix =
       (take 1)
       (\t b -> bool (map C.toLower) identity (all C.isUpper b) t <> drop 1 b)
     . drop (length prefix)
+

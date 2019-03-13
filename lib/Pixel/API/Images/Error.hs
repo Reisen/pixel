@@ -1,17 +1,14 @@
-module Error
-  ( PixelError(..)
-  )
-where
+module Pixel.API.Images.Error ( ImageError(..) ) where
 
 --------------------------------------------------------------------------------
 
 import           Protolude
 
-import qualified API.Image.Error as E
-
 --------------------------------------------------------------------------------
 
-data PixelError
-  = ImageError E.ImageError
-  | OtherError
+data ImageError
+  = MissingToken
+  | InvalidUUID
+  | ImageDoesNotExist
   deriving Show
+

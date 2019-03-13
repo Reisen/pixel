@@ -7,9 +7,9 @@ where
 
 import           Protolude
 
-import qualified API.Image.Types               as API
 import qualified Data.UUID                     as U
 import qualified Database.SQLite.Simple        as S
+import qualified Pixel                         as Pixel
 
 --------------------------------------------------------------------------------
 
@@ -17,10 +17,10 @@ projectImages
   :: MonadIO m
   => S.Connection
   -> U.UUID
-  -> API.Image
+  -> Pixel.Image
   -> m ()
 
-projectImages conn uuid API.Image {..} = do
+projectImages conn uuid Pixel.Image {..} = do
   putText $ fold ["[P:Image] ", show _imageCreatedAt, " ", _imageHash, ", Tags: ", show _imageTags]
   liftIO $ S.withTransaction conn $ do
     -- Create Tables
