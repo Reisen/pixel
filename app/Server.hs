@@ -12,7 +12,7 @@ import qualified API.Image.Routes                     as API
 import qualified Configuration                        as C
 import qualified Network.Wai.Middleware.Cors          as Cors
 import qualified Network.Wai.Middleware.RequestLogger as Logger
-import qualified Pixel                                as P
+import qualified MonadPixel                           as C
 
 --------------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ server config =
   Logger.logStdout
     $ corsHandler
     $ serve proxyAPI
-    $ hoistServer proxyAPI (P.runPixel config) implAPI
+    $ hoistServer proxyAPI (C.runPixel config) implAPI
 
   where
     corsHandler =

@@ -10,21 +10,19 @@ import           Protolude
 import           Servant
 
 import qualified API.Image.Error               as API
-import qualified API.Image.Services            as API
-import qualified API.Image.Types               as API
-import qualified API.Token                     as API
-import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
 import qualified Data.UUID                     as U
 import qualified Error                         as E
 import qualified JSON                          as J
+import qualified Pixel                         as Pixel
+import qualified MonadPixel                    as C
 
 --------------------------------------------------------------------------------
 
 -- We wrap up responses in an HTTP endpoint type, in order to abstract away
 -- from the backend.
 type GetImageByUUID =
-  Header "Authorization" API.Token
+  Header "Authorization" Pixel.Token
     :> Capture "uuid" Text
     :> Get '[JSON] Response
 
@@ -32,9 +30,9 @@ type GetImageByUUID =
 
 data Response = Response
   { responsePath  :: !Text
-  , responseTags  :: !API.TagList
+  , responseTags  :: !Pixel.TagList
   , responseThumb :: !Text
-  , responseUUID  :: !API.DigestText
+  , responseUUID  :: !Pixel.DigestText
   } deriving (Show, Generic)
 
 instance A.ToJSON Response where
@@ -43,8 +41,12 @@ instance A.ToJSON Response where
 
 --------------------------------------------------------------------------------
 
-createImageResponse :: API.DigestText -> API.Image -> Response
-createImageResponse uuid API.Image{..} = Response
+createImageResponse
+  :: Pixel.DigestText
+  -> Pixel.Image
+  -> Response
+
+createImageResponse uuid Pixel.Image{..} = Response
   { responsePath  = fold ["/static/images/", _imageHash]
   , responseTags  = _imageTags
   , responseThumb = fold ["/static/thumbs/", _imageHash]
@@ -53,7 +55,11 @@ createImageResponse uuid API.Image{..} = Response
 
 --------------------------------------------------------------------------------
 
-getImageByUUID :: Maybe API.Token -> API.DigestText -> C.Pixel Response
+getImageByUUID
+  :: Maybe Pixel.Token
+  -> Pixel.DigestText
+  -> C.Pixel Response
+
 getImageByUUID Nothing _     = throwError (E.ImageError API.MissingToken)
 getImageByUUID (Just _) uuid = handleImageRequest uuid >>= \case
   Nothing       -> throwError (E.ImageError API.InvalidUUID)
@@ -63,12 +69,12 @@ getImageByUUID (Just _) uuid = handleImageRequest uuid >>= \case
 
 handleImageRequest
   :: Monad m
-  => API.MonadImage m
-  => API.DigestText
+  => Pixel.MonadImage m
+  => Pixel.DigestText
   -> m (Maybe Response)
 
 handleImageRequest uuidText = case U.fromText uuidText of
   Nothing   -> pure Nothing
-  Just uuid -> API.loadImage uuid >>= \case
+  Just uuid -> Pixel.loadImage uuid >>= \case
     Nothing    -> pure Nothing
     Just image -> pure . Just $ createImageResponse uuidText image

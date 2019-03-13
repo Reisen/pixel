@@ -8,10 +8,6 @@ module Configuration
   , readConfig
   , readNumericEnv
   , readTextEnv
-
-  -- Monad Transformer
-  , Pixel
-  , MonadPixel
   )
 where
 
@@ -22,19 +18,9 @@ import           Control.Lens
 import           HKD
 
 import qualified Database.SQLite.Simple        as S
-import qualified Error                         as E
 import qualified Eventless                     as Ev
-import qualified MonadPixel                    as P
 import qualified System.Environment            as S.E
 import qualified Text.Read                     as T.R
-
---------------------------------------------------------------------------------
-
--- See `Imageless.hs` for an explanation of why we use `Make` functions to
--- generate Monads here. Otherwise, these are your standard Monad and MTL
--- constraints.
-type Pixel = P.MakePixel E.PixelError Config
-type MonadPixel m = P.MakeMonadPixel E.PixelError Config m
 
 --------------------------------------------------------------------------------
 

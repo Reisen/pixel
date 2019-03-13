@@ -12,19 +12,15 @@ import           Servant
 import           Servant.Multipart
 
 import qualified API.Image.Error               as API
-import qualified API.Image.Types               as API
-import qualified API.Image.Services            as API
-import qualified API.Token                     as API
 import qualified Configuration                 as C
-import qualified Crypto.Hash                   as H
 import qualified Data.Aeson                    as A
 import qualified Data.ByteString               as B
-import qualified Data.UUID                     as U
 import qualified Data.UUID.V4                  as U
 import qualified Data.Time                     as T
 import qualified Error                         as E
 import qualified JSON                          as J
 import qualified Pixel                         as Pixel
+import qualified MonadPixel                    as C
 
 --------------------------------------------------------------------------------
 

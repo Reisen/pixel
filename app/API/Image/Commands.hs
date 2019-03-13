@@ -10,7 +10,6 @@ where
 import           Protolude
 import           Control.Lens
 
-import qualified API.Image.Types               as API
 import qualified Data.UUID                     as U
 import qualified Eventless                     as E
 import qualified Pixel                         as Pixel
@@ -30,10 +29,10 @@ createImage
   -> E.Command Pixel.Image m
 
 createImage userUUID Pixel.Image {..} = do
-  E.emit (API.AssociatedWithUser userUUID)
-  E.emit (API.HashChanged _imageHash)
-  traverse_ (E.emit . API.TagAppended) _imageTags
-  traverse_ (E.emit . API.CreatedAt) _imageCreatedAt
+  E.emit (Pixel.AssociatedWithUser userUUID)
+  E.emit (Pixel.HashChanged _imageHash)
+  traverse_ (E.emit . Pixel.TagAppended) _imageTags
+  traverse_ (E.emit . Pixel.CreatedAt) _imageCreatedAt
 
 --------------------------------------------------------------------------------
 
@@ -49,7 +48,7 @@ addTags newtags = E.loadSnapshot @(Maybe Pixel.Image) >>= \case
   Nothing    -> pure ()
   Just image -> for_ newtags $ \tag ->
     unless (elem tag $ image ^. Pixel.imageTags)
-      $ E.emit (API.TagAppended tag)
+      $ E.emit (Pixel.TagAppended tag)
 
 --------------------------------------------------------------------------------
 
@@ -65,4 +64,4 @@ removeTags newtags = E.loadSnapshot @(Maybe Pixel.Image) >>= \case
   Nothing    -> pure ()
   Just image -> for_ newtags $ \tag ->
     when (elem tag $ image ^. Pixel.imageTags)
-      $ E.emit (API.TagRemoved tag)
+      $ E.emit (Pixel.TagRemoved tag)

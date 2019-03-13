@@ -49,6 +49,7 @@ default-extensions:
     - DataKinds
     - DeriveGeneric
     - DeriveDataTypeable
+    - DerivingStrategies
     - DuplicateRecordFields
     - FlexibleContexts
     - FlexibleInstances
