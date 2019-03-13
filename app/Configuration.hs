@@ -15,8 +15,8 @@ where
 
 import           Protolude
 import           Control.Lens
-import           HKD
 
+import           Pixel                          ( HKD )
 import qualified Database.SQLite.Simple        as S
 import qualified Eventless                     as Ev
 import qualified System.Environment            as S.E
