@@ -76,7 +76,7 @@ default-extensions:
 executables:
     imageless:
         main:        Main.hs
-        source-dirs: app
+        source-dirs: src/app
         ghc-options:
             - -threaded
             - -rtsopts
@@ -87,8 +87,8 @@ executables:
             - imageless
 
 library:
-  source-dirs: lib
-  dependencies:
-    - aeson
-    - eventless
-    - uuid
+    source-dirs: src/lib
+    dependencies:
+        - aeson
+        - eventless
+        - uuid
