@@ -13,7 +13,6 @@ import qualified API.Image.Error               as API
 import qualified Data.Aeson                    as A
 import qualified Data.UUID                     as U
 import qualified Error                         as E
-import qualified JSON                          as J
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
 
@@ -36,8 +35,8 @@ data Response = Response
   } deriving (Show, Generic)
 
 instance A.ToJSON Response where
-  toEncoding = J.pixelToEncoding
-  toJSON     = J.pixelToJSON
+  toEncoding = Pixel.pixelToEncoding
+  toJSON     = Pixel.pixelToJSON
 
 --------------------------------------------------------------------------------
 

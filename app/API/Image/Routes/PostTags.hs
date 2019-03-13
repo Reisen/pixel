@@ -14,7 +14,6 @@ import qualified API.Image.Error               as API
 import qualified Data.Aeson                    as A
 import qualified Data.UUID                     as U
 import qualified Error                         as E
-import qualified JSON                          as J
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
 
@@ -36,7 +35,7 @@ newtype Request = Request
   } deriving (Show, Generic)
 
 instance A.FromJSON Request where
-  parseJSON = J.pixelParseJSON
+  parseJSON = Pixel.pixelParseJSON
 
 makeFields ''Request
 

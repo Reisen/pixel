@@ -18,7 +18,6 @@ import qualified Data.ByteString               as B
 import qualified Data.UUID.V4                  as U
 import qualified Data.Time                     as T
 import qualified Error                         as E
-import qualified JSON                          as J
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
 
@@ -40,8 +39,8 @@ data Request = Request
   } deriving (Show, Generic)
 
 instance A.ToJSON Request where
-  toEncoding = J.pixelToEncoding
-  toJSON     = J.pixelToJSON
+  toEncoding = Pixel.pixelToEncoding
+  toJSON     = Pixel.pixelToJSON
 
 makeFields ''Request
 

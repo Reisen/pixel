@@ -12,7 +12,6 @@ import           Servant
 import qualified API.Image.Error               as API
 import qualified Data.Aeson                    as A
 import qualified Error                         as E
-import qualified JSON                          as J
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
 
@@ -33,16 +32,16 @@ data ImageResponse = ImageResponse
   } deriving (Show, Generic)
 
 instance A.ToJSON ImageResponse where
-  toEncoding = J.pixelToEncoding
-  toJSON     = J.pixelToJSON
+  toEncoding = Pixel.pixelToEncoding
+  toJSON     = Pixel.pixelToJSON
 
 newtype Response = Response
   { responseImages :: [ImageResponse]
   } deriving (Show, Generic)
 
 instance A.ToJSON Response where
-  toEncoding = J.pixelToEncoding
-  toJSON     = J.pixelToJSON
+  toEncoding = Pixel.pixelToEncoding
+  toJSON     = Pixel.pixelToJSON
 
 --------------------------------------------------------------------------------
 
