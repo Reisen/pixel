@@ -9,10 +9,7 @@ where
 import           Protolude
 import           Servant
 
-import qualified API.Image.Error               as API
 import qualified Data.Aeson                    as A
-import qualified Data.UUID                     as U
-import qualified Error                         as E
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
 
@@ -59,21 +56,8 @@ getImageByUUID
   -> Pixel.DigestText
   -> C.Pixel Response
 
-getImageByUUID Nothing _     = throwError (E.ImageError API.MissingToken)
-getImageByUUID (Just _) uuid = handleImageRequest uuid >>= \case
-  Nothing       -> throwError (E.ImageError API.InvalidUUID)
-  Just response -> pure response
-
---------------------------------------------------------------------------------
-
-handleImageRequest
-  :: Monad m
-  => Pixel.MonadImage m
-  => Pixel.DigestText
-  -> m (Maybe Response)
-
-handleImageRequest uuidText = case U.fromText uuidText of
-  Nothing   -> pure Nothing
-  Just uuid -> Pixel.loadImage uuid >>= \case
-    Nothing    -> pure Nothing
-    Just image -> pure . Just $ createImageResponse uuidText image
+getImageByUUID Nothing _     = throwError (Pixel.ImageError Pixel.MissingToken)
+getImageByUUID (Just _) uuid =
+  Pixel.handleImageRequest uuid >>= \case
+    Nothing       -> throwError (Pixel.ImageError Pixel.InvalidUUID)
+    Just response -> pure $ createImageResponse uuid response

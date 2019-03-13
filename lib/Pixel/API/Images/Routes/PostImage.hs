@@ -24,10 +24,10 @@ import qualified Pixel.Services.Static         as Pixel
 -- | bytes. The result of this function is just the hash of the newly created
 -- | file within the backend.
 handleImageUpload
-  :: Monad m           -- ^ Any Monad
+  :: Monad m             -- ^ Any Monad
   => Pixel.MonadStatic m -- ^ Access to Static API to store data.
   => Pixel.MonadImage m  -- ^ Access to Image API to write/read images.
-  => ImageDetails      -- ^ Argument Itself
+  => ImageDetails        -- ^ Argument Itself
   -> m ()
 
 handleImageUpload ImageDetails {..} = do

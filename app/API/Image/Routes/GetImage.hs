@@ -9,9 +9,7 @@ where
 import           Protolude
 import           Servant
 
-import qualified API.Image.Error               as API
 import qualified Data.Aeson                    as A
-import qualified Error                         as E
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
 
@@ -66,18 +64,9 @@ getImage
   :: Maybe Pixel.Token
   -> C.Pixel Response
 
-getImage Nothing  = throwError (E.ImageError API.MissingToken)
-getImage (Just _) = handleImagesRquest
-
---------------------------------------------------------------------------------
-
-handleImagesRquest
-  :: Monad m
-  => Pixel.MonadImage m
-  => m Response
-
-handleImagesRquest = do
-  images <- Pixel.loadImages 10
+getImage Nothing  = throwError (Pixel.ImageError Pixel.MissingToken)
+getImage (Just _) = do
+  images <- Pixel.fetchImages
   pure Response
     { responseImages = map (uncurry createImageResponse . first show) images
     }

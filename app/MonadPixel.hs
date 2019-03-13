@@ -11,7 +11,6 @@ import           Protolude
 import           Servant
 
 import qualified Configuration                 as C
-import qualified Error                         as E
 import qualified Pixel                         as Pixel
 import qualified Services.Image                as Services
 import qualified Services.Static               as Services
@@ -44,9 +43,9 @@ type MakeMonadPixel err context m =
 
 -- Concrete Wrapper
 newtype Pixel a = Pixel
-  { unwrapPixel :: MakePixel E.PixelError C.Config a
+  { unwrapPixel :: MakePixel Pixel.Error C.Config a
   } deriving newtype (MonadReader C.Config)
-    deriving newtype (MonadError E.PixelError)
+    deriving newtype (MonadError Pixel.Error)
     deriving newtype MonadIO
     deriving newtype Functor
     deriving newtype Applicative

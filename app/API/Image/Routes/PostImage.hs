@@ -11,13 +11,11 @@ import           Control.Lens
 import           Servant
 import           Servant.Multipart
 
-import qualified API.Image.Error               as API
 import qualified Configuration                 as C
 import qualified Data.Aeson                    as A
 import qualified Data.ByteString               as B
 import qualified Data.UUID.V4                  as U
 import qualified Data.Time                     as T
-import qualified Error                         as E
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
 
@@ -61,8 +59,12 @@ instance FromMultipart Tmp Request where
 -- Endpoint responsible for handling image uploads, it receives an image as a
 -- request object, copies the uploaded content to our local static directory
 -- and persists meta information to the DB.
-postImage :: Maybe Pixel.Token -> Request -> C.Pixel Text
-postImage Nothing _        = throwError (E.ImageError API.MissingToken)
+postImage
+  :: Maybe Pixel.Token
+  -> Request
+  -> C.Pixel Text
+
+postImage Nothing _        = throwError (Pixel.ImageError Pixel.MissingToken)
 postImage (Just token) req = do
   directory <- view C.configStaticLocation
   content   <- liftIO . B.readFile $ req ^. path

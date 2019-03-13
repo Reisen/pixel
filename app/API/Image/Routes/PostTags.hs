@@ -10,10 +10,7 @@ import           Protolude
 import           Control.Lens
 import           Servant
 
-import qualified API.Image.Error               as API
 import qualified Data.Aeson                    as A
-import qualified Data.UUID                     as U
-import qualified Error                         as E
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
 
@@ -47,19 +44,7 @@ postTags
   -> Request
   -> C.Pixel NoContent
 
-postTags Nothing _ _ = throwError (E.ImageError API.MissingToken)
-postTags (Just _) uuid req =
-  handleTagsRequest uuid (req ^. tags) >> pure NoContent
-
---------------------------------------------------------------------------------
-
-handleTagsRequest
-  :: Monad m
-  => Pixel.MonadImage m
-  => Pixel.DigestText
-  -> Pixel.TagList
-  -> m ()
-
-handleTagsRequest uuidText newTags = case U.fromText uuidText of
-  Nothing   -> pure ()
-  Just uuid -> Pixel.appendTags uuid newTags
+postTags Nothing _ _ = throwError (Pixel.ImageError Pixel.MissingToken)
+postTags (Just _) uuid req = do
+  Pixel.addTags uuid (req ^. tags)
+  pure NoContent
