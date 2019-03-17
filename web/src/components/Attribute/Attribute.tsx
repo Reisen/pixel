@@ -11,7 +11,7 @@ export default (props: Props) =>
     <div className={styles.Root}>
         <span>
             <i className={`icofont-${props.icon}`} />
-            {props.name}:
+            {props.name}
         </span>
 
         <span>

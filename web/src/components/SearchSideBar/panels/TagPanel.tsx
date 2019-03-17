@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import styles              from './TagPanel.module.css';
-import Tag                 from '../Tag';
+import React     from 'react';
+import styles    from './TagPanel.module.css';
 import Attribute from '../../../components/Attribute';
 
 interface Props {
@@ -17,4 +16,4 @@ export default (props: Props) =>
                 ))
             }
         </div>
-    </div>
+    </div>;

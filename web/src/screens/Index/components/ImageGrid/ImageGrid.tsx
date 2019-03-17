@@ -1,14 +1,17 @@
-import Image               from '../Image';
-import Pager               from '../Pager';
-import React, { useState } from 'react';
-import styles              from './ImageGrid.module.css';
-import { Link }            from 'react-router-dom';
-import { image }           from '../../../../types/image';
+import React     from 'react';
+import { Link }  from 'react-router-dom';
+import { image } from '../../../../types/image';
+
+import Image     from '../Image';
+import Pager     from '../Pager';
+import styles    from './ImageGrid.module.css';
 
 interface Props {
+    changePage: (page: number) => void;
     images: image[];
     width: number;
     rows: number;
+    page: number;
 }
 
 // Render images that have actually got valid paths.
@@ -37,11 +40,9 @@ const renderEmptyImages = (slice: image[], props: Props) =>
 // Render a fixed grid, calculating which images to display depending on page
 // width and row count.
 const ImageGrid = (props: Props) => {
-    // Render State
-    const [page, setPage] = useState(1);
-    const imageView       = props.images.slice(
-        props.width * props.rows * (page - 1 + 0),
-        props.width * props.rows * (page - 1 + 1)
+    const imageView = props.images.slice(
+        props.width * props.rows * (props.page - 1 + 0),
+        props.width * props.rows * (props.page - 1 + 1)
     );
 
     return (
@@ -50,9 +51,9 @@ const ImageGrid = (props: Props) => {
             { renderEmptyImages(imageView, props) }
 
             <Pager
-                page={page}
+                page={props.page}
                 pageCount={5}
-                setPage={(n: number) => setPage(Math.max(1, n))}
+                setPage={props.changePage}
             />
         </div>
     );

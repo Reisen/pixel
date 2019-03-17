@@ -31,7 +31,8 @@ const App = () => (
     <Provider store={store}>
         <Router>
             <div className="dark">
-                <Route exact path="/" component={Index} />
+                <Route exact path="/"        component={Index} />
+                <Route       path="/g/:page" component={Index} />
                 <Route       path="/i/:uuid" component={ImageView} />
             </div>
         </Router>

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/classnames": "^2.2.7",
+    "@types/history": "^4.7.2",
     "@types/jest": "24.0.0",
     "@types/node": "10.12.24",
     "@types/ramda": "^0.25.50",
