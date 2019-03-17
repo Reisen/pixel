@@ -6,15 +6,16 @@ import MetaDataPanel       from './panels/MetaDataPanel';
 import SettingsPanel       from './panels/SettingsPanel';
 import TagsPanel           from './panels/TagPanel';
 import TextInput           from '../TextInput';
-import Toggle              from '../Toggle';
 
 
 interface Props {
     tags?: string[];
+    initialPanel: string;
+    enabledMetadata: boolean;
 }
 
 const SearchSideBar = (props: Props) => {
-    const [page, changePage] = useState('metadata');
+    const [panel, changePanel] = useState(props.initialPanel);
 
     return (
         <div className={styles.Root}>
@@ -23,29 +24,34 @@ const SearchSideBar = (props: Props) => {
                 <IconButton
                     icon="tag"
                     tooltip="Tag List"
-                    active={page === 'tag'}
-                    onClick={() => changePage('tags')}
+                    active={panel === 'tag'}
+                    onClick={() => changePanel('tags')}
                 />
 
                 <IconButton
                     icon="gears"
                     tooltip="Settings"
-                    active={page === 'settings'}
-                    onClick={() => changePage('settings')}
+                    active={panel === 'settings'}
+                    onClick={() => changePanel('settings')}
                 />
 
-                <IconButton
-                    icon="chart-radar-graph"
-                    tooltip="Metadata"
-                    active={page === 'metadata'}
-                    onClick={() => changePage('metadata')}
-                />
+                {
+                    !props.enabledMetadata
+                        ? null
+                        :
+                            <IconButton
+                                icon="chart-radar-graph"
+                                tooltip="Metadata"
+                                active={panel === 'metadata'}
+                                onClick={() => changePanel('metadata')}
+                            />
+                }
             </div>
 
             {
-                page === 'tags'     ? <TagsPanel {...props}/> :
-                page === 'settings' ? <SettingsPanel /> :
-                page === 'metadata' ? <MetaDataPanel /> :
+                panel === 'tags'     ? <TagsPanel {...props}/> :
+                panel === 'settings' ? <SettingsPanel /> :
+                panel === 'metadata' ? <MetaDataPanel /> :
                 null
             }
         </div>
