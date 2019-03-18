@@ -1,7 +1,5 @@
 .Root {
-    border-left: 16px solid white;
-    border-bottom: 16px solid white;
-    width: 960px;
-    display: inline-block;
+    width: 944px;
     position: relative;
+    float: right;
 }

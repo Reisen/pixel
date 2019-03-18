@@ -3,6 +3,7 @@ import { handleActions }          from 'redux-actions';
 import { compose, lensProp, set } from 'ramda';
 
 const initialState: State = {
+    fillGrid: 'cover',
     images: [
         // Page 1
         { "hash": "asd98u23", path: "https://i.redd.it/v6ug5bnh51h21.jpg#1", tags: ["dogs", "cats"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
@@ -14,7 +15,7 @@ const initialState: State = {
 
         { "hash": "848djslk", path: "https://i.imgur.com/kblUAXs.jpg#7", tags: ["dogs", "cats"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
         { "hash": "2398fh23", path: "https://i.redd.it/uama23jb40h21.jpg#8", tags: ["dogs", "cats"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
-        { "hash": "asd98u23", path: "https://i.imgur.com/ysHH7a8.jpg#9", tags: ["dogs", "cats"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
+        { "hash": "asd98u23", path: "https://i.imgur.com/sv05qpF.jpg#9", tags: ["dogs", "cats"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
         { "hash": "asd98u23", path: "https://i.redd.it/v6ug5bnh51h21.jpg#10", tags: ["dogs", "cats"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
         { "hash": "asd98u23", path: "https://i.imgur.com/ysHH7a8.jpg#11", tags: ["dogs", "cats"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
         { "hash": "asd98u23", path: "https://i.redd.it/5agvjiyyfwg21.jpg#12", tags: ["dogs", "pussy", "yoshimitsu"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
@@ -55,7 +56,7 @@ const initialState: State = {
 };
 
 export const imageReducer = handleActions<State>({
-    'LOAD_IMAGES': (state, action) =>
-        set(lensProp('images'), action.payload)(state)
+    'LOAD_IMAGES':       (state, action) => set(lensProp('images'), action.payload)(state),
+    'SET_IMAGE_SCALING': (state, action) => set(lensProp('fillGrid'), action.payload)(state)
 
 }, initialState);

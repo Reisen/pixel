@@ -3,13 +3,12 @@
     background-color: #F3F3FF;
     background-position: center;
     background-size: cover;
-    border-bottom: 16px solid white;
-    border-left: 16px solid white;
+    background-repeat: no-repeat;
     cursor: pointer;
     display: inline-block;
-    height: 160px;
     position: relative;
-    width: 160px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
 }
 
 .Resolution {
@@ -36,4 +35,10 @@
 .Root__empty {
     background-color: #F3F3FF;
     background-size: auto;
+}
+
+.Root__contained {
+    background-size: contain;
+    background-color: white;
+    border-bottom: 8px solid white;
 }

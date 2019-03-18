@@ -1,16 +1,16 @@
 .Root {
     border: 1px solid white;
-    font-size: 14px;
     color: #5588CC;
     cursor: pointer;
-    width: 100%;
+    font-size: 14px;
+    line-height: 38px;
+    margin: 0px 1px 8px 1px;
     outline: 1px solid #DDF;
     padding: 0px 8px;
     position: relative;
     text-align: center;
     vertical-align: middle;
-    line-height: 38px;
-    margin-top: 8px;
+    width: auto;
 }
 
 .Root i {

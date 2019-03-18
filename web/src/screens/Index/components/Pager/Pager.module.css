@@ -1,8 +1,9 @@
 .Pager {
     border-top: 1px solid #DDF;
-    margin-left: 16px;
+    margin-left: 2px;
     padding-top: 32px;
     margin-top: 16px;
+    font-size: 14px;
 }
 
 .LeftIcons,

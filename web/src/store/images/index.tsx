@@ -8,5 +8,6 @@ export {
 
 export {
     loadImages,
-    fetchImages
+    fetchImages,
+    setImageScaling
 } from './actions';

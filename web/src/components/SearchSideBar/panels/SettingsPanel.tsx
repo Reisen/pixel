@@ -8,7 +8,7 @@ export default {
     tooltip: 'Settings',
     panel:   () =>
         <div>
-            <h1>Search Settings</h1>
+            <h1>Settings</h1>
 
             <Toggle on text="Hide NSFW" onPress={() => {}} />
             <Toggle on text="Hide Favorites" onPress={() => {}} />

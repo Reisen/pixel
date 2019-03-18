@@ -9,6 +9,8 @@ import styles    from './ImageGrid.module.css';
 
 interface Props {
     changePage: (page: number) => void;
+    scalingMode: 'contain' | 'cover',
+    setScalingMode: (mode: 'contain' | 'cover') => void;
     images: image[];
     width: number;
     rows: number;
@@ -20,9 +22,11 @@ const renderValidImages = (slice: image[], props: Props) =>
     slice.map((image, k) =>
         <Link key={image.path} to="/i/8ac5928b-9caa3ac1-cb488a9a-938ac938">
             <Image
+                contain={props.scalingMode === 'contain'}
+                key={k.toString()}
                 path={image.path}
-                width={960 / props.width}
                 resolution="800x600"
+                width={944 / props.width}
             />
         </Link>
     );
@@ -34,7 +38,12 @@ const renderEmptyImages = (slice: image[], props: Props) =>
     Array(props.width * props.rows - slice.length)
         .fill(0)
         .map(k =>
-            <Image key={k.toString()} width={960 / props.width} empty />
+            <Image
+                empty
+                contain={props.scalingMode === 'contain'}
+                key={k.toString()}
+                width={944 / props.width}
+            />
         );
 
 
@@ -62,7 +71,9 @@ const ImageGrid = (props: Props) => {
             <Pager
                 page={props.page}
                 pageCount={5}
+                scalingMode={props.scalingMode}
                 setPage={props.changePage}
+                setScalingMode={props.setScalingMode}
             />
         </div>
     );

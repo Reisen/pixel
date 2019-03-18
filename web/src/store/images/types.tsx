@@ -1,7 +1,8 @@
-import { image }                              from '../../types/image';
+import { image } from '../../types/image';
 
 export interface ImageState {
-    images: image[];
+    fillGrid: 'fill' | 'cover' | 'contain',
+    images:   image[];
 }
 
 export type State =

@@ -6,7 +6,9 @@ import styles        from './Pager.module.css';
 interface Props {
     page: number;
     pageCount: number;
+    scalingMode: 'contain' | 'cover',
     setPage: (page: number) => void;
+    setScalingMode: (mode: 'contain' | 'cover') => void;
 }
 
 const renderButtons = (page: number, setPage: (page: number) => void) =>
@@ -35,6 +37,18 @@ const Pager = (props: Props) => {
                     tooltip="Change Grid Size"
                     icon="layout"
                     onClick={() => props.setPage(props.page - 1)}
+                />
+
+                <IconButton
+                    tooltip="Toggle Image Fitting"
+                    icon="resize"
+                    onClick={() =>
+                        props.setScalingMode(
+                            props.scalingMode === 'contain'
+                                ? 'cover'
+                                : 'contain'
+                        )
+                    }
                 />
 
                 <IconButton
