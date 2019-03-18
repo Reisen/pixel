@@ -47,7 +47,7 @@ const Index = (props: Props) => {
         <div className="Page">
             <NavigationBar username={props.username} />
             <div className={styles.PanelContainer}>
-                <SearchSidebar enabledMetadata={false} initialPanel="tags" tags={tags} />
+                <SearchSidebar initialPanel="tags" tags={tags} />
                 <ImageGrid
                     rows={4}
                     width={6}

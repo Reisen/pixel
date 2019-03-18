@@ -50,7 +50,7 @@ const Pager = (props: Props) => {
                 </div>
 
                 <div className={styles.IconRow}>
-                    <IconButton icon="simple-left" onClick={() => props.setPage(props.page - 1)} />
+                    <IconButton icon="simple-left" onClick={() => props.setPage(Math.max(1, props.page - 1))} />
                     <IconButton icon="simple-right" onClick={() => props.setPage(props.page + 1)} />
                 </div>
             </div>

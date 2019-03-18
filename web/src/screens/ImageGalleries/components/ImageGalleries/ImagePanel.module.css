@@ -1,0 +1,17 @@
+.Root {
+    border-left: 16px solid white;
+    border-bottom: 16px solid white;
+    width: 960px;
+    display: inline-block;
+    position: relative;
+}
+
+.Gallery {
+    width: 240px;
+    border: 1px solid black;
+    line-height: 64px;
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}

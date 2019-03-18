@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
-import styles               from './ImageView.module.css';
 import { State }            from '../../store';
 import { connect }          from 'react-redux';
 import { fetchImages }      from '../../store/images';
 import { image }            from '../../types/image';
 
-import ImagePanel           from './components/ImagePanel';
+import ImageGalleries       from './components/ImageGalleries';
 import NavigationBar        from '../../components/NavigationBar';
 import SearchSidebar        from '../../components/SearchSideBar';
 import { MetaDataPanel }    from '../../components/SearchSideBar/panels';
+import styles               from './ImageGalleries.module.css';
 
 const onlyImage: image = {
     createdAt: '01/01/1999',
@@ -49,7 +49,7 @@ const Image = (props: Props) => {
                     }}
                 </SearchSidebar>
 
-                <ImagePanel image={onlyImage} />
+                <ImageGalleries image={onlyImage} />
             </div>
         </div>
     );

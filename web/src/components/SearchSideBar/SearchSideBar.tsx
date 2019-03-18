@@ -1,59 +1,43 @@
-import React, { useState } from 'react';
-import styles              from './SearchSideBar.module.css';
+import React, { useState }  from 'react';
+import styles               from './SearchSideBar.module.css';
 
-import IconButton          from '../IconButton';
-import MetaDataPanel       from './panels/MetaDataPanel';
-import SettingsPanel       from './panels/SettingsPanel';
-import TagsPanel           from './panels/TagPanel';
-import TextInput           from '../TextInput';
+import IconButton           from '../IconButton';
+import panels, { PanelMap } from './panels';
+import TextInput            from '../TextInput';
 
 
 interface Props {
     tags?: string[];
     initialPanel: string;
-    enabledMetadata: boolean;
+    children?: PanelMap;
 }
 
 const SearchSideBar = (props: Props) => {
-    const [panel, changePanel] = useState(props.initialPanel);
+    const [panel, changePanel] = useState<string>(props.initialPanel);
+    const panelMap: PanelMap   = {
+        ...panels,
+        ...props.children
+    };
+
+    const Current               = panelMap[panel].panel;
 
     return (
         <div className={styles.Root}>
             <TextInput placeholder="Search" />
             <div className={styles.Buttons}>
-                <IconButton
-                    icon="tag"
-                    tooltip="Tag List"
-                    active={panel === 'tag'}
-                    onClick={() => changePanel('tags')}
-                />
-
-                <IconButton
-                    icon="gears"
-                    tooltip="Settings"
-                    active={panel === 'settings'}
-                    onClick={() => changePanel('settings')}
-                />
-
                 {
-                    !props.enabledMetadata
-                        ? null
-                        :
-                            <IconButton
-                                icon="chart-radar-graph"
-                                tooltip="Metadata"
-                                active={panel === 'metadata'}
-                                onClick={() => changePanel('metadata')}
-                            />
+                    Object.values(panelMap).map(v  =>
+                        <IconButton
+                            icon={v.icon}
+                            tooltip={v.tooltip}
+                            active={panel === v.name}
+                            onClick={() => changePanel(v.name)}
+                        />
+                    )
                 }
             </div>
 
-            {
-                panel === 'tags'     ? <TagsPanel {...props}/> :
-                panel === 'settings' ? <SettingsPanel /> :
-                panel === 'metadata' ? <MetaDataPanel /> :
-                null
-            }
+            <Current {...props} />
         </div>
     );
 }
