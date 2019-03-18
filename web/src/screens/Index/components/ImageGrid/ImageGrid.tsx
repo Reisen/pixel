@@ -6,6 +6,7 @@ import Image     from '../Image';
 import Pager     from '../Pager';
 import styles    from './ImageGrid.module.css';
 
+
 interface Props {
     changePage: (page: number) => void;
     images: image[];
@@ -44,6 +45,14 @@ const ImageGrid = (props: Props) => {
         props.width * props.rows * (props.page - 1 + 0),
         props.width * props.rows * (props.page - 1 + 1)
     );
+
+    if (imageView.length === 0 ) {
+        return (
+            <div>
+                Nodbody here but us chickens!
+            </div>
+        );
+    }
 
     return (
         <div className={styles.ImageGrid}>

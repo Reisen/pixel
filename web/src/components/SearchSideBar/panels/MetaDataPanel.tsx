@@ -24,10 +24,10 @@ export default {
                 <Attribute name="Hash:" value="10c435b41257e5ae2ef4ae1c360b3d02a14d5175ab37" icon="unlock" />
             </div>
 
-            <Button icon="heart">Favorite</Button>
             <Link to={window.location.pathname + "/galleries"}>
-                <Button icon="save">Save to Gallery</Button>
+                <Button icon="save">Add to Gallery</Button>
             </Link>
+            <Button icon="heart">Favorite</Button>
             <Button icon="trash" danger>Delete</Button>
         </div>
 };

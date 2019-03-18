@@ -18,6 +18,7 @@ import ImageGalleries                     from './screens/ImageGalleries';
 // Global Styles
 import './App.css';
 import 'normalize.css';
+import './static/icofont/icofont.min.css';
 
 
 // Create Global Store

@@ -6,12 +6,60 @@
     position: relative;
 }
 
+.Root h1 {
+    font-size: 18px;
+    border-bottom: 1px solid #DDF;
+    padding-bottom: 8px;
+    color: #336699;
+    font-weight: normal;
+    margin: 0px 4px;
+    margin-bottom: 24px;
+    margin-top: 40px;
+}
+
+.Root h1:first-of-type {
+    margin-top: 0px;
+}
+
+.Root hr {
+    margin: 32px 4px;
+    width: 100%;
+    border: 0px;
+    border-top: 1px solid #DDF;
+}
+
 .Gallery {
-    width: 240px;
-    border: 1px solid black;
-    line-height: 64px;
+    width: 184px;
+    height: 184px;
+    background-size: cover;
+    background-position: center;
     display: inline-block;
-    margin-right: 10px;
+    margin-left: 4px;
     margin-bottom: 10px;
     text-align: center;
+    position: relative;
+}
+
+.Name {
+    background-color: rgba(22, 22, 22, 0.8);
+    border-top: 1px solid white;
+    color: white;
+    display: inline-block;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 11px;
+    line-height: 32px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    left: 0px;
+    bottom: 0px;
+}
+
+.Name i {
+    color: #55FF55;
+    font-size: 18px;
+    vertical-align: middle;
+    position: absolute;
+    left: 8px;
+    line-height: 32px;
 }

@@ -1,15 +1,16 @@
-import React, { useEffect,  useState } from 'react';
-import { image }                       from '../../types/image';
-import { connect }                     from 'react-redux';
-import { match }                       from 'react-router-dom';
-import { State }                       from '../../store';
-import { getImages, fetchImages }      from '../../store/images';
-import { History }                     from 'history'
+import React, { useEffect }       from 'react';
+import { image }                  from '../../types/image';
+import { connect }                from 'react-redux';
+import { match }                  from 'react-router-dom';
+import { State }                  from '../../store';
+import { getImages, fetchImages } from '../../store/images';
+import { History }                from 'history'
 
-import NavigationBar                   from '../../components/NavigationBar';
-import SearchSidebar                   from '../../components/SearchSideBar';
-import ImageGrid                       from './components/ImageGrid';
-import styles                          from './Index.module.css';
+import NavigationBar              from '../../components/NavigationBar';
+import SearchSidebar              from '../../components/SearchSideBar';
+import ImageGrid                  from './components/ImageGrid';
+import styles                     from './Index.module.css';
+
 
 const tags: string[] = [
     "dog",
@@ -24,12 +25,10 @@ interface Params {
 
 interface Props {
     fetchImages: () => void;
-    nextPage:    () => void;
-    prevPage:    () => void;
     images:      image[];
     username:    string;
-    match:       match<Params>;
     history:     History;
+    match:       match<Params>;
 }
 
 const Index = (props: Props) => {
