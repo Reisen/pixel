@@ -1,5 +1,6 @@
 module API.Image.Routes.GetTags
   ( GetTags
+  , GetTagsResponse
   , getTags
   )
 where
@@ -21,15 +22,15 @@ type GetTags =
   Header "Authorization" Pixel.Token
     :> Capture "uuid" Text
     :> "tags"
-    :> Get '[JSON] Response
+    :> Get '[JSON] GetTagsResponse
 
 --------------------------------------------------------------------------------
 
-newtype Response = Response
-  { responseTags :: Pixel.TagList
+newtype GetTagsResponse = GetTagsResponse
+  { getTagsResponseTags :: Pixel.TagList
   } deriving (Show, Generic)
 
-instance A.ToJSON Response where
+instance A.ToJSON GetTagsResponse where
   toEncoding = Pixel.pixelToEncoding
   toJSON     = Pixel.pixelToJSON
 
@@ -38,10 +39,10 @@ instance A.ToJSON Response where
 getTags
   :: Maybe Pixel.Token
   -> Pixel.DigestText
-  -> C.Pixel Response
+  -> C.Pixel GetTagsResponse
 
 getTags Nothing _     = throwError (Pixel.ImageError Pixel.MissingToken)
 getTags (Just _) uuid =
   Pixel.fetchTags uuid >>= \case
     Nothing       -> throwError (Pixel.ImageError Pixel.InvalidUUID)
-    Just response -> pure (Response response)
+    Just response -> pure (GetTagsResponse response)

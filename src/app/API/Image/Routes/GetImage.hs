@@ -1,5 +1,6 @@
 module API.Image.Routes.GetImage
   ( GetImage
+  , GetImageResponse
   , getImage
   )
 where
@@ -9,6 +10,7 @@ where
 import           Protolude
 import           Servant
 
+import           API.Image.Types                ( Image(..) )
 import qualified Data.Aeson                    as A
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
@@ -19,39 +21,30 @@ import qualified MonadPixel                    as C
 -- away from the backend.
 type GetImage =
   Header "Authorization" Pixel.Token
-    :> Get '[JSON] Response
+    :> Get '[JSON] GetImageResponse
 
 --------------------------------------------------------------------------------
 
-data ImageResponse = ImageResponse
-  { imageResponsePath  :: !Text
-  , imageResponseThumb :: !Text
-  , imageResponseUUID  :: !Pixel.DigestText
+newtype GetImageResponse = GetImageResponse
+  { getImageResponseImages :: [Image]
   } deriving (Show, Generic)
 
-instance A.ToJSON ImageResponse where
-  toEncoding = Pixel.pixelToEncoding
-  toJSON     = Pixel.pixelToJSON
-
-newtype Response = Response
-  { responseImages :: [ImageResponse]
-  } deriving (Show, Generic)
-
-instance A.ToJSON Response where
+instance A.ToJSON GetImageResponse where
   toEncoding = Pixel.pixelToEncoding
   toJSON     = Pixel.pixelToJSON
 
 --------------------------------------------------------------------------------
 
-createImageResponse
+convertImage
   :: Pixel.DigestText
   -> Pixel.Image
-  -> ImageResponse
+  -> Image
 
-createImageResponse uuid Pixel.Image{..} = ImageResponse
-  { imageResponsePath  = fold ["/static/images/", _imageHash]
-  , imageResponseThumb = fold ["/static/thumbs/", _imageHash]
-  , imageResponseUUID  = uuid
+convertImage uuid Pixel.Image{..} = Image
+  { imagePath  = fold ["/static/images/", _imageHash]
+  , imageThumb = fold ["/static/thumbs/", _imageHash]
+  , imageUUID  = uuid
+  , imageTags  = []
   }
 
 --------------------------------------------------------------------------------
@@ -62,11 +55,11 @@ createImageResponse uuid Pixel.Image{..} = ImageResponse
 -- from tags to uploader, to ordering.
 getImage
   :: Maybe Pixel.Token
-  -> C.Pixel Response
+  -> C.Pixel GetImageResponse
 
 getImage Nothing  = throwError (Pixel.ImageError Pixel.MissingToken)
 getImage (Just _) = do
   images <- Pixel.fetchImages
-  pure Response
-    { responseImages = map (uncurry createImageResponse . first show) images
+  pure GetImageResponse
+    { getImageResponseImages = map (uncurry convertImage . first show) images
     }

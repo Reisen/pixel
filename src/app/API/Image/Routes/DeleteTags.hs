@@ -1,5 +1,6 @@
 module API.Image.Routes.DeleteTags
   ( DeleteTags
+  , DeleteTagsRequest
   , deleteTags
   )
 where
@@ -22,26 +23,26 @@ type DeleteTags =
   Header "Authorization" Pixel.Token
     :> Capture "uuid" Text
     :> "tags"
-    :> ReqBody '[JSON] Request
+    :> ReqBody '[JSON] DeleteTagsRequest
     :> Delete '[JSON] NoContent
 
 --------------------------------------------------------------------------------
 
-newtype Request = Request
-  { requestTags :: Pixel.TagList
+newtype DeleteTagsRequest = DeleteTagsRequest
+  { deleteTagsRequestTags :: Pixel.TagList
   } deriving (Show, Generic)
 
-instance A.FromJSON Request where
+instance A.FromJSON DeleteTagsRequest where
   parseJSON = Pixel.pixelParseJSON
 
-makeFields ''Request
+makeFields ''DeleteTagsRequest
 
 --------------------------------------------------------------------------------
 
 deleteTags
   :: Maybe Pixel.Token
   -> Pixel.DigestText
-  -> Request
+  -> DeleteTagsRequest
   -> C.Pixel NoContent
 
 deleteTags Nothing _ _ = throwError (Pixel.ImageError Pixel.MissingToken)

@@ -1,6 +1,11 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 
-module Pixel.JSON where
+module Pixel.JSON
+  ( createOptions
+  , pixelToEncoding
+  , pixelToJSON
+  , pixelParseJSON
+  ) where
 
 --------------------------------------------------------------------------------
 
@@ -41,6 +46,19 @@ dataName = datatypeName (from @a localUndefined)
 --     _someImageUUID        -> UUID
 --     _someImageCreatedDate -> createdDate
 
+-- This function creates, on the fly, a method capable of calculating
+-- the right prefix for any type.
+createOptions
+  :: forall a d f. Generic a
+  => Rep a ~ D1 d f
+  => Datatype d
+  => A.Options
+
+createOptions = A.defaultOptions
+  { A.fieldLabelModifier = shortIdentifier (dataName @a)
+  }
+
+
 pixelToEncoding
   :: forall a d f. Generic a
   => Rep a ~ D1 d f
@@ -49,9 +67,7 @@ pixelToEncoding
   => a
   -> A.Encoding
 
-pixelToEncoding = A.genericToEncoding A.defaultOptions
-  { A.fieldLabelModifier = shortIdentifier (dataName @a)
-  }
+pixelToEncoding = A.genericToEncoding (createOptions @a)
 
 
 pixelToJSON
@@ -62,9 +78,7 @@ pixelToJSON
   => a
   -> A.Value
 
-pixelToJSON = A.genericToJSON A.defaultOptions
-  { A.fieldLabelModifier = shortIdentifier (dataName @a)
-  }
+pixelToJSON = A.genericToJSON (createOptions @a)
 
 
 pixelParseJSON
@@ -75,15 +89,13 @@ pixelParseJSON
   => A.Value
   -> A.Parser a
 
-pixelParseJSON = A.genericParseJSON A.defaultOptions
-  { A.fieldLabelModifier = shortIdentifier (dataName @a)
-  }
+pixelParseJSON = A.genericParseJSON (createOptions @a)
 
 
 shortIdentifier
-  :: String
-  -> String
-  -> String
+  :: String -- ^ Identifier Prefix
+  -> String -- ^ Full Identifier
+  -> String -- ^ Identifier Without Prefix / Re-Camelcased
 
 shortIdentifier prefix =
   (>>=)

@@ -1,4 +1,4 @@
-module Pixel.API.Images.Routes.Tags
+module Pixel.API.Images.Operations.Tags
   ( fetchTags
   , addTags
   , deleteTags

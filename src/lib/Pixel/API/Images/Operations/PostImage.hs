@@ -1,10 +1,9 @@
-module Pixel.API.Images.Routes.PostImage
+module Pixel.API.Images.Operations.PostImage
   ( ImageDetails(..)
   , digestImage
   , handleImageUpload
   , processImage
-  )
-where
+  ) where
 
 --------------------------------------------------------------------------------
 

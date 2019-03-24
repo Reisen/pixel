@@ -1,5 +1,6 @@
 module API.Image.Routes.PostTags
   ( PostTags
+  , PostTagsRequest
   , postTags
   )
 where
@@ -22,26 +23,26 @@ type PostTags =
   Header "Authorization" Pixel.Token
     :> Capture "uuid" Text
     :> "tags"
-    :> ReqBody '[JSON] Request
+    :> ReqBody '[JSON] PostTagsRequest
     :> Post '[JSON] NoContent
 
 --------------------------------------------------------------------------------
 
-newtype Request = Request
-  { requestTags :: Pixel.TagList
+newtype PostTagsRequest = PostTagsRequest
+  { postTagsRequestTags :: Pixel.TagList
   } deriving (Show, Generic)
 
-instance A.FromJSON Request where
+instance A.FromJSON PostTagsRequest where
   parseJSON = Pixel.pixelParseJSON
 
-makeFields ''Request
+makeFields ''PostTagsRequest
 
 --------------------------------------------------------------------------------
 
 postTags
   :: Maybe Pixel.Token
   -> Pixel.DigestText
-  -> Request
+  -> PostTagsRequest
   -> C.Pixel NoContent
 
 postTags Nothing _ _ = throwError (Pixel.ImageError Pixel.MissingToken)

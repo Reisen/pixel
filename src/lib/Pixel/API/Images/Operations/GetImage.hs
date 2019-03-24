@@ -1,4 +1,6 @@
-module Pixel.API.Images.Routes.GetImage ( fetchImages ) where
+module Pixel.API.Images.Operations.GetImage
+  ( fetchImages
+  ) where
 
 --------------------------------------------------------------------------------
 

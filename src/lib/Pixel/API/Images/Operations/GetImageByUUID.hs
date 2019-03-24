@@ -1,4 +1,6 @@
-module Pixel.API.Images.Routes.GetImageByUUID ( handleImageRequest ) where
+module Pixel.API.Images.Operations.GetImageByUUID
+  ( handleImageRequest
+  ) where
 
 --------------------------------------------------------------------------------
 
