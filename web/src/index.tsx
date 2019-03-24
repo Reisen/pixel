@@ -10,9 +10,10 @@ import {
     createStore
 }                                         from 'redux';
 
-// Routes
+// Pages
 import Index                              from './screens/Index/Index';
 import ImageView                          from './screens/ImageView';
+import ImageUpload                        from './screens/ImageUpload';
 import ImageGalleries                     from './screens/ImageGalleries';
 
 // Global Styles
@@ -34,7 +35,8 @@ const App = () => (
         <Router>
             <div className="dark">
                 <Route exact path="/"                  component={Index} />
-                <Route       path="/g/:page"           component={Index} />
+                <Route exact path="/my/upload"         component={ImageUpload} />
+                <Route exact path="/my/images/:page"   component={Index} />
                 <Route exact path="/i/:uuid"           component={ImageView} />
                 <Route       path="/i/:uuid/galleries" component={ImageGalleries} />
             </div>

@@ -1,14 +1,16 @@
-import React         from 'react';
+import React           from 'react';
+import { ScalingMode } from '../../../../store/images/types';
+import { range, lt }   from 'ramda';
+
 import IconButton    from '../../../../components/IconButton';
-import { range, lt } from 'ramda';
 import styles        from './Pager.module.css';
 
 interface Props {
-    page: number;
-    pageCount: number;
-    scalingMode: 'contain' | 'cover',
-    setPage: (page: number) => void;
-    setScalingMode: (mode: 'contain' | 'cover') => void;
+    page:           number;
+    pageCount:      number;
+    scalingMode:    ScalingMode;
+    setPage:        (page: number) => void;
+    setScalingMode: (mode: ScalingMode) => void;
 }
 
 const renderButtons = (page: number, setPage: (page: number) => void) =>
@@ -42,13 +44,13 @@ const Pager = (props: Props) => {
                 <IconButton
                     tooltip="Toggle Image Fitting"
                     icon="resize"
-                    onClick={() =>
+                    onClick={() => {
                         props.setScalingMode(
                             props.scalingMode === 'contain'
                                 ? 'cover'
                                 : 'contain'
                         )
-                    }
+                    }}
                 />
 
                 <IconButton

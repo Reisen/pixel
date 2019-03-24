@@ -3,8 +3,8 @@ import { Dispatch }     from 'redux';
 import { createAction } from 'redux-actions';
 
 
-export const loadImages      = createAction('LOAD_IMAGES');
-export const setImageScaling = createAction('SET_IMAGE_SCALING');
+export const loadImages        = createAction('LOAD_IMAGES');
+export const setGalleryScaling = createAction('SET_IMAGE_SCALING');
 
 export const fetchImages = () => async (dispatch: Dispatch) => {
     const request = {

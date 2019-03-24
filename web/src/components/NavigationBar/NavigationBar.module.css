@@ -27,4 +27,12 @@
 
 .RightNavigation a {
     margin-left: 16px;
+    font-size: 15px;
+}
+
+.UploadLink {
+    background-color: #4499CC;
+    border-radius: 4px;
+    color: white;
+    padding: 8px;
 }

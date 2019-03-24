@@ -1,6 +1,7 @@
-import React     from 'react';
-import { Link }  from 'react-router-dom';
-import { image } from '../../../../types/image';
+import React           from 'react';
+import { Link }        from 'react-router-dom';
+import { image }       from '../../../../types/image';
+import { ScalingMode } from '../../../../store/images/types';
 
 import Image     from '../Image';
 import Pager     from '../Pager';
@@ -8,13 +9,13 @@ import styles    from './ImageGrid.module.css';
 
 
 interface Props {
-    changePage: (page: number) => void;
-    scalingMode: 'contain' | 'cover',
-    setScalingMode: (mode: 'contain' | 'cover') => void;
-    images: image[];
-    width: number;
-    rows: number;
-    page: number;
+    changePage:     (page: number) => void;
+    scalingMode:    ScalingMode;
+    setScalingMode: (mode: ScalingMode) => void;
+    images:         image[];
+    width:          number;
+    rows:           number;
+    page:           number;
 }
 
 // Render images that have actually got valid paths.

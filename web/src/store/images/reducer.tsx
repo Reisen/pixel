@@ -2,8 +2,9 @@ import { State }                  from './types';
 import { handleActions }          from 'redux-actions';
 import { compose, lensProp, set } from 'ramda';
 
+
 const initialState: State = {
-    fillGrid: 'cover',
+    galleryScalingMode: 'cover',
     images: [
         // Page 1
         { "hash": "asd98u23", path: "https://i.redd.it/v6ug5bnh51h21.jpg#1", tags: ["dogs", "cats"], uploader: "Reisen", createdAt: "01-02-1999", resolution: "800x600" },
@@ -57,6 +58,5 @@ const initialState: State = {
 
 export const imageReducer = handleActions<State>({
     'LOAD_IMAGES':       (state, action) => set(lensProp('images'), action.payload)(state),
-    'SET_IMAGE_SCALING': (state, action) => set(lensProp('fillGrid'), action.payload)(state)
-
+    'SET_IMAGE_SCALING': (state, action) => set(lensProp('galleryScalingMode'), action.payload)(state)
 }, initialState);
