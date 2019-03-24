@@ -1,0 +1,51 @@
+.Root {
+    border: 1px solid white;
+    color: #5588CC;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 38px;
+    margin: 0px 1px 8px 1px;
+    outline: 1px solid #DDF;
+    padding: 0px 8px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: auto;
+}
+
+.Root i {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    height: 100%;
+    width: 40px;
+    line-height: 38px;
+}
+
+.Root:hover {
+    background-color: #5588CC;
+    outline: 1px solid #5588CC;
+    color: white;
+}
+
+.Root__active {
+    composes: Root;
+    background-color: #5588CC;
+    outline: 1px solid #5588CC;
+    color: white;
+}
+
+.Root__danger {
+    composes: Root;
+    outline: 1px solid #F34;
+    color: #BB4433;
+}
+
+.Root__danger:hover {
+    outline: 1px solid #F34;
+    background-color: #FF3355;
+}

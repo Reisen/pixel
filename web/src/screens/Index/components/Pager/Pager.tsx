@@ -1,12 +1,16 @@
-import React         from 'react';
+import React           from 'react';
+import { ScalingMode } from '../../../../store/images/types';
+import { range, lt }   from 'ramda';
+
 import IconButton    from '../../../../components/IconButton';
-import { range, lt } from 'ramda';
 import styles        from './Pager.module.css';
 
 interface Props {
-    page: number;
-    pageCount: number;
-    setPage: (page: number) => void;
+    page:           number;
+    pageCount:      number;
+    scalingMode:    ScalingMode;
+    setPage:        (page: number) => void;
+    setScalingMode: (mode: ScalingMode) => void;
 }
 
 const renderButtons = (page: number, setPage: (page: number) => void) =>
@@ -38,6 +42,18 @@ const Pager = (props: Props) => {
                 />
 
                 <IconButton
+                    tooltip="Toggle Image Fitting"
+                    icon="resize"
+                    onClick={() => {
+                        props.setScalingMode(
+                            props.scalingMode === 'contain'
+                                ? 'cover'
+                                : 'contain'
+                        )
+                    }}
+                />
+
+                <IconButton
                     tooltip="Toggle NSFW Filter"
                     icon="business-man-alt-1"
                     onClick={() => props.setPage(props.page - 1)}
@@ -50,7 +66,7 @@ const Pager = (props: Props) => {
                 </div>
 
                 <div className={styles.IconRow}>
-                    <IconButton icon="simple-left" onClick={() => props.setPage(props.page - 1)} />
+                    <IconButton icon="simple-left" onClick={() => props.setPage(Math.max(1, props.page - 1))} />
                     <IconButton icon="simple-right" onClick={() => props.setPage(props.page + 1)} />
                 </div>
             </div>

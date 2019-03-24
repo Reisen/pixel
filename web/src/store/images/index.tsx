@@ -3,10 +3,12 @@ export {
 } from './reducer';
 
 export {
-    getImages
+    getGalleryScaling,
+    getImages,
 } from './selectors';
 
 export {
     loadImages,
-    fetchImages
+    fetchImages,
+    setGalleryScaling
 } from './actions';

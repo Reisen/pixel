@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import styles     from './Image.module.css';
 
 interface Props {
+    contain?: boolean;
     empty?: boolean;
     path?: string;
     resolution?: string;
@@ -11,7 +12,8 @@ interface Props {
 
 const classes = (props: Props) => classnames({
     [styles.Root]: true,
-    [styles.Root__empty]: props.empty
+    [styles.Root__empty]: props.empty,
+    [styles.Root__contained]: props.contain
 })
 
 const Image = (props: Props) => {

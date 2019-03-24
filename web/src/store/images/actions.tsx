@@ -1,9 +1,10 @@
 import 'whatwg-fetch';
 import { Dispatch }     from 'redux';
 import { createAction } from 'redux-actions';
-import { image }        from '../../types/image';
 
-export const loadImages = createAction('LOAD_IMAGES');
+
+export const loadImages        = createAction('LOAD_IMAGES');
+export const setGalleryScaling = createAction('SET_IMAGE_SCALING');
 
 export const fetchImages = () => async (dispatch: Dispatch) => {
     const request = {
