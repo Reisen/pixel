@@ -2,14 +2,11 @@ module Commands.Types
   ( Options (..)
   , RunOptions (..)
   , GenerateTypesOptions (..)
-  , typeScriptOptions
   ) where
 
 --------------------------------------------------------------------------------
 
 import           Protolude
-
-import qualified Data.Aeson                    as A
 
 --------------------------------------------------------------------------------
 
@@ -25,10 +22,5 @@ data RunOptions = RunOptions
   }
 
 data GenerateTypesOptions = GenerateTypesOptions
-  { _generateTypesOptionsFolder :: Text
+  { _generateTypesOptionsFile :: Text
   }
-
---------------------------------------------------------------------------------
-
-typeScriptOptions :: A.Options
-typeScriptOptions = A.defaultOptions

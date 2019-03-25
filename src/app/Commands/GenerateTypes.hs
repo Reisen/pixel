@@ -9,15 +9,27 @@ module Commands.GenerateTypes
 
 import           Protolude
 
+import           Commands.Types                 ( Options (..), GenerateTypesOptions (..) )
 import qualified API.Image.Routes              as API
 import qualified API.Image.Types               as API
-import           Commands.Types              ( Options (..), GenerateTypesOptions (..) )
 import qualified Data.Aeson.TypeScript.TH      as TS
+import qualified Data.Text                     as T
+import qualified Data.Text.IO                  as T.IO
 import qualified Options.Applicative           as O
 import qualified Pixel                         as Pixel
 
-
 --------------------------------------------------------------------------------
+
+formatExports
+  :: [TS.TSDeclaration]
+  -> Text
+
+formatExports declarations =
+  T.intercalate "\n\n"
+    $   ("export " <>)
+    .   T.pack
+    .   TS.formatTSDeclaration (TS.FormattingOptions 4)
+    <$> declarations
 
 -- Here we take all exposed API types, including all
 -- Route, Request/Response, and HTTP level types, and generate a TypeSCript
@@ -25,18 +37,17 @@ import qualified Pixel                         as Pixel
 --
 -- This keeps our front-end and back-end in sync as much as possible.
 generateTypes :: GenerateTypesOptions -> IO ()
-generateTypes _ = do
-  putText
-    .  toS
-    .  TS.formatTSDeclarations
-    $  TS.getTypeScriptDeclarations (Proxy @API.Image)
-    <> TS.getTypeScriptDeclarations (Proxy @API.DeleteTagsRequest)
-    <> TS.getTypeScriptDeclarations (Proxy @API.GetImageResponse)
-    <> TS.getTypeScriptDeclarations (Proxy @API.GetTagsResponse)
-    <> TS.getTypeScriptDeclarations (Proxy @API.PostImageRequest)
-    <> TS.getTypeScriptDeclarations (Proxy @API.PostTagsRequest)
-
-  pure ()
+generateTypes (GenerateTypesOptions folder) = do
+  putText $ "Creating " <> (show $ length definitions) <> " definitions."
+  T.IO.writeFile (toS folder) . formatExports $ definitions
+  where
+    definitions =
+      TS.getTypeScriptDeclarations (Proxy @API.Image)
+        <> TS.getTypeScriptDeclarations (Proxy @API.DeleteTagsRequest)
+        <> TS.getTypeScriptDeclarations (Proxy @API.GetImageResponse)
+        <> TS.getTypeScriptDeclarations (Proxy @API.GetTagsResponse)
+        <> TS.getTypeScriptDeclarations (Proxy @API.PostImageRequest)
+        <> TS.getTypeScriptDeclarations (Proxy @API.PostTagsRequest)
 
 --------------------------------------------------------------------------------
 -- Generate TypeScript Instances
@@ -81,7 +92,7 @@ parseOptions = GenerateTypes <$>
 
 folderOption :: O.Parser Text
 folderOption = O.strOption
-  (  O.long "folder"
-  <> O.help "Folder to store TypeScript definitions in."
-  <> O.metavar "FOLDER"
+  (  O.long "file"
+  <> O.help "File to write TypeScript definitions into."
+  <> O.metavar "FILE"
   )
