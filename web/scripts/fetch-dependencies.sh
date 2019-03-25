@@ -12,10 +12,3 @@ file src/static/icofont.zip || (
     yes | unzip icofont.zip
     popd
 )
-
-# Generate Types from Backend
-(
-    pushd ..
-    stack run -- generate-types --file web/src/api/types.tsx
-    popd
-)
