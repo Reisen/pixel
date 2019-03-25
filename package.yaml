@@ -83,8 +83,10 @@ executables:
             - -with-rtsopts=-N
 
         dependencies:
+            - aeson-typescript
             - eventless
             - imageless
+            - optparse-applicative
 
 library:
     source-dirs: src/lib

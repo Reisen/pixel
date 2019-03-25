@@ -9,7 +9,7 @@ where
 import           Protolude
 import           Servant
 
-import qualified Data.Aeson                    as A
+import           API.Image.Types                ( Image(..) )
 import qualified Pixel                         as Pixel
 import qualified MonadPixel                    as C
 
@@ -20,33 +20,20 @@ import qualified MonadPixel                    as C
 type GetImageByUUID =
   Header "Authorization" Pixel.Token
     :> Capture "uuid" Text
-    :> Get '[JSON] Response
+    :> Get '[JSON] Image
 
 --------------------------------------------------------------------------------
 
-data Response = Response
-  { responsePath  :: !Text
-  , responseTags  :: !Pixel.TagList
-  , responseThumb :: !Text
-  , responseUUID  :: !Pixel.DigestText
-  } deriving (Show, Generic)
-
-instance A.ToJSON Response where
-  toEncoding = Pixel.pixelToEncoding
-  toJSON     = Pixel.pixelToJSON
-
---------------------------------------------------------------------------------
-
-createImageResponse
+convertImage
   :: Pixel.DigestText
   -> Pixel.Image
-  -> Response
+  -> Image
 
-createImageResponse uuid Pixel.Image{..} = Response
-  { responsePath  = fold ["/static/images/", _imageHash]
-  , responseTags  = _imageTags
-  , responseThumb = fold ["/static/thumbs/", _imageHash]
-  , responseUUID  = uuid
+convertImage uuid Pixel.Image{..} = Image
+  { imagePath  = fold ["/static/images/", _imageHash]
+  , imageTags  = _imageTags
+  , imageThumb = fold ["/static/thumbs/", _imageHash]
+  , imageUUID  = uuid
   }
 
 --------------------------------------------------------------------------------
@@ -54,10 +41,10 @@ createImageResponse uuid Pixel.Image{..} = Response
 getImageByUUID
   :: Maybe Pixel.Token
   -> Pixel.DigestText
-  -> C.Pixel Response
+  -> C.Pixel Image
 
 getImageByUUID Nothing _     = throwError (Pixel.ImageError Pixel.MissingToken)
 getImageByUUID (Just _) uuid =
   Pixel.handleImageRequest uuid >>= \case
     Nothing       -> throwError (Pixel.ImageError Pixel.InvalidUUID)
-    Just response -> pure $ createImageResponse uuid response
+    Just response -> pure $ convertImage uuid response

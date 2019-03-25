@@ -1,5 +1,6 @@
 module API.Image.Routes.PostImage
   ( PostImage
+  , PostImageRequest
   , postImage
   )
 where
@@ -25,32 +26,32 @@ import qualified MonadPixel                    as C
 -- from the sender.
 type PostImage =
   Header "Authorization" Pixel.Token
-    :> MultipartForm Tmp Request
+    :> MultipartForm Tmp PostImageRequest
     :> Post '[JSON] Text
 
 --------------------------------------------------------------------------------
 
 -- Define a type to wrap up the MultipartData coming over the wire.
-data Request = Request
-  { requestPath :: !FilePath
-  , requestTags :: ![Text]
+data PostImageRequest = PostImageRequest
+  { postImageRequestPath :: !FilePath
+  , postImageRequestTags :: ![Text]
   } deriving (Show, Generic)
 
-instance A.ToJSON Request where
+instance A.ToJSON PostImageRequest where
   toEncoding = Pixel.pixelToEncoding
   toJSON     = Pixel.pixelToJSON
 
-makeFields ''Request
+makeFields ''PostImageRequest
 
 --------------------------------------------------------------------------------
 
 -- Provide an implementation to parse incoming data into our type above.
-instance FromMultipart Tmp Request where
+instance FromMultipart Tmp PostImageRequest where
   fromMultipart multi =
     let allInputs = inputs multi in
     let tagInputs = flip filter allInputs $ (== "tag") . iName in
     let allValues = iValue <$> tagInputs in
-    Request
+    PostImageRequest
       <$> map fdPayload (lookupFile "image" multi)
       <*> pure allValues
 
@@ -61,7 +62,7 @@ instance FromMultipart Tmp Request where
 -- and persists meta information to the DB.
 postImage
   :: Maybe Pixel.Token
-  -> Request
+  -> PostImageRequest
   -> C.Pixel Text
 
 postImage Nothing _        = throwError (Pixel.ImageError Pixel.MissingToken)

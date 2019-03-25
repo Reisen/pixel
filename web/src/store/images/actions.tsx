@@ -1,18 +1,13 @@
 import 'whatwg-fetch';
 import { Dispatch }     from 'redux';
 import { createAction } from 'redux-actions';
+import { getImages }    from '../../api/images';
 
 
 export const loadImages        = createAction('LOAD_IMAGES');
 export const setGalleryScaling = createAction('SET_IMAGE_SCALING');
 
 export const fetchImages = () => async (dispatch: Dispatch) => {
-    const request = {
-        headers:     { 'Authorization': '96033b4a-44b0-4c14-ac44-890330b9877e' },
-        method:      'GET',
-    };
-
-    const response = await fetch('http://127.0.0.1:3001/api/image', request);
-    const json     = await response.json();
+    const json = await getImages();
     dispatch(loadImages(json.images));
 };
