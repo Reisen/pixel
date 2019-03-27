@@ -17,6 +17,26 @@ const Image = (props: Props) => {
             <NavigationBar username={props.username} />
 
             <div className={styles.Root}>
+                <div className={styles.Stages}>
+                    <div className={styles.Stage}>
+                        Upload Images
+                    </div>
+
+                    <div className={styles.Stage}>
+                        Tags
+                    </div>
+
+                    <div className={styles.Stage}>
+                        Galleries
+                    </div>
+
+                    <div className={styles.Stage}>
+                    </div>
+                </div>
+
+                <div className={styles.UploadBox}>
+                    Upload Boxes
+                </div>
             </div>
         </div>
     );

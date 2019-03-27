@@ -1,6 +1,6 @@
-name:       imageless
+name:       pixel
 version:    0.1.0.0
-github:     "reisen/imageless"
+github:     "reisen/pixel"
 license:    MIT
 author:     "Reisen"
 maintainer: "reisen@morphism.org"
@@ -14,6 +14,7 @@ description: A Booru-like Gallery API.
 ghc-options:
     -Wall
     -Werror
+    -optP-Wno-nonportable-include-path
     -fwarn-tabs
     -fwarn-unused-imports
     -fwarn-missing-signatures
@@ -74,7 +75,7 @@ default-extensions:
     - ViewPatterns
 
 executables:
-    imageless:
+    pixel:
         main:        Main.hs
         source-dirs: src/app
         ghc-options:
@@ -85,8 +86,8 @@ executables:
         dependencies:
             - aeson-typescript
             - eventless
-            - imageless
             - optparse-applicative
+            - pixel
 
 library:
     source-dirs: src/lib

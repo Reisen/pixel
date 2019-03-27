@@ -2,3 +2,41 @@
     width: 1200px;
     margin: 0 auto;
 }
+
+.Stages {
+    width: 300px;
+    float: left;
+}
+
+.UploadBox {
+    width: 900px;
+    float: right;
+    border: 1px solid #CCC;
+    min-height: 400px;
+    padding: 16px;
+}
+
+.Stage {
+    font-size: 18px;
+    color: #336699;
+    font-weight: normal;
+    margin-bottom: 16px;
+    padding: 8px;
+    text-align: center;
+    background-color: white;
+    position: relative;
+}
+
+.Stage:after {
+    content: '';
+    background-color: #336699;
+    width: 4px;
+    height: 60px;
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    margin: 0 auto;
+    z-index: -1;
+}
