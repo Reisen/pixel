@@ -1,11 +1,11 @@
-import React           from 'react';
-import { Link }        from 'react-router-dom';
-import { image }       from '../../../../types/image';
-import { ScalingMode } from '../../../../store/images/types';
+import React              from 'react';
+import { Link }           from 'react-router-dom';
+import { Image as image } from '../../../../api/types';
+import { ScalingMode }    from '../../../../store/images/types';
 
-import Image     from '../Image';
-import Pager     from '../Pager';
-import styles    from './ImageGrid.module.css';
+import Image              from '../Image';
+import Pager              from '../Pager';
+import styles             from './ImageGrid.module.css';
 
 
 interface Props {
@@ -58,11 +58,14 @@ const ImageGrid = (props: Props) => {
 
     if (imageView.length === 0 ) {
         return (
-            <div>
-                Nodbody here but us chickens!
+            <div className={styles.OhNo}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Chicken_cartoon_04.svg/723px-Chicken_cartoon_04.svg.png" alt="Chickens" /><br/>
+                Nobody here but us chickens!
             </div>
         );
     }
+
+    console.log (props.images);
 
     return (
         <div className={styles.ImageGrid}>

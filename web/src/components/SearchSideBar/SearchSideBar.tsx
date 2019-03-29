@@ -23,7 +23,12 @@ const SearchSideBar = (props: Props) => {
 
     return (
         <div className={styles.Root}>
-            <TextInput placeholder="Search" />
+            <TextInput
+                placeholder="Search"
+                onKeyPress={(e) => {
+                }}
+            />
+
             <div className={styles.Buttons}>
                 {
                     Object.values(panelMap).map(v  =>

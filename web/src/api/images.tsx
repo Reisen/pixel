@@ -39,13 +39,14 @@ const getTags = async (uuid: string): Promise<GetTagsResponse> => {
     return await json;
 }
 
-const uploadImage = async (req: PostImageRequest): Promise<void> => {
+const uploadImage = async (req: FormData): Promise<Response> => {
     const request = {
         headers: { 'Authorization': '96033b4a-44b0-4c14-ac44-890330b9877e' },
         method:  'POST',
+        body:    req
     };
 
-    fetch('http://127.0.0.1:3001/api/image', request);
+    return fetch('http://127.0.0.1:3001/api/image', request);
 }
 
 const uploadTags = async (uuid: string, req: PostTagsRequest): Promise<void> => {
