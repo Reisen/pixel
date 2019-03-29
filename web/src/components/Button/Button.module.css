@@ -50,3 +50,15 @@
     outline: 1px solid #F34;
     background-color: #FF3355;
 }
+
+.Root__disabled {
+    outline: 1px solid #CCC;
+    background-color: #EEE;
+    color: #AAA;
+}
+
+.Root__disabled:hover {
+    outline: 1px solid #CCC;
+    background-color: #EEE;
+    color: #AAA;
+}

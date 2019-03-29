@@ -1,4 +1,4 @@
-import { image } from '../../types/image';
+import { Image as image } from '../../api/types';
 
 export type ScalingMode =
     | 'fill'

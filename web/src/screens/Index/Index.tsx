@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { image }            from '../../types/image';
+import { Image as image }   from '../../api/types';
 import { connect }          from 'react-redux';
 import { match }            from 'react-router-dom';
 import { State }            from '../../store';

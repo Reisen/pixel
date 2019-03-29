@@ -3,40 +3,42 @@
     margin: 0 auto;
 }
 
-.Stages {
-    width: 300px;
+.Tags {
+    width: 240px;
     float: left;
 }
 
-.UploadBox {
-    width: 900px;
+.Uploader {
+    width: 940px;
     float: right;
-    border: 1px solid #CCC;
-    min-height: 400px;
-    padding: 16px;
 }
 
-.Stage {
-    font-size: 18px;
+.UploadManager {
+    cursor: pointer;
+    outline: 1px solid #DDF;
+    border: 8px solid white;
+    margin-bottom: 8px;
     color: #336699;
-    font-weight: normal;
-    margin-bottom: 16px;
-    padding: 8px;
     text-align: center;
-    background-color: white;
+    min-height: 800px;
     position: relative;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
-.Stage:after {
-    content: '';
-    background-color: #336699;
-    width: 4px;
-    height: 60px;
+.UploadManager input {
+    width: 100%;
+    height: 100%;
+    background-color: red;
     display: block;
+    padding: 16px;
     position: absolute;
-    left: 0px;
     top: 0px;
-    right: 0px;
-    margin: 0 auto;
-    z-index: -1;
+    opacity: 0;
+    border: 1px solid red;
+}
+
+.TagList {
+    margin-top: 16px;
 }
