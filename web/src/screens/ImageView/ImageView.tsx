@@ -1,32 +1,26 @@
-import React, { useEffect } from 'react';
-import styles               from './ImageView.module.css';
-import { State }            from '../../store';
-import { connect }          from 'react-redux';
-import { fetchImages }      from '../../store/images';
-import { image }            from '../../types/image';
+import React, { useEffect }       from 'react';
+import styles                     from './ImageView.module.css';
+import { State }                  from '../../store';
+import { connect }                from 'react-redux';
+import { match }                  from 'react-router-dom';
+import { getImages, fetchImages } from '../../store/images';
+import { Image as image }         from '../../api/types';
 
-import ImagePanel           from './components/ImagePanel';
-import NavigationBar        from '../../components/NavigationBar';
-import SearchSidebar        from '../../components/SearchSideBar';
-import { MetaDataPanel }    from '../../components/SearchSideBar/panels';
+import ImagePanel                 from './components/ImagePanel';
+import NavigationBar              from '../../components/NavigationBar';
+import SearchSidebar              from '../../components/SearchSideBar';
+import { MetaDataPanel }          from '../../components/SearchSideBar/panels';
 
-const onlyImage: image = {
-    createdAt: '01/01/1999',
-    hash: 'asd98u23',
-    path: 'https://i.imgur.com/aG7C0Zx.jpg',
-    resolution: '800x600',
-    tags: [
-        "cartoon",
-        "example",
-        "apple"
-    ],
-    uploader: 'Reisen',
-};
+interface Params {
+    uuid?: string;
+}
 
 interface Props {
-    image?: image;
-    username: string;
+    image?:      image;
+    username:    string;
+    images:      image[];
     fetchImages: () => void;
+    match:       match<Params>;
 }
 
 const Image = (props: Props) => {
@@ -35,13 +29,19 @@ const Image = (props: Props) => {
         props.fetchImages()
     }, []);
 
-    return (
+    const image = props.images.find(image => {
+        return image.UUID === props.match.params.uuid;
+    });
+
+    return !image
+        ? <span>Ruh oh</span>
+        : (
         <div className="Page">
             <NavigationBar username={props.username} />
 
             <div className={styles.Root}>
                 <SearchSidebar
-                    tags={onlyImage.tags}
+                    tags={image.tags}
                     initialPanel="metadata"
                 >
                     {{
@@ -49,13 +49,14 @@ const Image = (props: Props) => {
                     }}
                 </SearchSidebar>
 
-                <ImagePanel image={onlyImage} />
+                <ImagePanel image={image} />
             </div>
         </div>
     );
 }
 
 const mapState = (state: State) => ({
+    images:   getImages(state.images),
     username: state.user.username
 });
 
