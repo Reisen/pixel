@@ -21,7 +21,7 @@ interface Props {
 // Render images that have actually got valid paths.
 const renderValidImages = (slice: image[], props: Props) =>
     slice.map((image, k) =>
-        <Link key={image.path} to="/i/8ac5928b-9caa3ac1-cb488a9a-938ac938">
+        <Link key={image.path} to={`/i/${image.UUID}`}>
             <Image
                 contain={props.scalingMode === 'contain'}
                 key={k.toString()}
@@ -64,8 +64,6 @@ const ImageGrid = (props: Props) => {
             </div>
         );
     }
-
-    console.log (props.images);
 
     return (
         <div className={styles.ImageGrid}>
