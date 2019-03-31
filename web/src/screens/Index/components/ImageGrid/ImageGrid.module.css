@@ -6,7 +6,9 @@
 
 .OhNo {
     text-align: center;
-    line-height: 80px;
+    line-height: 240px;
+    width: 944px;
+    float: right;
     color: #336699;
     padding-top: 80px;
 }
