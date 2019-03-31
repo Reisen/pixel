@@ -11,7 +11,7 @@ import styles             from './ImageGrid.module.css';
 // HACK, BIG HACK
 const findApiBase = () => {
     const cookies = new Cookies();
-    return cookies.get('base') || '';
+    return cookies.get('base') || 'http://localhost:3000';
 };
 
 interface Props {
@@ -27,10 +27,9 @@ interface Props {
 // Render images that have actually got valid paths.
 const renderValidImages = (slice: image[], props: Props) =>
     slice.map((image, k) =>
-        <Link key={image.path} to={`/i/${image.UUID}`}>
+        <Link key={image.UUID} to={`/i/${image.UUID}`}>
             <Image
                 contain={props.scalingMode === 'contain'}
-                key={k.toString()}
                 path={`${findApiBase()}/${image.path}`}
                 resolution="800x600"
                 width={944 / props.width}
@@ -44,11 +43,11 @@ const renderValidImages = (slice: image[], props: Props) =>
 const renderEmptyImages = (slice: image[], props: Props) =>
     Array(props.width * props.rows - slice.length)
         .fill(0)
-        .map(k =>
+        .map((k, v) =>
             <Image
                 empty
                 contain={props.scalingMode === 'contain'}
-                key={k.toString()}
+                key={v.toString()}
                 width={944 / props.width}
             />
         );

@@ -67,6 +67,7 @@ postImage
 
 postImage Nothing _        = throwError (Pixel.ImageError Pixel.MissingToken)
 postImage (Just token) req = do
+  putText (show req)
   directory <- view C.configStaticLocation
   content   <- liftIO . B.readFile $ req ^. path
   uuid      <- liftIO U.nextRandom

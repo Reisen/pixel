@@ -7,7 +7,7 @@ import { Image as image } from '../../../../api/types';
 // HACK, BIG HACK
 const findApiBase = () => {
     const cookies = new Cookies();
-    return cookies.get('base') || '';
+    return cookies.get('base') || 'http://localhost:3000';
 };
 
 interface Props {

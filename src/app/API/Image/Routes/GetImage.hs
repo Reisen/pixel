@@ -44,7 +44,7 @@ convertImage uuid Pixel.Image{..} = Image
   { imagePath  = fold ["/static/images/", _imageHash]
   , imageThumb = fold ["/static/thumbs/", _imageHash]
   , imageUUID  = uuid
-  , imageTags  = []
+  , imageTags  = _imageTags
   }
 
 --------------------------------------------------------------------------------
