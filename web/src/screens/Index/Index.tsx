@@ -15,15 +15,9 @@ import {
 import NavigationBar        from '../../components/NavigationBar';
 import SearchSidebar        from '../../components/SearchSideBar';
 import ImageGrid            from './components/ImageGrid';
+import Pager                from './components/Pager';
 import styles               from './Index.module.css';
 
-
-const tags: string[] = [
-    "dog",
-    "field",
-    "happy_dog",
-    "bernese"
-];
 
 interface Params {
     page?: string;
@@ -61,10 +55,10 @@ const Index = (props: Props) => {
 
     // Grid Display Configuration
     const rows       = 4;
-    const width      = 6;
+    const cols       = 6;
     const slice      = props.images.slice(
-        width * rows * (pageNumber - 1 + 0),
-        width * rows * (pageNumber - 1 + 1)
+        cols * rows * (pageNumber - 1 + 0),
+        cols * rows * (pageNumber - 1 + 1)
     );
     const tags       = filterVisibleTags(slice);
 
@@ -78,14 +72,22 @@ const Index = (props: Props) => {
             <NavigationBar username={props.username} />
             <div className={styles.PanelContainer}>
                 <SearchSidebar initialPanel="tags" tags={tags} />
+
                 <ImageGrid
                     changePage={changePage}
                     scalingMode={props.galleryScalingMode}
                     setScalingMode={props.setGalleryScaling}
-                    images={props.images}
-                    page={pageNumber}
+                    images={slice}
                     rows={rows}
-                    width={width}
+                    cols={cols}
+                />
+
+                <Pager
+                    page={pageNumber}
+                    pageCount={5}
+                    scalingMode={props.galleryScalingMode}
+                    setPage={changePage}
+                    setScalingMode={props.setGalleryScaling}
                 />
             </div>
         </div>

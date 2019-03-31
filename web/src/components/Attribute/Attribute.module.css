@@ -1,6 +1,5 @@
 .Root {
     display: block;
-    margin-bottom: 2px;
 }
 
 .Root i {
@@ -15,6 +14,7 @@
     font-size: 14px;
     color: #5588CC;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 .Root span:last-of-type {

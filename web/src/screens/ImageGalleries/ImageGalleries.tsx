@@ -40,10 +40,7 @@ const Image = (props: Props) => {
             <NavigationBar username={props.username} />
 
             <div className={styles.Root}>
-                <SearchSidebar
-                    tags={{}}
-                    initialPanel="metadata"
-                >
+                <SearchSidebar tags={{}} initialPanel="metadata">
                     {{
                        metadata: MetaDataPanel
                     }}

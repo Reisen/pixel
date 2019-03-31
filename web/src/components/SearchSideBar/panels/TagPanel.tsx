@@ -18,7 +18,7 @@ export default {
             <h1>Taglist</h1>
             <div className={styles.TagList}>
                 {
-                    props.tags && Object.keys(props.tags).map(tag => (
+                    props.tags && Object.keys(props.tags).sort().map(tag => (
                         <Attribute
                             key={tag}
                             icon="tag"

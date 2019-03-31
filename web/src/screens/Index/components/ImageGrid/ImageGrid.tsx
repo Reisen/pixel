@@ -5,7 +5,6 @@ import { Image as image } from '../../../../api/types';
 import { ScalingMode }    from '../../../../store/images/types';
 
 import Image              from '../Image';
-import Pager              from '../Pager';
 import styles             from './ImageGrid.module.css';
 
 
@@ -20,9 +19,8 @@ interface Props {
     scalingMode:    ScalingMode;
     setScalingMode: (mode: ScalingMode) => void;
     images:         image[];
-    width:          number;
+    cols:           number;
     rows:           number;
-    page:           number;
 }
 
 // Render images that have actually got valid paths.
@@ -33,7 +31,7 @@ const renderValidImages = (slice: image[], props: Props) =>
                 contain={props.scalingMode === 'contain'}
                 path={`${findApiBase()}/${image.path}`}
                 resolution="800x600"
-                width={944 / props.width}
+                width={944 / props.cols}
             />
         </Link>
     );
@@ -42,14 +40,14 @@ const renderValidImages = (slice: image[], props: Props) =>
 // Render empty spaces for all images that are missing to keep the grid size
 // fixed at all times.
 const renderEmptyImages = (slice: image[], props: Props) =>
-    Array(props.width * props.rows - slice.length)
+    Array(props.cols * props.rows - slice.length)
         .fill(0)
         .map((k, v) =>
             <Image
                 empty
                 contain={props.scalingMode === 'contain'}
                 key={v.toString()}
-                width={944 / props.width}
+                width={944 / props.cols}
             />
         );
 
@@ -57,12 +55,7 @@ const renderEmptyImages = (slice: image[], props: Props) =>
 // Render a fixed grid, calculating which images to display depending on page
 // width and row count.
 const ImageGrid = (props: Props) => {
-    const imageView = props.images.slice(
-        props.width * props.rows * (props.page - 1 + 0),
-        props.width * props.rows * (props.page - 1 + 1)
-    );
-
-    if (imageView.length === 0 ) {
+    if (props.images.length === 0 ) {
         return (
             <div className={styles.OhNo}>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Chicken_cartoon_04.svg/723px-Chicken_cartoon_04.svg.png" alt="Chickens" /><br/>
@@ -73,16 +66,8 @@ const ImageGrid = (props: Props) => {
 
     return (
         <div className={styles.ImageGrid}>
-            { renderValidImages(imageView, props) }
-            { renderEmptyImages(imageView, props) }
-
-            <Pager
-                page={props.page}
-                pageCount={5}
-                scalingMode={props.scalingMode}
-                setPage={props.changePage}
-                setScalingMode={props.setScalingMode}
-            />
+            { renderValidImages(props.images, props) }
+            { renderEmptyImages(props.images, props) }
         </div>
     );
 }
