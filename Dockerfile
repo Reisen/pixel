@@ -35,4 +35,5 @@ RUN     apt-get -y update && apt-get -y install libgmp-dev
 RUN     mkdir -p /app
 WORKDIR /app
 COPY    --from=compile /app/pixel .
+COPY    --from=web /app/web/build /app/web
 CMD     ["/app/pixel", "run"]
