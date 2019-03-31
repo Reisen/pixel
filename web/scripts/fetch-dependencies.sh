@@ -11,6 +11,6 @@ mkdir -p $PWD/src/static
 if [ ! -f "$PWD/src/static/icofont.zip" ]; then
     pushd $PWD/src/static
     curl -s 'https://icofont.com/process/download?type=1&uid=1552920712' > $PWD/icofont.zip
-    yes | unzip $PWD/icofont.zip
+    unzip $PWD/icofont.zip
     popd
 fi
