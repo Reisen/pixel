@@ -41,7 +41,7 @@ const Image = (props: Props) => {
 
             <div className={styles.Root}>
                 <SearchSidebar
-                    tags={onlyImage.tags}
+                    tags={{}}
                     initialPanel="metadata"
                 >
                     {{

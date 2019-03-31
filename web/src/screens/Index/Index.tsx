@@ -39,11 +39,34 @@ interface Props {
     match:              match<Params>;
 }
 
+const filterVisibleTags = (images: image[]) => {
+    let tagCounter: { [index: string]: number } = {};
+    images.forEach(image => {
+        image.tags.forEach(tag => {
+            tagCounter[tag] = tag in tagCounter
+                ? tagCounter[tag] + 1
+                : 1
+        });
+    });
+
+    return tagCounter;
+};
+
 const Index = (props: Props) => {
+    // Page Handling
     const pageNumber = parseInt(props.match.params.page || '1', 10);
     const changePage = (page: number) => {
         props.history.push(`/my/images/${page}`)
     };
+
+    // Grid Display Configuration
+    const rows       = 4;
+    const width      = 6;
+    const slice      = props.images.slice(
+        width * rows * (pageNumber - 1 + 0),
+        width * rows * (pageNumber - 1 + 1)
+    );
+    const tags       = filterVisibleTags(slice);
 
     // Load Images, On First Mount Only
     useEffect(() => {
@@ -61,13 +84,13 @@ const Index = (props: Props) => {
                     setScalingMode={props.setGalleryScaling}
                     images={props.images}
                     page={pageNumber}
-                    rows={4}
-                    width={6}
+                    rows={rows}
+                    width={width}
                 />
             </div>
         </div>
     );
-}
+};
 
 const mapState = (state: State) => ({
     images:             getImages(state.images),

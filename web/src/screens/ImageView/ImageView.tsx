@@ -29,9 +29,8 @@ const Image = (props: Props) => {
         props.fetchImages()
     }, []);
 
-    const image = props.images.find(image => {
-        return image.UUID === props.match.params.uuid;
-    });
+    const image = props.images.find(image => image.UUID === props.match.params.uuid);
+    const tags  = image && image.tags.reduce((o, tag) => ({ [tag]: 1, ...o }), {})
 
     return !image
         ? <span>Ruh oh</span>
@@ -41,8 +40,8 @@ const Image = (props: Props) => {
 
             <div className={styles.Root}>
                 <SearchSidebar
-                    tags={image.tags}
-                    initialPanel="metadata"
+                    tags={tags}
+                    initialPanel="tags"
                 >
                     {{
                        metadata: MetaDataPanel
