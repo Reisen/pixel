@@ -8,7 +8,7 @@ set -euxo pipefail
 mkdir -p $PWD/src/static
 
 # Fetch IcoFont as a dependency.
-if [ ! -f "$PWD/src/static/icofont.zip ]; then
+if [ ! -f "$PWD/src/static/icofont.zip" ]; then
     pushd $PWD/src/static
     curl -s 'https://icofont.com/process/download?type=1&uid=1552920712' > $PWD/icofont.zip
     yes | unzip $PWD/icofont.zip
