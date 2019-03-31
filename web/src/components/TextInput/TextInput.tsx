@@ -4,19 +4,27 @@ import styles from './TextInput.module.css';
 interface Props {
     icon?:       string;
     placeholder: string;
+    suggestion?: string;
     value?:      string;
     onChange?:   (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const TextInput = (props: Props) => (
-    <input
-        value={props.value}
-        onChange={props.onChange}
-        onKeyPress={props.onKeyPress}
-        className={styles.TextInput}
-        placeholder={props.placeholder}
-    />
+    <div className={styles.Root}>
+        <input
+            className={styles.ShadowInput}
+            value={props.suggestion}
+        />
+
+        <input
+            value={props.value}
+            onChange={props.onChange}
+            onKeyPress={props.onKeyPress}
+            className={styles.TextInput}
+            placeholder={props.placeholder}
+        />
+    </div>
 );
 
 export default TextInput;

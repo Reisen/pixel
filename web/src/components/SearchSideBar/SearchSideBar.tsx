@@ -14,8 +14,9 @@ interface Props {
 }
 
 const SearchSideBar = (props: Props) => {
-    const [panel, changePanel] = useState<string>(props.initialPanel);
-    const panelMap: PanelMap   = {
+    const [search, changeSearch] = useState('');
+    const [panel, changePanel]   = useState<string>(props.initialPanel);
+    const panelMap: PanelMap     = {
         ...panels,
         ...props.children
     };
@@ -25,7 +26,9 @@ const SearchSideBar = (props: Props) => {
     return (
         <div className={styles.Root}>
             <TextInput
+                value={search}
                 placeholder="Search"
+                onChange={(e) => changeSearch(e.target.value)}
                 onKeyPress={(e) => {
                 }}
             />
