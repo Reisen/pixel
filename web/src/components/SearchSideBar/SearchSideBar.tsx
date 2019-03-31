@@ -31,8 +31,9 @@ const SearchSideBar = (props: Props) => {
 
             <div className={styles.Buttons}>
                 {
-                    Object.values(panelMap).map(v  =>
+                    Object.values(panelMap).map(v =>
                         <IconButton
+                            key={v.name}
                             icon={v.icon}
                             tooltip={v.tooltip}
                             active={panel === v.name}

@@ -15,6 +15,7 @@ import           Control.Lens
 import qualified API.Image.Commands            as API
 import qualified Configuration                 as C
 import qualified Data.UUID                     as U
+import qualified Data.Text                     as T
 import qualified Database.SQLite.Simple        as S
 import qualified Eventless                     as E
 import qualified Pixel                         as Pixel
@@ -57,18 +58,21 @@ pixelLoadImages
 pixelLoadImages _limit = do
   schema <- view C.configReadSchema
   images <- liftIO $ S.query_ schema
-    " SELECT i.uuid, i.hash, i.created \
-    \ FROM images i                    \
-    \ LIMIT 25                         "
+    " SELECT    i.uuid, i.hash, i.created, group_concat(ta.name) tags \
+    \ FROM      images i \
+    \ LEFT JOIN tag_associations ta ON i.uuid = ta.image \
+    \ GROUP BY  i.uuid \
+    \ ORDER BY  i.created DESC \
+    \ LIMIT 25"
 
-  pure . catMaybes $ images <&> \(textUUID, imageHash, date) ->
+  pure . catMaybes $ images <&> \(textUUID, imageHash, date, tags) ->
     case U.fromText textUUID of
       Nothing   -> Nothing
       Just uuid -> Just
         ( uuid
         , Pixel.Image
           { Pixel._imageHash      = imageHash
-          , Pixel._imageTags      = []
+          , Pixel._imageTags      = fromMaybe [] $ T.splitOn "," <$> tags
           , Pixel._imageUploader  = Nothing
           , Pixel._imageCreatedAt = Just date
           }

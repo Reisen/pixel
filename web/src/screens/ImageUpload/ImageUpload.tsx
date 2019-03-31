@@ -47,7 +47,11 @@ const Image = (props: Props) => {
         if (current && current.files) {
             const data = new FormData();
             data.append('image', current.files[0]);
-            tags.map(tag => data.append('tag', tag));
+            tags.map(tag => {
+                data.append('tag', tag);
+                console.log('Tag Added: ' + tag);
+                return null;
+            });
             uploadImage(data).then(() => {
                 props.history.push('/');
             });

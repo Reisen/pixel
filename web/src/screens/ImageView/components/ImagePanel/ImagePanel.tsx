@@ -1,6 +1,14 @@
 import React              from 'react';
+import Cookies            from 'universal-cookie';
 import styles             from './ImagePanel.module.css';
 import { Image as image } from '../../../../api/types';
+
+
+// HACK, BIG HACK
+const findApiBase = () => {
+    const cookies = new Cookies();
+    return cookies.get('base') || 'http://localhost:3000';
+};
 
 interface Props {
     image: image
@@ -10,7 +18,7 @@ const ImagePanel = (props: Props) => {
     return (
         <img
             className={styles.Root}
-            src={props.image.path}
+            src={`${findApiBase()}/${props.image.path}`}
             alt="Focused"
         />
     );
