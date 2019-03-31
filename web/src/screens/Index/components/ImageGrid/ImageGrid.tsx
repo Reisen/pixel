@@ -1,4 +1,5 @@
 import React              from 'react';
+import Cookies            from 'universal-cookie';
 import { Link }           from 'react-router-dom';
 import { Image as image } from '../../../../api/types';
 import { ScalingMode }    from '../../../../store/images/types';
@@ -7,6 +8,11 @@ import Image              from '../Image';
 import Pager              from '../Pager';
 import styles             from './ImageGrid.module.css';
 
+// HACK, BIG HACK
+const findApiBase = () => {
+    const cookies = new Cookies();
+    return cookies.get('base') || '';
+};
 
 interface Props {
     changePage:     (page: number) => void;
@@ -25,7 +31,7 @@ const renderValidImages = (slice: image[], props: Props) =>
             <Image
                 contain={props.scalingMode === 'contain'}
                 key={k.toString()}
-                path={image.path}
+                path={`${findApiBase()}/${image.path}`}
                 resolution="800x600"
                 width={944 / props.width}
             />
