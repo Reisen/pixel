@@ -1,7 +1,21 @@
-.TextInput {
+.Root {
+    position: relative;
+}
+
+.TextInput,
+.ShadowInput {
     border: 1px solid #CCF;
     padding: 8px;
     font-size: 14px;
     color: #336699;
     width: 100%;
+    background-color: transparent;
+}
+
+.ShadowInput {
+    position: absolute;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+    color: #AAA;
 }

@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
+import { Image as image }          from '../../api/types';
 import { State }                   from '../../store';
 import { connect }                 from 'react-redux';
-import { fetchImages }             from '../../store/images';
+import { getImages }               from '../../store/images';
 import { uploadImage }             from '../../api/images';
 import { History }                 from 'history'
 
@@ -13,12 +14,17 @@ import styles                      from './ImageUpload.module.css';
 
 
 interface Props {
+    images:   image[];
     username: string;
     history:  History;
 }
 
 const Image = (props: Props) => {
     // Create State Stuff
+    const allTags: string[] = props.images.reduce((all: string[], image) => {
+        return [...all, ...image.tags];
+    }, []);
+
     const fileElement       = useRef<HTMLInputElement>(null);
     const [tags, setTags]   = useState<string[]>([]);
     const [input, setInput] = useState<string>('');
@@ -58,6 +64,17 @@ const Image = (props: Props) => {
         }
     }
 
+    // Do Tag Completion
+    const suggestion = allTags.find((tag: string) => {
+        const words = input.split(' ');
+        const word  = words[words.length - 1];
+        return tag.startsWith(word);
+    });
+
+    const completeTag = input === ''
+        ? ''
+        : input.split(' ').slice(0, -1).join(' ') + ' ' + (suggestion || '');
+
     // Render Time!
     return (
         <div className="Page">
@@ -67,6 +84,7 @@ const Image = (props: Props) => {
                 <div className={styles.Tags}>
                     <TextInput
                         value={input}
+                        suggestion={completeTag && completeTag.trim()}
                         onChange={onTagsChange}
                         placeholder="Enter Tags Here"
                         onKeyPress={onTagsKeyPress}
@@ -105,12 +123,8 @@ const Image = (props: Props) => {
 }
 
 const mapState = (state: State) => ({
+    images:   getImages(state.images),
     username: state.user.username
 });
 
-const mapDispatch = {
-    fetchImages
-};
-
-
-export default connect(mapState, mapDispatch)(Image);
+export default connect(mapState)(Image);
