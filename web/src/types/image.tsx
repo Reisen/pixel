@@ -6,3 +6,7 @@ export interface image {
     uploader:   string;
     path:       string;
 }
+
+export interface tags {
+    [index: string]: number
+}

@@ -1,10 +1,12 @@
 import React             from 'react';
+import { tags }          from '../../../types/image';
+
 import Attribute         from '../../../components/Attribute';
 import styles            from './TagPanel.module.css';
 
 
 interface Props {
-    tags?: string[];
+    tags?: tags;
 }
 
 export default {
@@ -16,8 +18,18 @@ export default {
             <h1>Taglist</h1>
             <div className={styles.TagList}>
                 {
-                    !props.tags ? null : props.tags.map(tag => (
-                        <Attribute key={tag} icon="tag" name={tag} value="1" />
+                    props.tags && Object.keys(props.tags).map(tag => (
+                        <Attribute
+                            key={tag}
+                            icon="tag"
+                            name={tag}
+                            value={(
+                                props.tags &&
+                                props.tags[tag] > 1 &&
+                                String(props.tags[tag])
+                            ) || ''
+                            }
+                        />
                     ))
                 }
             </div>

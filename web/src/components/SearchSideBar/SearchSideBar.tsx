@@ -1,13 +1,14 @@
 import React, { useState }  from 'react';
-import styles               from './SearchSideBar.module.css';
+import { tags }             from '../../types/image';
 
 import IconButton           from '../IconButton';
 import panels, { PanelMap } from './panels';
 import TextInput            from '../TextInput';
+import styles               from './SearchSideBar.module.css';
 
 
 interface Props {
-    tags?: string[];
+    tags?: tags;
     initialPanel: string;
     children?: PanelMap;
 }
