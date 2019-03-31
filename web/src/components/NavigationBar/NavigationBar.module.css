@@ -1,8 +1,15 @@
-.Root {
+.NavigationBar {
     border-bottom: 1px solid #DDF;
     line-height: 64px;
     margin: 0 auto;
-    margin-bottom: 32px;
+    width: 100%;
+}
+
+.SubNavigationBar {
+    border-bottom: 1px solid #DDF;
+    line-height: 42px;
+    margin: 0 auto;
+    margin-bottom: 40px;
     width: 100%;
 }
 
@@ -18,6 +25,11 @@
     color: #5588CC;
     vertical-align: middle;
     font-family: 'Baumans';
+}
+
+.LeftNavigation a {
+    margin-right: 32px;
+    font-size: 15px;
 }
 
 .RightNavigation {
