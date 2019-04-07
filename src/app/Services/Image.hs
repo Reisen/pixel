@@ -62,8 +62,7 @@ pixelLoadImages _limit = do
     \ FROM      images i \
     \ LEFT JOIN tag_associations ta ON i.uuid = ta.image \
     \ GROUP BY  i.uuid \
-    \ ORDER BY  i.created DESC \
-    \ LIMIT 25"
+    \ ORDER BY  i.created DESC"
 
   pure . catMaybes $ images <&> \(textUUID, imageHash, date, tags) ->
     case U.fromText textUUID of
