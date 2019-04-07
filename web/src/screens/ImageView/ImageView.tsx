@@ -24,28 +24,24 @@ interface Props {
 }
 
 const Image = (props: Props) => {
-    useEffect(() => {
-        return;
-        props.fetchImages()
-    }, []);
+    useEffect(() => { props.fetchImages() }, []);
 
-    const image = props.images.find(image => image.UUID === props.match.params.uuid);
-    const tags  = image && image.tags.reduce((o, tag) => ({ [tag]: 1, ...o }), {})
+    const image = props.images.find(image =>
+        image.UUID === props.match.params.uuid
+    );
+
+    const tags = image && image.tags.map(
+        (tag: string): [string, number] => [tag, 1]
+    );
 
     return !image
         ? <span>Ruh oh</span>
         : (
         <div className="Page">
-            <NavigationBar username={props.username} />
-
+            <NavigationBar links={[]} username={props.username} />
             <div className={styles.Root}>
-                <SearchSidebar
-                    tags={tags}
-                    initialPanel="tags"
-                >
-                    {{
-                       metadata: MetaDataPanel
-                    }}
+                <SearchSidebar tags={tags} initialPanel="tags">
+                    {{ metadata: MetaDataPanel }}
                 </SearchSidebar>
 
                 <ImagePanel image={image} />

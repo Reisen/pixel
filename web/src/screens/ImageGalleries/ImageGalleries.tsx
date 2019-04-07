@@ -30,22 +30,14 @@ interface Props {
 }
 
 const Image = (props: Props) => {
-    useEffect(() => {
-        return;
-        props.fetchImages()
-    }, []);
-
+    useEffect(() => { props.fetchImages() }, []);
     return (
         <div className="Page">
-            <NavigationBar username={props.username} />
-
+            <NavigationBar links={[]} username={props.username} />
             <div className={styles.Root}>
-                <SearchSidebar tags={{}} initialPanel="metadata">
-                    {{
-                       metadata: MetaDataPanel
-                    }}
+                <SearchSidebar tags={[]} initialPanel="metadata">
+                    {{ metadata: MetaDataPanel }}
                 </SearchSidebar>
-
                 <ImageGalleries image={onlyImage} />
             </div>
         </div>

@@ -25,16 +25,18 @@ interface Params {
 
 interface Props {
     fetchImages:        () => void;
+    setGalleryScaling:  (mode: ScalingMode) => void;
     galleryScalingMode: ScalingMode;
     images:             image[];
     username:           string;
-    setGalleryScaling:  (mode: ScalingMode) => void;
     history:            History;
     match:              match<Params>;
 }
 
 const filterVisibleTags = (images: image[]) => {
     let tagCounter: { [index: string]: number } = {};
+
+    // Create Tag List
     images.forEach(image => {
         image.tags.forEach(tag => {
             tagCounter[tag] = tag in tagCounter
@@ -43,8 +45,15 @@ const filterVisibleTags = (images: image[]) => {
         });
     });
 
-    return tagCounter;
+    let tagList: [string, number][] = Object.entries(tagCounter);
+    return tagList.sort((a, b) => b[1] - a[1]).slice(0, 25);
 };
+
+const headerLinks = [
+    {name: 'Images', path: ''},
+    {name: 'Pools', path: ''},
+    {name: 'Tags', path: ''}
+];
 
 const Index = (props: Props) => {
     // Page Handling
@@ -63,13 +72,11 @@ const Index = (props: Props) => {
     const tags       = filterVisibleTags(slice);
 
     // Load Images, On First Mount Only
-    useEffect(() => {
-        props.fetchImages()
-    }, []);
+    useEffect(() => { props.fetchImages() }, []);
 
     return (
         <div className="Page">
-            <NavigationBar username={props.username} />
+            <NavigationBar links={headerLinks} username={props.username} />
             <div className={styles.PanelContainer}>
                 <SearchSidebar initialPanel="tags" tags={tags} />
 

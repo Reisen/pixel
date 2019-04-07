@@ -1,5 +1,4 @@
 import React, { useState }  from 'react';
-import { tags }             from '../../types/image';
 
 import IconButton           from '../IconButton';
 import panels, { PanelMap } from './panels';
@@ -8,7 +7,7 @@ import styles               from './SearchSideBar.module.css';
 
 
 interface Props {
-    tags?: tags;
+    tags?: [string, number][];
     initialPanel: string;
     children?: PanelMap;
 }

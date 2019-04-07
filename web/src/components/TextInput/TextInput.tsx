@@ -13,6 +13,7 @@ interface Props {
 const TextInput = (props: Props) => (
     <div className={styles.Root}>
         <input
+            readOnly
             className={styles.ShadowInput}
             value={props.suggestion}
         />

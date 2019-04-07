@@ -15,14 +15,18 @@ import qualified Eventless                     as E
 
 handleProjections
   :: MonadIO m
+  => Traversable t
   => S.Connection
   -> U.UUID
-  -> E.Event
+  -> t E.Event
   -> m ()
 
-handleProjections conn uuid event = case event ^. E.kind of
-  "Image" -> overDecoded event $ API.projectImages conn uuid
-  _       -> pure ()
+handleProjections conn uuid events = do
+  case getLast $ foldMapDefault (Last . Just) events of
+    Nothing    -> pure ()
+    Just event -> case event ^. E.kind of
+      "Image" -> overDecoded event $ API.projectImages conn uuid
+      _       -> pure ()
 
 --------------------------------------------------------------------------------
 

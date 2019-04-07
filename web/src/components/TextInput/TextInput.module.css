@@ -4,12 +4,13 @@
 
 .TextInput,
 .ShadowInput {
-    border: 1px solid #CCF;
-    padding: 8px;
-    font-size: 14px;
-    color: #336699;
-    width: 100%;
     background-color: transparent;
+    border: 1px solid #CCF;
+    color: #336699;
+    font-size: 14px;
+    line-height: 38px;
+    padding: 0px 8px;
+    width: 100%;
 }
 
 .ShadowInput {
@@ -18,4 +19,5 @@
     top: 0px;
     left: 0px;
     color: #AAA;
+    border: 1px solid transparent;
 }

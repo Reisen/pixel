@@ -6,6 +6,6 @@ extra-deps:
     - servant-multipart-0.11.3
 
     - github: Reisen/eventless
-      commit: db8929b197c5c2b6334338ce6853ef19113c46d3
+      commit: 35f305ea994c34598e99ca5155d52033a03a053a
     - github: IreneKnapp/direct-sqlite
       commit: 8e3da41c46b5de19942cc7bf421c3deb5117ba7a
