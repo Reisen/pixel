@@ -36,6 +36,7 @@ const App = () => (
             <div className="dark">
                 <Route exact path="/"                  component={Index} />
                 <Route exact path="/my/upload"         component={ImageUpload} />
+                <Route       path="/my/upload/:mode"   component={ImageUpload} />
                 <Route exact path="/my/images/:page"   component={Index} />
                 <Route exact path="/i/:uuid"           component={ImageView} />
                 <Route       path="/i/:uuid/galleries" component={ImageGalleries} />

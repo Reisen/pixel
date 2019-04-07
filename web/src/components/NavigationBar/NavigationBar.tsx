@@ -6,6 +6,7 @@ import { Link }    from 'react-router-dom';
 
 interface Props {
     username: string;
+    links:    {name: string, path: string}[];
 }
 
 
@@ -26,9 +27,11 @@ const NavigationBar = (props: Props) => (
         <div className={styles.SubNavigationBar}>
             <div className={styles.InnerRoot}>
                 <div className={styles.LeftNavigation}>
-                    <Link to="/">Images</Link>
-                    <Link to="/">Pools</Link>
-                    <Link to="/">Tags</Link>
+                    {
+                        props.links.map(link =>
+                            <Link key={link.name} to={link.path}>{link.name}</Link>
+                        )
+                    }
                 </div>
             </div>
         </div>

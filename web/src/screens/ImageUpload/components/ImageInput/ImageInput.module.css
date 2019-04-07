@@ -1,19 +1,4 @@
 .Root {
-    width: 1200px;
-    margin: 0 auto;
-}
-
-.Tags {
-    width: 240px;
-    float: left;
-}
-
-.Uploader {
-    width: 940px;
-    float: right;
-}
-
-.UploadManager {
     cursor: pointer;
     outline: 1px solid #DDF;
     border: 8px solid white;
@@ -25,13 +10,8 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-    background-color: green;
 }
 
-.UploadManager input {
-    display: none;
-}
-
-.TagList {
-    margin-top: 16px;
+.Root > input {
+    opacity: 0;
 }

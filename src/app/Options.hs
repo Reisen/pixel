@@ -7,11 +7,13 @@ module Options
 
 --------------------------------------------------------------------------------
 
-import           Protolude
+import Protolude
+import Commands.Run            ( commandRun )
+import Commands.RunProjections ( commandRunProjections )
+import Commands.GenerateTypes  ( commandGenerateTypes )
+import Commands.Types
+
 import qualified Options.Applicative as O
-import           Commands.Run ( commandRun )
-import           Commands.GenerateTypes ( commandGenerateTypes )
-import           Commands.Types
 
 --------------------------------------------------------------------------------
 
@@ -26,5 +28,6 @@ parseOptions = O.execParser $ O.info (commands <**> O.helper)
 commands :: O.Parser Options
 commands = O.subparser
   (  commandRun
+  <> commandRunProjections
   <> commandGenerateTypes
   )
