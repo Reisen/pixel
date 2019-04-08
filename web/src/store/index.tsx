@@ -1,4 +1,5 @@
 // Types
+import { ApiState }     from './api/types';
 import { ImageState }   from './images/types';
 import { UserState }    from './user';
 
@@ -11,6 +12,7 @@ import { userReducer }  from './user';
 // has been fully composed. Note that this is only our defined types, things
 // injected into the state, such as by redux-router, aren't typed here.
 export interface State {
+    api:    ApiState,
     images: ImageState,
     user:   UserState,
 }
@@ -18,5 +20,5 @@ export interface State {
 
 export const reducers = {
     images: imageReducer,
-    user:   userReducer
+    user:   userReducer,
 };

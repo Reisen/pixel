@@ -12,10 +12,12 @@ const calculateSize = (width: number) => ({
     left: `-${Math.round(width/2)}px`
 });
 
-
-export default (props: Props) =>
+const ToolTip = (props: Props) =>
     <div className="ToolTip">
         <div className={styles.Bar} style={calculateSize(138)}>
             {props.text}
         </div>
     </div>;
+
+
+export default ToolTip;

@@ -7,7 +7,7 @@ interface Props {
     value: string;
 }
 
-export default (props: Props) =>
+const Attribute = (props: Props) =>
     <div className={styles.Root}>
         <span>
             <i className={`icofont-${props.icon}`} />
@@ -18,3 +18,5 @@ export default (props: Props) =>
             {props.value}
         </span>
     </div>;
+
+export default Attribute;

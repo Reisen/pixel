@@ -14,23 +14,25 @@ interface Props {
     onClick?: () => void;
 }
 
-
 const classes = (props: Props) => classnames({
     [styles.Root]: true,
     [styles.Root__danger]: props.danger,
     [styles.Root__disabled]: props.disabled
 })
 
+const Button = (props: Props) => {
+    const onClick = () => !props.disabled
+        && props.onClick
+        && props.onClick()
 
-const Button = (props: Props) =>
-    <div
-        onClick={() => !props.disabled && props.onClick && props.onClick()}
-        className={classes(props)}
-    >
-        { props.tooltip && <ToolTip text={props.tooltip} /> }
-        { props.children }
-        { props.icon && <i className={`icofont-${props.icon}`}/> }
-    </div>;
+    return (
+        <div onClick={onClick} className={classes(props)}>
+            { props.tooltip && <ToolTip text={props.tooltip} /> }
+            { props.children }
+            { props.icon && <i className={`icofont-${props.icon}`} /> }
+        </div>
+    );
+};
 
 
 export default Button;

@@ -1,6 +1,7 @@
 import React       from 'react';
 import styles      from './Toggle.module.css';
 
+
 interface Props {
     on: boolean;
     onPress: (current: boolean) => void;
@@ -17,5 +18,6 @@ const Toggle = (props: Props) => (
         <span>{props.text}</span>
     </div>
 );
+
 
 export default Toggle;
