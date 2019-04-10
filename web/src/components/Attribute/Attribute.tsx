@@ -2,12 +2,12 @@ import React       from 'react';
 import styles      from './Attribute.module.css';
 
 interface Props {
-    icon: string;
-    name: string;
+    icon:  string;
+    name:  string;
     value: string;
 }
 
-export default (props: Props) =>
+const Attribute = (props: Props) =>
     <div className={styles.Root}>
         <span>
             <i className={`icofont-${props.icon}`} />
@@ -18,3 +18,5 @@ export default (props: Props) =>
             {props.value}
         </span>
     </div>;
+
+export default Attribute;

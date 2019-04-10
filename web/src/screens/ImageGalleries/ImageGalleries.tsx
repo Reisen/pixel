@@ -4,11 +4,13 @@ import { connect }          from 'react-redux';
 import { fetchImages }      from '../../store/images';
 import { image }            from '../../types/image';
 
+// Components
 import ImageGalleries       from './components/ImageGalleries';
 import NavigationBar        from '../../components/NavigationBar';
 import SearchSidebar        from '../../components/SearchSideBar';
 import { MetaDataPanel }    from '../../components/SearchSideBar/panels';
 import styles               from './ImageGalleries.module.css';
+
 
 const onlyImage: image = {
     createdAt: '01/01/1999',

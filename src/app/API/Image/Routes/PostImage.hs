@@ -5,20 +5,18 @@ module API.Image.Routes.PostImage
   )
 where
 
---------------------------------------------------------------------------------
+import Protolude
+import Control.Lens
+import Servant
+import Servant.Multipart
 
-import           Protolude
-import           Control.Lens
-import           Servant
-import           Servant.Multipart
-
-import qualified Configuration                 as C
-import qualified Data.Aeson                    as A
+import Configuration ( configStaticLocation )
+import MonadPixel    ( Pixel )
+import Data.Aeson                    as A
 import qualified Data.ByteString               as B
 import qualified Data.UUID.V4                  as U
 import qualified Data.Time                     as T
 import qualified Pixel                         as Pixel
-import qualified MonadPixel                    as C
 
 --------------------------------------------------------------------------------
 
@@ -63,12 +61,12 @@ instance FromMultipart Tmp PostImageRequest where
 postImage
   :: Maybe Pixel.Token
   -> PostImageRequest
-  -> C.Pixel Text
+  -> Pixel Text
 
 postImage Nothing _        = throwError (Pixel.ImageError Pixel.MissingToken)
 postImage (Just token) req = do
   putText (show req)
-  directory <- view C.configStaticLocation
+  directory <- view configStaticLocation
   content   <- liftIO . B.readFile $ req ^. path
   uuid      <- liftIO U.nextRandom
   createdAt <- liftIO T.getCurrentTime

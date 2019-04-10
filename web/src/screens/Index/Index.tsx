@@ -1,3 +1,10 @@
+// This Screen is the initial gallery index, it shows a paginated view of all
+// images currently in the gallery ordered by upload date or tag search. This
+// represents the core view for:
+//
+//   - User's Private Galleries
+//   - Public/Shared Galleries
+
 import React, { useEffect } from 'react';
 import { Image as image }   from '../../api/types';
 import { connect }          from 'react-redux';
@@ -12,6 +19,7 @@ import {
     getGalleryScaling
 }                           from '../../store/images';
 
+// Components
 import NavigationBar        from '../../components/NavigationBar';
 import SearchSidebar        from '../../components/SearchSideBar';
 import ImageGrid            from './components/ImageGrid';
@@ -33,6 +41,10 @@ interface Props {
     match:              match<Params>;
 }
 
+// On each page, the tag list on the left should be a view of the most common
+// tags in the _current_ view, I.E, all the tags of all the current visible
+// images, ordered by occurance. This function does the ordering and takes the
+// top 25 of the slice so the page doesn't grow too much.
 const filterVisibleTags = (images: image[]) => {
     let tagCounter: { [index: string]: number } = {};
 
@@ -56,13 +68,14 @@ const headerLinks = [
 ];
 
 const Index = (props: Props) => {
-    // Page Handling
+    // Translate Page number into a slice of the gallery list.
     const pageNumber = parseInt(props.match.params.page || '1', 10);
     const changePage = (page: number) => {
         props.history.push(`/my/images/${page}`)
     };
 
-    // Grid Display Configuration
+    // Configure the grid size so we can slice correct amounts of images for
+    // each visible page.
     const rows       = 4;
     const cols       = 6;
     const slice      = props.images.slice(
@@ -71,7 +84,8 @@ const Index = (props: Props) => {
     );
     const tags       = filterVisibleTags(slice);
 
-    // Load Images, On First Mount Only
+    // Load Images, On First Mount Only, we only re-request on page reload or
+    // when a new search is made.
     useEffect(() => { props.fetchImages() }, []);
 
     return (

@@ -7,15 +7,17 @@ interface Props {
 }
 
 const calculateSize = (width: number) => ({
-    width: `${width}px`,
+    width:      `${width}px`,
     marginLeft: `50%`,
-    left: `-${Math.round(width/2)}px`
+    left:       `-${Math.round(width/2)}px`
 });
 
-
-export default (props: Props) =>
+const ToolTip = (props: Props) =>
     <div className="ToolTip">
         <div className={styles.Bar} style={calculateSize(138)}>
             {props.text}
         </div>
     </div>;
+
+
+export default ToolTip;

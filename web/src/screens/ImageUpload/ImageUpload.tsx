@@ -6,6 +6,7 @@ import { getImages }               from '../../store/images';
 import { uploadImage }             from '../../api/images';
 import { History }                 from 'history'
 
+// Components
 import Attribute                   from '../../components/Attribute';
 import Button                      from '../../components/Button';
 import TextInput                   from '../../components/TextInput';
@@ -65,7 +66,7 @@ const Image = (props: Props) => {
             setInput('');
         }
 
-        if (e.key === ' ' && suggestion) {
+        if (e.key === ' ' && suggestion && suggestionWord && suggestionWord !== '') {
             setInput(suggestion.trim());
         }
     };
@@ -133,5 +134,6 @@ const mapState = (state: State) => ({
     images:   getImages(state.images),
     username: state.user.username
 });
+
 
 export default connect(mapState)(Image);

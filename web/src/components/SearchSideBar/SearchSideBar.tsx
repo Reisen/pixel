@@ -7,9 +7,9 @@ import styles               from './SearchSideBar.module.css';
 
 
 interface Props {
-    tags?: [string, number][];
+    tags?:        [string, number][];
     initialPanel: string;
-    children?: PanelMap;
+    children?:    PanelMap;
 }
 
 const SearchSideBar = (props: Props) => {
