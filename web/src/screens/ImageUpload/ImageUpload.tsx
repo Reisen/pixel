@@ -28,9 +28,10 @@ const headerLinks = [
 
 const Image = (props: Props) => {
     // Create State Stuff
-    const [tags, setTags]   = useState<string[]>([]);
-    const [input, setInput] = useState<string>('');
-    const [image, setImage] = useState<string | null>(null);
+    const [tags, setTags]           = useState<string[]>([]);
+    const [input, setInput]         = useState<string>('');
+    const [uploading, setUploading] = useState<boolean>(false);
+    const [image, setImage]         = useState<string | null>(null);
 
     // We need a Ref to the file element so we can capture events from the DOM
     // when it is set. This allows is to capture the image data when a file is
@@ -81,6 +82,10 @@ const Image = (props: Props) => {
                 console.log('Tag Added: ' + tag);
                 return null;
             });
+
+            console.log('A');
+            setUploading(true);
+            console.log('B');
             uploadImage(data).then(() => {
                 props.history.push('/');
             });
@@ -96,10 +101,10 @@ const Image = (props: Props) => {
                 <div className={styles.Tags}>
                     <Button
                         icon="upload"
-                        disabled={!image}
+                        disabled={!image || uploading}
                         onClick={onImageUpload}
                     >
-                        Upload
+                        { uploading ? 'Uploading...' : 'Upload' }
                     </Button>
 
                     <TextInput
