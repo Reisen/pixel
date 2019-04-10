@@ -7,6 +7,8 @@
     categorization, and sharing. 
 </p>
 
+> **This project is really early stages, it is barely alpha software (AKA 🗑:fire:), so until there's a first release don't attempt to run it. A lot of the features below are still TODO. Check back later.**
+
 ![Screenshot](https://user-images.githubusercontent.com/158967/54244067-d36f4480-4522-11e9-87bb-47468a932dda.png)
 
 
