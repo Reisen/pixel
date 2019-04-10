@@ -66,7 +66,7 @@ const Image = (props: Props) => {
             setInput('');
         }
 
-        if (e.key === ' ' && suggestion) {
+        if (e.key === ' ' && suggestion && suggestionWord && suggestionWord !== '') {
             setInput(suggestion.trim());
         }
     };
