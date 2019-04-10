@@ -3,9 +3,9 @@ import styles      from './Toggle.module.css';
 
 
 interface Props {
-    on: boolean;
+    on:      boolean;
     onPress: (current: boolean) => void;
-    text: string;
+    text:    string;
 }
 
 const Toggle = (props: Props) => (

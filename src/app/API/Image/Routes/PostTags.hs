@@ -5,22 +5,30 @@ module API.Image.Routes.PostTags
   )
 where
 
+import Protolude
+import Control.Lens
+import Servant
+
+import Data.Aeson ( FromJSON (..) )
+import MonadPixel ( Pixel )
+import Pixel      ( DigestText
+                  , Error (..)
+                  , ImageError (..)
+                  , Token
+                  , TagList
+                  , addTags
+                  , pixelParseJSON
+                  )
+
 --------------------------------------------------------------------------------
+-- Post tags require:
+--
+--   * A UUID so we know which image we're talking about.
+--   * A "tags" fragment to recognize /:uuid/tags routes.
+--   * A Request Tags Object to decode from.
 
-import           Protolude
-import           Control.Lens
-import           Servant
-
-import qualified Data.Aeson                    as A
-import qualified Pixel                         as Pixel
-import qualified MonadPixel                    as C
-
---------------------------------------------------------------------------------
-
--- We wrap up responses in an HTTP endpoint type, in order to abstract away
--- from the backend.
 type PostTags =
-  Header "Authorization" Pixel.Token
+  Header "Authorization" Token
     :> Capture "uuid" Text
     :> "tags"
     :> ReqBody '[JSON] PostTagsRequest
@@ -29,23 +37,26 @@ type PostTags =
 --------------------------------------------------------------------------------
 
 newtype PostTagsRequest = PostTagsRequest
-  { postTagsRequestTags :: Pixel.TagList
+  { postTagsRequestTags :: TagList -- ^ List of tags to add to the image.
   } deriving (Show, Generic)
 
-instance A.FromJSON PostTagsRequest where
-  parseJSON = Pixel.pixelParseJSON
+instance FromJSON PostTagsRequest where
+  parseJSON = pixelParseJSON
 
 makeFields ''PostTagsRequest
 
 --------------------------------------------------------------------------------
 
 postTags
-  :: Maybe Pixel.Token
-  -> Pixel.DigestText
+  :: Maybe Token
+  -> DigestText
   -> PostTagsRequest
-  -> C.Pixel NoContent
+  -> Pixel NoContent
 
-postTags Nothing _ _ = throwError (Pixel.ImageError Pixel.MissingToken)
+-- When there's no Token, we can't do anything.
+postTags Nothing _ _       = throwError (ImageError MissingToken)
+
+-- When we have a token, authorize it and apply tags to the image object.
 postTags (Just _) uuid req = do
-  Pixel.addTags uuid (req ^. tags)
+  addTags uuid (req ^. tags)
   pure NoContent

@@ -6,9 +6,9 @@ import ToolTip    from '../ToolTip';
 
 
 interface Props {
-    active?: boolean;
-    icon?: string;
-    letter?: string;
+    active?:  boolean;
+    icon?:    string;
+    letter?:  string;
     tooltip?: string;
     onClick?: () => void;
 }

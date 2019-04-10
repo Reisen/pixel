@@ -7,9 +7,9 @@ interface Props {
 }
 
 const calculateSize = (width: number) => ({
-    width: `${width}px`,
+    width:      `${width}px`,
     marginLeft: `50%`,
-    left: `-${Math.round(width/2)}px`
+    left:       `-${Math.round(width/2)}px`
 });
 
 const ToolTip = (props: Props) =>

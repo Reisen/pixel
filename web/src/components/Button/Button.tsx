@@ -6,12 +6,12 @@ import ToolTip    from '../ToolTip';
 
 
 interface Props {
-    children: string;
-    danger?: boolean;
+    children:  string;
+    danger?:   boolean;
     disabled?: boolean;
-    icon?: string;
-    tooltip?: string;
-    onClick?: () => void;
+    icon?:     string;
+    tooltip?:  string;
+    onClick?:  () => void;
 }
 
 const classes = (props: Props) => classnames({

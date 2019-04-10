@@ -5,7 +5,7 @@ import { lensProp, set } from 'ramda';
 
 const initialState: State = {
     galleryScalingMode: 'cover',
-    images: [],
+    images:             [],
 };
 
 export const imageReducer = handleActions<State>({

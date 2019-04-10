@@ -4,6 +4,7 @@ import { ImageState }   from './images/types';
 import { UserState }    from './user';
 
 // Reducers
+import { apiReducer }   from './api';
 import { imageReducer } from './images';
 import { userReducer }  from './user';
 
@@ -19,6 +20,7 @@ export interface State {
 
 
 export const reducers = {
+    api:    apiReducer,
     images: imageReducer,
     user:   userReducer,
 };
