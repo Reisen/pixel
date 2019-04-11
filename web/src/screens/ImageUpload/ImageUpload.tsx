@@ -7,7 +7,7 @@ import { uploadImage }             from '../../api/images';
 import { History }                 from 'history'
 
 // Components
-import Attribute                   from '../../components/Attribute';
+import Tag                         from '../../components/Tag';
 import Button                      from '../../components/Button';
 import TextInput                   from '../../components/TextInput';
 import NavigationBar               from '../../components/NavigationBar';
@@ -72,6 +72,12 @@ const Image = (props: Props) => {
         }
     };
 
+    // Remove tags
+    const removeTag = (k: number) => {
+        tags.splice(k,1);
+        setTags([...tags]);
+    }
+
     // Handle Image Upload
     const onImageUpload = () => {
         if (ref.current && ref.current.files) {
@@ -118,7 +124,7 @@ const Image = (props: Props) => {
                     <div className={styles.TagList}>
                         {
                             tags.map((tag, k) =>
-                                <Attribute key={k} icon="tag" name={tag} value="" />
+                                <Tag key={k} icon="close-circled" name={tag} value="" onIcon={() => removeTag(k)}/>
                             )
                         }
                     </div>
