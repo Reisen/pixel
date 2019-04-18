@@ -23,3 +23,8 @@
     text-overflow: ellipsis;
     color: #333;
 }
+
+.Root__strikethrough > span {
+    text-decoration: line-through;
+    color: #CC9898;
+}

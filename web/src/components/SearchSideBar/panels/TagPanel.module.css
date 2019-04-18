@@ -18,4 +18,10 @@
     color: #FF6677 !important;
 }
 
-
+.EditButton {
+    color: #5588CC;
+    cursor: pointer;
+    font-size: 14px;
+    vertical-align: baseline;
+    margin-left: 8px;
+}

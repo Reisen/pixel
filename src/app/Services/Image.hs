@@ -4,8 +4,7 @@ module Services.Image
   , pixelLoadImages
   , pixelAppendTags
   , pixelRemoveTags
-  )
-where
+  ) where
 
 --------------------------------------------------------------------------------
 

@@ -13,20 +13,29 @@ import Commands.RunProjections ( commandRunProjections )
 import Commands.GenerateTypes  ( commandGenerateTypes )
 import Commands.Types
 
-import qualified Options.Applicative as O
+import Options.Applicative     ( Parser
+                               , execParser
+                               , fullDesc
+                               , header
+                               , helper
+                               , info
+                               , progDesc
+                               , subparser
+                               )
+
 
 --------------------------------------------------------------------------------
 
 parseOptions :: IO Options
-parseOptions = O.execParser $ O.info (commands <**> O.helper)
-  (  O.fullDesc
-  <> O.progDesc "Pixel!"
-  <> O.header "Dots everywhere."
+parseOptions = execParser $ info (commands <**> helper)
+  (  fullDesc
+  <> progDesc "Pixel!"
+  <> header "Dots everywhere."
   )
 
 -- Main Option Parser
-commands :: O.Parser Options
-commands = O.subparser
+commands :: Parser Options
+commands = subparser
   (  commandRun
   <> commandRunProjections
   <> commandGenerateTypes

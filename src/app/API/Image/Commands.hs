@@ -2,17 +2,19 @@ module API.Image.Commands
   ( addTags
   , createImage
   , removeTags
-  )
-where
+  ) where
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import           Control.Lens
+import Protolude
+import Control.Lens
 
-import qualified Data.UUID                     as U
-import qualified Eventless                     as E
-import qualified Pixel                         as Pixel
+import Data.UUID ( UUID )
+import Eventless ( Command, emit, loadSnapshot )
+import Pixel     ( Image (..)
+                 , ImageEvent (..)
+                 , imageTags
+                 )
 
 --------------------------------------------------------------------------------
 
@@ -24,15 +26,15 @@ type Tag = Text
 -- with some existing tags as well.
 createImage
   :: Monad m
-  => U.UUID
-  -> Pixel.Image
-  -> E.Command Pixel.Image m
+  => UUID
+  -> Image
+  -> Command Image m
 
-createImage userUUID Pixel.Image {..} = do
-  E.emit (Pixel.AssociatedWithUser userUUID)
-  E.emit (Pixel.HashChanged _imageHash)
-  traverse_ (E.emit . Pixel.TagAppended) _imageTags
-  traverse_ (E.emit . Pixel.CreatedAt) _imageCreatedAt
+createImage userUUID Image {..} = do
+  emit (AssociatedWithUser userUUID)
+  emit (HashChanged _imageHash)
+  traverse_ (emit . TagAppended) _imageTags
+  traverse_ (emit . CreatedAt) _imageCreatedAt
 
 --------------------------------------------------------------------------------
 
@@ -42,13 +44,13 @@ addTags
   :: Monad m
   => Traversable t
   => t Tag
-  -> E.Command Pixel.Image m
+  -> Command Image m
 
-addTags newtags = E.loadSnapshot @(Maybe Pixel.Image) >>= \case
+addTags newtags = loadSnapshot @(Maybe Image) >>= \case
   Nothing    -> pure ()
   Just image -> for_ newtags $ \tag ->
-    unless (elem tag $ image ^. Pixel.imageTags)
-      $ E.emit (Pixel.TagAppended tag)
+    unless (elem tag $ image ^. imageTags)
+      $ emit (TagAppended tag)
 
 --------------------------------------------------------------------------------
 
@@ -58,10 +60,10 @@ removeTags
   :: Monad m
   => Traversable t
   => t Tag
-  -> E.Command Pixel.Image m
+  -> Command Image m
 
-removeTags newtags = E.loadSnapshot @(Maybe Pixel.Image) >>= \case
+removeTags newtags = loadSnapshot @(Maybe Image) >>= \case
   Nothing    -> pure ()
   Just image -> for_ newtags $ \tag ->
-    when (elem tag $ image ^. Pixel.imageTags)
-      $ E.emit (Pixel.TagRemoved tag)
+    when (elem tag $ image ^. imageTags)
+      $ emit (TagRemoved tag)

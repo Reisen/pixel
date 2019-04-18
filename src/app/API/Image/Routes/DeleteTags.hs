@@ -1,26 +1,32 @@
 module API.Image.Routes.DeleteTags
   ( DeleteTags
   , DeleteTagsRequest
-  , deleteTags
-  )
-where
+  , postDeleteTags
+  ) where
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import           Control.Lens
-import           Servant
+import Protolude
+import Control.Lens
+import Servant
 
-import qualified Data.Aeson                    as A
-import qualified Pixel                         as Pixel
-import qualified MonadPixel                    as C
+import Data.Aeson ( FromJSON (..) )
+import Pixel      ( Token
+                  , TagList
+                  , DigestText
+                  , Error (..)
+                  , ImageError (..)
+                  , pixelParseJSON
+                  , deleteTags
+                  )
+import MonadPixel ( Pixel )
 
 --------------------------------------------------------------------------------
 
 -- We wrap up responses in an HTTP endpoint type, in order to abstract away
 -- from the backend.
 type DeleteTags =
-  Header "Authorization" Pixel.Token
+  Header "Authorization" Token
     :> Capture "uuid" Text
     :> "tags"
     :> ReqBody '[JSON] DeleteTagsRequest
@@ -29,23 +35,23 @@ type DeleteTags =
 --------------------------------------------------------------------------------
 
 newtype DeleteTagsRequest = DeleteTagsRequest
-  { deleteTagsRequestTags :: Pixel.TagList
+  { deleteTagsRequestTags :: TagList
   } deriving (Show, Generic)
 
-instance A.FromJSON DeleteTagsRequest where
-  parseJSON = Pixel.pixelParseJSON
+instance FromJSON DeleteTagsRequest where
+  parseJSON = pixelParseJSON
 
 makeFields ''DeleteTagsRequest
 
 --------------------------------------------------------------------------------
 
-deleteTags
-  :: Maybe Pixel.Token
-  -> Pixel.DigestText
+postDeleteTags
+  :: Maybe Token
+  -> DigestText
   -> DeleteTagsRequest
-  -> C.Pixel NoContent
+  -> Pixel NoContent
 
-deleteTags Nothing _ _ = throwError (Pixel.ImageError Pixel.MissingToken)
-deleteTags (Just _) uuid req = do
-  Pixel.deleteTags uuid (req ^. tags)
+postDeleteTags Nothing _ _ = throwError (ImageError MissingToken)
+postDeleteTags (Just _) uuid req = do
+  deleteTags uuid (req ^. tags)
   pure NoContent
