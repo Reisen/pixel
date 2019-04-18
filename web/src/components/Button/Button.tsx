@@ -15,8 +15,8 @@ interface Props {
 }
 
 const classes = (props: Props) => classnames({
-    [styles.Root]: true,
-    [styles.Root__danger]: props.danger,
+    [styles.Root]:           true,
+    [styles.Root__danger]:   props.danger,
     [styles.Root__disabled]: props.disabled
 })
 
