@@ -2,19 +2,16 @@ module Pixel.API.Images.Operations.GetImage
   ( fetchImages
   ) where
 
---------------------------------------------------------------------------------
-
-import           Protolude
-
-import qualified Data.UUID                     as U
-import qualified Pixel.API.Images.Types        as Pixel
-import qualified Pixel.Services.Image          as Pixel
+import Protolude
+import Data.UUID              ( UUID )
+import Pixel.API.Images.Types ( Image )
+import Pixel.Services.Image   ( MonadImage (..) )
 
 --------------------------------------------------------------------------------
 
 fetchImages
   :: Monad m
-  => Pixel.MonadImage m
-  => m [(U.UUID, Pixel.Image)]
+  => MonadImage m
+  => m [(UUID, Image)]
 
-fetchImages = Pixel.loadImages 10
+fetchImages = loadImages 10

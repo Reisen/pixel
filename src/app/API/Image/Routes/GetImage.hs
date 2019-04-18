@@ -7,40 +7,48 @@ where
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import           Servant
+import Protolude
+import Servant
 
-import           API.Image.Types                ( Image(..) )
-import qualified Data.Aeson                    as A
-import qualified Pixel                         as Pixel
-import qualified MonadPixel                    as C
+import API.Image.Types as API         ( Image(..) )
+import Data.Aeson                     ( ToJSON (..) )
+import Pixel as Pixel                 ( DigestText
+                                      , Error (..)
+                                      , Image (..)
+                                      , ImageError (..)
+                                      , Token
+                                      , fetchImages
+                                      , pixelToEncoding
+                                      , pixelToJSON
+                                      )
+import MonadPixel                     ( Pixel )
 
 --------------------------------------------------------------------------------
 
 -- We wrap up responses in an HTTP endpoint type, in order to abstract
 -- away from the backend.
 type GetImage =
-  Header "Authorization" Pixel.Token
+  Header "Authorization" Token
     :> Get '[JSON] GetImageResponse
 
 --------------------------------------------------------------------------------
 
 newtype GetImageResponse = GetImageResponse
-  { getImageResponseImages :: [Image]
+  { getImageResponseImages :: [API.Image]
   } deriving (Show, Generic)
 
-instance A.ToJSON GetImageResponse where
-  toEncoding = Pixel.pixelToEncoding
-  toJSON     = Pixel.pixelToJSON
+instance ToJSON GetImageResponse where
+  toEncoding = pixelToEncoding
+  toJSON     = pixelToJSON
 
 --------------------------------------------------------------------------------
 
 convertImage
-  :: Pixel.DigestText
+  :: DigestText
   -> Pixel.Image
-  -> Image
+  -> API.Image
 
-convertImage uuid Pixel.Image{..} = Image
+convertImage uuid Pixel.Image{..} = API.Image
   { imagePath  = fold ["/static/images/", _imageHash]
   , imageThumb = fold ["/static/thumbs/", _imageHash]
   , imageUUID  = uuid
@@ -54,12 +62,12 @@ convertImage uuid Pixel.Image{..} = Image
 -- date and the filter should encompass all possible queries a user might have,
 -- from tags to uploader, to ordering.
 getImage
-  :: Maybe Pixel.Token
-  -> C.Pixel GetImageResponse
+  :: Maybe Token
+  -> Pixel GetImageResponse
 
-getImage Nothing  = throwError (Pixel.ImageError Pixel.MissingToken)
+getImage Nothing  = throwError (ImageError MissingToken)
 getImage (Just _) = do
-  images <- Pixel.fetchImages
+  images <- fetchImages
   pure GetImageResponse
     { getImageResponseImages = map (uncurry convertImage . first show) images
     }

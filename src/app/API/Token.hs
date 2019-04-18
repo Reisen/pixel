@@ -5,9 +5,9 @@ module API.Token
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import           Control.Lens
-import           Servant                        ( FromHttpApiData(..) )
+import Protolude
+import Control.Lens
+import Servant      ( FromHttpApiData (..) )
 
 --------------------------------------------------------------------------------
 

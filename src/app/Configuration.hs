@@ -8,19 +8,18 @@ module Configuration
   , readConfig
   , readNumericEnv
   , readTextEnv
-  )
-where
+  ) where
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import           Control.Lens
+import Protolude
+import Control.Lens
 
-import           Pixel                          ( HKD )
-import qualified Database.SQLite.Simple        as S
-import qualified Eventless                     as Ev
-import qualified System.Environment            as S.E
-import qualified Text.Read                     as T.R
+import Pixel                  ( HKD )
+import Database.SQLite.Simple ( Connection )
+import Eventless              ( BackendStore )
+import System.Environment     ( lookupEnv )
+import Text.Read              ( read )
 
 --------------------------------------------------------------------------------
 
@@ -28,8 +27,8 @@ import qualified Text.Read                     as T.R
 data Config' f = Config
   { _configStaticLocation :: HKD f Text
   , _configPort           :: HKD f Int
-  , _configConnection     :: HKD f Ev.BackendStore
-  , _configReadSchema     :: HKD f S.Connection
+  , _configConnection     :: HKD f BackendStore
+  , _configReadSchema     :: HKD f Connection
   }
 
 -- Concrete Configuration
@@ -57,10 +56,8 @@ readConfig Config {..} =
 -- application has started doing anything meaningful.
 readTextEnv :: Text -> Text ->  IO Text
 readTextEnv key def =
-  fromMaybe def . map toS
-    <$> S.E.lookupEnv (toS key)
+  fromMaybe def . map toS <$> lookupEnv (toS key)
 
 readNumericEnv :: Text -> Int -> IO Int
 readNumericEnv key def =
-  fromMaybe def . map (T.R.read . toS)
-    <$> S.E.lookupEnv (toS key)
+  fromMaybe def . map (read . toS) <$> lookupEnv (toS key)

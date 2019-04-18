@@ -2,43 +2,43 @@ module Projections where
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import           Control.Lens
+import Protolude
+import Control.Lens
 
-import qualified API.Image.Projections         as API
-import qualified Data.Aeson                    as A
-import qualified Data.UUID                     as U
-import qualified Database.SQLite.Simple        as S
-import qualified Eventless                     as E
+import API.Image.Projections  ( projectImages )
+import Data.Aeson             ( FromJSON, eitherDecode )
+import Data.UUID              ( UUID )
+import Database.SQLite.Simple ( Connection )
+import Eventless              ( Event (..), kind )
 
 --------------------------------------------------------------------------------
 
 handleProjections
   :: MonadIO m
   => Traversable t
-  => S.Connection
-  -> U.UUID
-  -> t E.Event
+  => Connection
+  -> UUID
+  -> t Event
   -> m ()
 
 handleProjections conn uuid events = do
   case getLast $ foldMapDefault (Last . Just) events of
     Nothing    -> pure ()
-    Just event -> case event ^. E.kind of
-      "Image" -> overDecoded event $ API.projectImages conn uuid
+    Just event -> case event ^. kind of
+      "Image" -> overDecoded event $ projectImages conn uuid
       _       -> pure ()
 
 --------------------------------------------------------------------------------
 
 overDecoded
   :: Applicative f
-  => A.FromJSON a
-  => E.Event
+  => FromJSON a
+  => Event
   -> (a -> f ())
   -> f ()
 
-overDecoded E.Event {..} f =
+overDecoded Event {..} f =
   (const (pure ()) `either` f)
-    . A.eitherDecode
+    . eitherDecode
     . toS
     $ eventSnapshot

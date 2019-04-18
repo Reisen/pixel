@@ -41,7 +41,7 @@ const Image = (props: Props) => {
 
     // Scan for image by UUID, and extract the tags into a counted tag list.
     const image = props.images.find(image => image.UUID === props.match.params.uuid);
-    const tags = image && image.tags.map((tag: string): [string, number] => [tag, 1]);
+    const tags  = image && image.tags.map((tag: string): [string, number] => [tag, 1]);
 
     return !image
         ? <span>Ruh oh</span>

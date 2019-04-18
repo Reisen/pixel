@@ -4,10 +4,10 @@ module API.Image.Types
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import qualified Pixel
+import Protolude
 
-import qualified Data.Aeson                    as A
+import Data.Aeson ( ToJSON (..) )
+import Pixel      ( DigestText, pixelToEncoding, pixelToJSON )
 
 --------------------------------------------------------------------------------
 
@@ -15,9 +15,9 @@ data Image = Image
   { imagePath  :: !Text
   , imageThumb :: !Text
   , imageTags  :: ![Text]
-  , imageUUID  :: !Pixel.DigestText
+  , imageUUID  :: !DigestText
   } deriving (Show, Generic)
 
-instance A.ToJSON Image where
-  toEncoding = Pixel.pixelToEncoding
-  toJSON     = Pixel.pixelToJSON
+instance ToJSON Image where
+  toEncoding = pixelToEncoding
+  toJSON     = pixelToJSON

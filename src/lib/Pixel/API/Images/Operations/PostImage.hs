@@ -5,17 +5,14 @@ module Pixel.API.Images.Operations.PostImage
   , processImage
   ) where
 
---------------------------------------------------------------------------------
-
-import           Protolude
-
-import qualified Crypto.Hash                   as H
-import qualified Data.UUID                     as U
-import           Data.Time                      ( UTCTime )
-import qualified Pixel.API.Token               as Pixel
-import qualified Pixel.API.Images.Types        as Pixel
-import qualified Pixel.Services.Image          as Pixel
-import qualified Pixel.Services.Static         as Pixel
+import Protolude hiding       ( hash )
+import Crypto.Hash            ( hash, Digest, SHA3_224 )
+import Data.UUID              ( UUID, fromText )
+import Data.Time              ( UTCTime )
+import Pixel.API.Token        ( Token (..) )
+import Pixel.API.Images.Types ( Image (..), TagList )
+import Pixel.Services.Image   ( MonadImage (..) )
+import Pixel.Services.Static  ( MonadStatic (..) )
 
 --------------------------------------------------------------------------------
 
@@ -23,17 +20,17 @@ import qualified Pixel.Services.Static         as Pixel
 -- | bytes. The result of this function is just the hash of the newly created
 -- | file within the backend.
 handleImageUpload
-  :: Monad m             -- ^ Any Monad
-  => Pixel.MonadStatic m -- ^ Access to Static API to store data.
-  => Pixel.MonadImage m  -- ^ Access to Image API to write/read images.
-  => ImageDetails        -- ^ Argument Itself
+  :: Monad m       -- ^ Any Monad...
+  => MonadStatic m -- ^ ... that can store static data
+  => MonadImage m  -- ^ ... that can work with Image data
+  => ImageDetails  -- ^ The Image we want to upload.
   -> m ()
 
 handleImageUpload ImageDetails {..} = do
   let digest = digestImage content
   let image  = processImage createdAt uploadedTags token content
-  Pixel.writeStaticImage directory digest content
-  Pixel.saveImage uuid image
+  writeStaticImage directory digest content
+  saveImage uuid image
   pure ()
 
 --------------------------------------------------------------------------------
@@ -42,24 +39,24 @@ handleImageUpload ImageDetails {..} = do
 -- | change this it will become possible to upload multiple identical images
 -- | using a different hash. This may be desireable?
 digestImage :: ByteString -> Text
-digestImage = show . (H.hash :: ByteString -> H.Digest H.SHA3_224)
+digestImage = show . (hash :: ByteString -> Digest SHA3_224)
 
 -- Given all uploaded data, produce a valid API image type.
-processImage :: UTCTime -> [Text] -> Pixel.Token -> ByteString -> Pixel.Image
-processImage createdAt newTags token content = Pixel.Image
+processImage :: UTCTime -> [Text] -> Token -> ByteString -> Image
+processImage createdAt newTags token content = Image
   { _imageHash      = digestImage content
   , _imageTags      = newTags
-  , _imageUploader  = U.fromText . Pixel._tokenText $ token
+  , _imageUploader  = fromText . _tokenText $ token
   , _imageCreatedAt = Just createdAt
   }
 
 --------------------------------------------------------------------------------
 
 data ImageDetails = ImageDetails
-  { content      :: ByteString    -- ^ Content of the Image Itself
-  , createdAt    :: UTCTime       -- ^ Time of Upload
-  , directory    :: Text          -- ^ Where do we store this image?
-  , token        :: Pixel.Token   -- ^ Token for user doing this request.
-  , uploadedTags :: Pixel.TagList -- ^ Tags to associate with this image.
-  , uuid         :: U.UUID        -- ^ What UUID do we assign to this resouce?
+  { content      :: ByteString -- ^ Binary content of the Image to store.
+  , createdAt    :: UTCTime    -- ^ Time of Upload
+  , directory    :: Text       -- ^ Where do we store this image?
+  , token        :: Token      -- ^ Token for user doing this request.
+  , uploadedTags :: TagList    -- ^ Tags to associate with this image.
+  , uuid         :: UUID       -- ^ What UUID do we assign to this resouce?
   }
