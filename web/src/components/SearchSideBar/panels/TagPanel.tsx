@@ -6,7 +6,8 @@ import styles              from './TagPanel.module.css';
 
 
 interface Props {
-    tags?: [string, number][];
+    editable?: boolean;
+    tags?:     [string, number][];
 }
 
 export default {
@@ -32,18 +33,41 @@ export default {
             }
         };
 
+        const NewTags = () => {
+            return (
+                <div className={styles.NewTags}>
+                    {
+                        adds.map(add => (
+                            <Tag
+                                new
+                                key={add}
+                                icon="close-circled"
+                                name={add}
+                                value="NEW"
+                                onIcon={() => {}}
+                            />
+                        ))
+                    }
+                </div>
+            );
+        }
+
         return (
             <div>
                 <h1>
                     Taglist
-                    <span onClick={toggleEditMode} className={styles.EditButton}>
-                        ({
-                            deletes.length > 0 ? 'Save Changes' :
-                            adds.length > 0    ? 'Save Changed' :
-                            editMode           ? 'Cancel'
-                                               : 'Edit'
-                        })
-                    </span>
+
+                    {
+                        props.editable &&
+                            <span onClick={toggleEditMode} className={styles.EditButton}>
+                                ({
+                                    deletes.length > 0 ? 'Save Changes' :
+                                    adds.length > 0    ? 'Save Changed' :
+                                    editMode           ? 'Cancel'
+                                                    : 'Edit'
+                                })
+                            </span>
+                    }
                 </h1>
 
                 { editMode &&
@@ -57,17 +81,7 @@ export default {
 
 
                 <div className={styles.TagList}>
-                    {
-                        adds && adds.map(add => (
-                            <Tag
-                                key={add}
-                                icon="tag"
-                                name={add}
-                                value="NEW"
-                                onIcon={() => {}}
-                            />
-                        ))
-                    }
+                    { adds.length > 0 && <NewTags /> }
 
                     {
                         props.tags && props.tags.map(tag => (

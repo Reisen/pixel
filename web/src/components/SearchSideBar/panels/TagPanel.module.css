@@ -25,3 +25,9 @@
     vertical-align: baseline;
     margin-left: 8px;
 }
+
+.NewTags {
+    border-bottom: 1px solid #DDF;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+}

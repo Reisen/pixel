@@ -10,6 +10,7 @@ interface Props {
     tags?:        [string, number][];
     initialPanel: string;
     children?:    PanelMap;
+    editable?:    boolean;
 }
 
 const SearchSideBar = (props: Props) => {

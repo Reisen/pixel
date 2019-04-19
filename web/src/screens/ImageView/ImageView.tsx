@@ -49,7 +49,7 @@ const Image = (props: Props) => {
         <div className="Page">
             <NavigationBar links={headerLinks} username={props.username} />
             <div className={styles.Root}>
-                <SearchSidebar tags={tags} initialPanel="tags">
+                <SearchSidebar editable tags={tags} initialPanel="tags">
                     {{ metadata: MetaDataPanel }}
                 </SearchSidebar>
 
