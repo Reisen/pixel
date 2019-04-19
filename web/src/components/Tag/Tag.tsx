@@ -1,19 +1,20 @@
 import React       from 'react';
 import classnames  from 'classnames';
 import styles      from './Tag.module.css';
-import { string }  from 'prop-types';
 
 interface Props {
     icon:           string;
     name:           string;
     value:          string;
     strikethrough?: boolean;
+    new?:           boolean;
     onIcon:         () => void;
 }
 
 const classes = (props: Props) => classnames({
     [styles.Root]:                true,
     [styles.Root__strikethrough]: props.strikethrough,
+    [styles.Root__new]:           props.new
 })
 
 const Tag = (props: Props) =>

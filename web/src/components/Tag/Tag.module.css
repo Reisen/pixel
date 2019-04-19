@@ -28,3 +28,7 @@
     text-decoration: line-through;
     color: #CC9898;
 }
+
+.Root__new > span {
+    color: #77BB99;
+}
