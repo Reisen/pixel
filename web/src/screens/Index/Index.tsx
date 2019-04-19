@@ -21,7 +21,9 @@ import {
 
 // Components
 import NavigationBar        from '../../components/NavigationBar';
-import SearchSidebar        from '../../components/SearchSideBar';
+import SearchSideBar        from '../../components/SearchSideBar';
+import TagPanel             from '../../panels/TagPanel';
+import SettingsPanel        from '../../panels/SettingsPanel';
 import ImageGrid            from './components/ImageGrid';
 import Pager                from './components/Pager';
 import styles               from './Index.module.css';
@@ -67,6 +69,21 @@ const headerLinks = [
     {name: 'Tags', path: ''}
 ];
 
+const panels = (tags: [string, number][]) => {
+    return [
+        {
+            icon: 'tag',
+            name: 'Tag List',
+            elem: <TagPanel tags={tags} />
+        },
+        {
+            icon: 'gears',
+            name: 'Settings',
+            elem: <SettingsPanel />
+        }
+    ];
+}
+
 const Index = (props: Props) => {
     // Translate Page number into a slice of the gallery list.
     const pageNumber = parseInt(props.match.params.page || '1', 10);
@@ -92,7 +109,11 @@ const Index = (props: Props) => {
         <div className="Page">
             <NavigationBar links={headerLinks} username={props.username} />
             <div className={styles.PanelContainer}>
-                <SearchSidebar initialPanel="tags" tags={tags} />
+                <SearchSideBar initialPanel="Tag List">
+                    {
+                        panels(tags)
+                    }
+                </SearchSideBar>
 
                 <ImageGrid
                     changePage={changePage}

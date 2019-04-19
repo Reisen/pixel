@@ -13,9 +13,11 @@ import { Image as image }         from '../../api/types';
 
 // Components
 import ImagePanel                 from './components/ImagePanel';
+import MetaDataPanel              from '../../panels/MetaDataPanel';
 import NavigationBar              from '../../components/NavigationBar';
 import SearchSidebar              from '../../components/SearchSideBar';
-import { MetaDataPanel }          from '../../components/SearchSideBar/panels';
+import SettingsPanel              from '../../panels/SettingsPanel';
+import TagPanel                   from '../../panels/TagPanel';
 
 
 interface Params {
@@ -36,6 +38,26 @@ const headerLinks = [
     {name: 'Tags', path: ''}
 ];
 
+const panels = (tags: [string, number][]) => {
+    return [
+        {
+            icon: 'tag',
+            name: 'Tag List',
+            elem: <TagPanel editable tags={tags} />
+        },
+        {
+            icon: 'gears',
+            name: 'Settings',
+            elem: <SettingsPanel />
+        },
+        {
+            icon: 'chart-radar-graph',
+            name: 'Metadata',
+            elem: <MetaDataPanel />
+        }
+    ];
+}
+
 const Image = (props: Props) => {
     useEffect(() => { props.fetchImages() }, []);
 
@@ -49,8 +71,10 @@ const Image = (props: Props) => {
         <div className="Page">
             <NavigationBar links={headerLinks} username={props.username} />
             <div className={styles.Root}>
-                <SearchSidebar editable tags={tags} initialPanel="tags">
-                    {{ metadata: MetaDataPanel }}
+                <SearchSidebar initialPanel="Tag List">
+                    {
+                        panels(tags || [])
+                    }
                 </SearchSidebar>
 
                 <ImagePanel image={image} />

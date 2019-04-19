@@ -8,7 +8,6 @@ import { image }            from '../../types/image';
 import ImageGalleries       from './components/ImageGalleries';
 import NavigationBar        from '../../components/NavigationBar';
 import SearchSidebar        from '../../components/SearchSideBar';
-import { MetaDataPanel }    from '../../components/SearchSideBar/panels';
 import styles               from './ImageGalleries.module.css';
 
 
@@ -37,8 +36,7 @@ const Image = (props: Props) => {
         <div className="Page">
             <NavigationBar links={[]} username={props.username} />
             <div className={styles.Root}>
-                <SearchSidebar tags={[]} initialPanel="metadata">
-                    {{ metadata: MetaDataPanel }}
+                <SearchSidebar initialPanel="metadata">
                 </SearchSidebar>
                 <ImageGalleries image={onlyImage} />
             </div>
