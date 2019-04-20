@@ -24,8 +24,12 @@
 }
 
 .Root__active {
-    composes: Root;
     background-color: #5588CC;
     outline: 1px solid #5588CC;
     color: white;
+}
+
+.Root__small {
+    min-width: 16px;
+    line-height: 32px;
 }

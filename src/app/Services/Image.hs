@@ -10,6 +10,7 @@ module Services.Image
 
 import           Protolude
 import           Control.Lens
+import           Text.InterpolatedString.QM
 
 import qualified API.Image.Commands            as API
 import qualified Configuration                 as C
@@ -56,12 +57,16 @@ pixelLoadImages
 
 pixelLoadImages _limit = do
   schema <- view C.configReadSchema
-  images <- liftIO $ S.query_ schema
-    " SELECT    i.uuid, i.hash, i.created, group_concat(ta.name) tags \
-    \ FROM      images i \
-    \ LEFT JOIN tag_associations ta ON i.uuid = ta.image \
-    \ GROUP BY  i.uuid \
-    \ ORDER BY  i.created DESC"
+  images <- liftIO $ S.query_ schema [qns|
+      SELECT    i.uuid
+              , i.hash
+              , i.created
+              , group_concat(ta.name) tags
+      FROM      images i
+      LEFT JOIN tag_associations ta ON i.uuid = ta.image
+      GROUP BY  i.uuid
+      ORDER BY  i.created DESC
+  |]
 
   pure . catMaybes $ images <&> \(textUUID, imageHash, date, tags) ->
     case U.fromText textUUID of
@@ -73,6 +78,7 @@ pixelLoadImages _limit = do
           , Pixel._imageTags      = fromMaybe [] $ T.splitOn "," <$> tags
           , Pixel._imageUploader  = Nothing
           , Pixel._imageCreatedAt = Just date
+          , Pixel._imageDeletedAt = Nothing
           }
         )
 

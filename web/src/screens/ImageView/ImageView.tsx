@@ -9,6 +9,7 @@ import { State }                  from '../../store';
 import { connect }                from 'react-redux';
 import { match }                  from 'react-router-dom';
 import { getImages, fetchImages } from '../../store/images';
+import { uploadTags, deleteTags } from '../../api/images';
 import { Image as image }         from '../../api/types';
 
 // Components
@@ -38,24 +39,7 @@ const headerLinks = [
     {name: 'Tags', path: ''}
 ];
 
-const panels = (tags: [string, number][]) => {
-    return [
-        {
-            icon: 'tag',
-            name: 'Tag List',
-            elem: <TagPanel editable tags={tags} />
-        },
-        {
-            icon: 'gears',
-            name: 'Settings',
-            elem: <SettingsPanel />
-        },
-        {
-            icon: 'chart-radar-graph',
-            name: 'Metadata',
-            elem: <MetaDataPanel />
-        }
-    ];
+const panels = (uuid: string, tags: [string, number][]) => {
 }
 
 const Image = (props: Props) => {
@@ -65,6 +49,14 @@ const Image = (props: Props) => {
     const image = props.images.find(image => image.UUID === props.match.params.uuid);
     const tags  = image && image.tags.map((tag: string): [string, number] => [tag, 1]);
 
+    // Update Tags for an Image
+    const handleTagsUpdate = async (adds: string[], deletes: string[]) => {
+        if (!image) { return; }
+        await uploadTags(image.UUID, { tags: adds });
+        await deleteTags(image.UUID, { tags: deletes });
+        await props.fetchImages();
+    };
+
     return !image
         ? <span>Ruh oh</span>
         : (
@@ -72,9 +64,28 @@ const Image = (props: Props) => {
             <NavigationBar links={headerLinks} username={props.username} />
             <div className={styles.Root}>
                 <SearchSidebar initialPanel="Tag List">
-                    {
-                        panels(tags || [])
-                    }
+                    {[
+                        {
+                            icon: 'tag',
+                            name: 'Tag List',
+                            elem: <TagPanel
+                                editable
+                                onSave={handleTagsUpdate}
+                                uuid={image.UUID}
+                                tags={tags}
+                            />
+                        },
+                        {
+                            icon: 'gears',
+                            name: 'Settings',
+                            elem: <SettingsPanel />
+                        },
+                        {
+                            icon: 'chart-radar-graph',
+                            name: 'Metadata',
+                            elem: <MetaDataPanel />
+                        }
+                    ]}
                 </SearchSidebar>
 
                 <ImagePanel image={image} />

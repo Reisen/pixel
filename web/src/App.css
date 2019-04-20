@@ -9,9 +9,25 @@ html, body {
     padding-bottom: 32px;
 }
 
-.Page {}
-
 a {
     text-decoration: none;
     color: #336699;
 }
+
+/* ClearFix */
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+.cf {
+    *zoom: 1;
+}
+
+/* Shared Global Pages */
+.Page {}

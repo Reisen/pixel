@@ -5,9 +5,16 @@ module API.Image.Projections
 --------------------------------------------------------------------------------
 
 import Protolude
+import Text.InterpolatedString.QM
 
 import Data.UUID              ( UUID, toText )
-import Database.SQLite.Simple ( Query, Connection, execute_, execute, withTransaction )
+import Database.SQLite.Simple ( Query
+                              , Connection
+                              , Only (..)
+                              , execute_
+                              , execute
+                              , withTransaction
+                              )
 import Pixel                  ( Image (..) )
 
 --------------------------------------------------------------------------------
@@ -29,6 +36,9 @@ projectImages conn uuid Image {..} = do
 
     -- Insert Image Updates
     execute conn insertImageRow (toText uuid, _imageHash, _imageCreatedAt)
+    execute conn clearAssociations (Only $ toText uuid)
+
+    -- Recreate Tag Mapping
     for_ _imageTags $ \tag -> do
       execute conn insertTagRow (tag, "tag" :: Text)
       execute conn insertAssociationRow (tag, toText uuid)
@@ -36,48 +46,57 @@ projectImages conn uuid Image {..} = do
 --------------------------------------------------------------------------------
 
 createImageTable :: Query
-createImageTable = "\
-\ CREATE TABLE IF NOT EXISTS images ( \
-\   uuid       TEXT     NOT NULL,     \
-\   hash       TEXT     NOT NULL,     \
-\   created    DATETIME NOT NULL,     \
-\   PRIMARY KEY (uuid, hash)          \
-\ );"
+createImageTable = [qns|
+  CREATE TABLE IF NOT EXISTS images (
+    uuid       TEXT     NOT NULL,
+    hash       TEXT     NOT NULL,
+    created    DATETIME NOT NULL,
+    PRIMARY KEY (uuid, hash)
+  );
+|]
 
 createTagsTable :: Query
-createTagsTable = "\
-\ CREATE TABLE IF NOT EXISTS tags ( \
-\   name       TEXT     NOT NULL,   \
-\   kind       TEXT     NOT NULL,   \
-\   PRIMARY KEY (name, kind)        \
-\ );"
+createTagsTable = [qns|
+  CREATE TABLE IF NOT EXISTS tags (
+    name       TEXT     NOT NULL,
+    kind       TEXT     NOT NULL,
+    PRIMARY KEY (name, kind)
+  );
+|]
 
 createTagAssociationTable :: Query
-createTagAssociationTable = "\
-\ CREATE TABLE IF NOT EXISTS tag_associations (  \
-\   name       TEXT     NOT NULL,                \
-\   image      TEXT     NOT NULL,                \
-\   FOREIGN KEY (name)  REFERENCES tags(name),   \
-\   FOREIGN KEY (image) REFERENCES images(uuid), \
-\   PRIMARY KEY (name, image)                    \
-\ );"
+createTagAssociationTable = [qns|
+  CREATE TABLE IF NOT EXISTS tag_associations (
+    name       TEXT     NOT NULL,
+    image      TEXT     NOT NULL,
+    FOREIGN KEY (name)  REFERENCES tags(name),
+    FOREIGN KEY (image) REFERENCES images(uuid),
+    PRIMARY KEY (name, image)
+  );
+|]
 
 insertImageRow :: Query
-insertImageRow = "\
-\ REPLACE INTO images ( uuid , hash , created ) \
-\ VALUES              ( ?    , ?    , ?       ) \
-\ "
+insertImageRow = [qns|
+  REPLACE INTO images ( uuid , hash , created )
+  VALUES              ( ?    , ?    , ?       );
+|]
 
 insertTagRow :: Query
-insertTagRow = "\
-\ INSERT INTO tags       ( name, kind ) \
-\ VALUES                 ( ?   , ?    ) \
-\ ON CONFLICT DO NOTHING                \
-\ "
+insertTagRow = [qns|
+  INSERT INTO tags       ( name, kind )
+  VALUES                 ( ?   , ?    )
+  ON CONFLICT DO NOTHING;
+|]
 
 insertAssociationRow :: Query
-insertAssociationRow = "\
-\ INSERT INTO tag_associations (name, image) \
-\ VALUES                       ( ?   , ?   ) \
-\ ON CONFLICT DO NOTHING                     \
-\ "
+insertAssociationRow = [qns|
+  INSERT INTO tag_associations (name, image)
+  VALUES                       ( ?   , ?   )
+  ON CONFLICT DO NOTHING;
+|]
+
+clearAssociations :: Query
+clearAssociations = [qns|
+  DELETE FROM tag_associations
+  WHERE       image = ?
+|]
