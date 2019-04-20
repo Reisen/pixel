@@ -64,6 +64,7 @@ default-extensions:
     - OverloadedStrings
     - PatternSynonyms
     - PatternGuards
+    - QuasiQuotes
     - RankNTypes
     - RecordWildCards
     - ScopedTypeVariables
@@ -87,8 +88,10 @@ executables:
         dependencies:
             - aeson-typescript
             - eventless
+            - http-types
             - optparse-applicative
             - pixel
+            - qm-interpolated-string
 
 library:
     source-dirs: src/lib

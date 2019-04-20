@@ -1,22 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState }        from 'react';
+import { uploadTags, deleteTags } from '../../api/images';
 
-import Tag                 from '../../components/Tag';
-import TextInput           from '../../components/TextInput';
-import styles              from './TagPanel.module.css';
+import Tag                        from '../../components/Tag';
+import TextInput                  from '../../components/TextInput';
+import styles                     from './TagPanel.module.css';
 
 
 interface Props {
     editable?: boolean;
+    onSave?:   (adds: string[], deletes: string[]) => void;
     tags?:     [string, number][];
+    uuid?:     string;
 }
 
 const TagPanel = (props: Props) => {
     const [editMode, setEditMode] = useState<boolean>(false);
-    const [deletes, setDeletes]   = useState<string[]>([]);
     const [adds, setAdds]         = useState<string[]>([]);
+    const [deletes, setDeletes]   = useState<string[]>([]);
     const [input, setInput]       = useState<string>('');
 
     const toggleEditMode = () => {
+        if (props.uuid && adds.length > 0) {
+            uploadTags(props.uuid, { tags: [...adds] });
+        }
+
+        if (props.uuid && deletes.length > 0) {
+            deleteTags(props.uuid, { tags: [...deletes] });
+        }
+
+        // Clear State, Switch Modes.
+        props.onSave && props.onSave(adds, deletes);
+        setAdds([]);
         setDeletes([]);
         setInput('');
         setEditMode(!editMode)
@@ -29,40 +43,18 @@ const TagPanel = (props: Props) => {
         }
     };
 
-    const NewTags = () => {
-        return (
-            <div className={styles.NewTags}>
-                {
-                    adds.map(add => (
-                        <Tag
-                            new
-                            key={add}
-                            icon="close-circled"
-                            name={add}
-                            value="NEW"
-                            onIcon={() => {}}
-                        />
-                    ))
-                }
-            </div>
-        );
-    }
-
     return (
         <div>
             <h1>
-                Taglist
+                Tags
 
-                {
-                    props.editable &&
-                        <span onClick={toggleEditMode} className={styles.EditButton}>
-                            ({
-                                deletes.length > 0 ? 'Save Changes' :
-                                adds.length > 0    ? 'Save Changed' :
-                                editMode           ? 'Cancel'
-                                                : 'Edit'
-                            })
-                        </span>
+                { props.editable &&
+                    <span onClick={toggleEditMode} className={styles.EditButton}>
+                        ({ deletes.length > 0 || adds.length > 0
+                            ? `Save Changes: +${adds.length}/-${deletes.length}`
+                            : editMode ? 'Cancel' : 'Edit'
+                        })
+                    </span>
                 }
             </h1>
 
@@ -77,14 +69,50 @@ const TagPanel = (props: Props) => {
 
 
             <div className={styles.TagList}>
-                { adds.length > 0 && <NewTags /> }
+                { adds.length > 0 &&
+                    <div className={styles.TagGroup}>
+                        {
+                            adds.map((add, k) => (
+                                <Tag
+                                    new
+                                    key={add}
+                                    icon="close-circled"
+                                    name={add}
+                                    value="+"
+                                    onIcon={() => {
+                                        adds.splice(k, 1);
+                                        setAdds([...adds]);
+                                    }}
+                                />
+                            ))
+                        }
+                    </div>
+                }
 
-                {
-                    props.tags && props.tags.map(tag => (
+                { deletes.length > 0 &&
+                    <div className={styles.TagGroup}>
+                        {
+                            deletes.map((del, k) => (
+                                <Tag
+                                    strikethrough
+                                    key={del}
+                                    icon="close-circled"
+                                    name={del}
+                                    value="-"
+                                    onIcon={() => {
+                                        adds.splice(k, 1);
+                                        setDeletes([...adds]);
+                                    }}
+                                />
+                            ))
+                        }
+                    </div>
+                }
+
+                { props.tags &&
+                    props.tags.map(tag => (
                         <Tag
-                            onIcon={() => {
-                                setDeletes([tag[0], ...deletes])
-                            }}
+                            onIcon={() => setDeletes([tag[0], ...deletes])}
                             key={tag[0]}
                             icon={editMode ? "close-circled" : "tag"}
                             name={tag[0]}

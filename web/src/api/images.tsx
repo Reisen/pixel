@@ -45,8 +45,9 @@ const deleteTags = async (uuid: string, req: DeleteTagsRequest): Promise<void> =
     const base    = findApiBase();
     const token   = findApiToken();
     const request = {
-        headers: { 'Authorization': token },
-        method:  'POST',
+        headers: { 'Authorization': token, 'Content-Type': 'application/json' },
+        method:  'DELETE',
+        body:    JSON.stringify(req),
     };
 
     fetch(`${base}/api/image/${uuid}/tags`, request);
@@ -88,8 +89,9 @@ const uploadTags = async (uuid: string, req: PostTagsRequest): Promise<void> => 
     const base    = findApiBase();
     const token   = findApiToken();
     const request = {
-        headers: { 'Authorization': token },
+        headers: { 'Authorization': token, 'Content-Type': 'application/json' },
         method:  'POST',
+        body:    JSON.stringify(req),
     };
 
     fetch(`${base}/api/image/${uuid}/tags`, request);

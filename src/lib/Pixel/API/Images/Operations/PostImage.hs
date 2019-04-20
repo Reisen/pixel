@@ -48,6 +48,7 @@ processImage createdAt newTags token content = Image
   , _imageTags      = newTags
   , _imageUploader  = fromText . _tokenText $ token
   , _imageCreatedAt = Just createdAt
+  , _imageDeletedAt = Nothing
   }
 
 --------------------------------------------------------------------------------

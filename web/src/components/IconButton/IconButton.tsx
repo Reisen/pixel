@@ -9,13 +9,15 @@ interface Props {
     active?:  boolean;
     icon?:    string;
     letter?:  string;
-    tooltip?: string;
     onClick?: () => void;
+    small?:   boolean;
+    tooltip?: string;
 }
 
 const classes = (props: Props) => classnames({
     [styles.Root]: true,
-    [styles.Root__active]: props.active
+    [styles.Root__active]: props.active,
+    [styles.Root__small]: props.small
 })
 
 const IconButton = (props: Props) =>

@@ -21,9 +21,11 @@ import API.Image.Routes                     ( PostImage
                                             , postTags
                                             )
 import Configuration                        ( Config )
+import Network.HTTP.Types.Method            ( methodGet, methodPost, methodHead, methodDelete )
 import Network.Wai.Middleware.Cors          ( cors
                                             , simpleCorsResourcePolicy
                                             , corsRequestHeaders
+                                            , corsMethods
                                             )
 import Network.Wai.Middleware.RequestLogger ( logStdout )
 import MonadPixel                           ( Pixel, runPixel )
@@ -79,7 +81,14 @@ server config =
     corsHandler =
       cors . const $ Just $ simpleCorsResourcePolicy
         { corsRequestHeaders =
-          [ "Content-Type"
-          , "Authorization"
-          ]
+            [ "Content-Type"
+            , "Authorization"
+            ]
+
+        , corsMethods =
+            [ methodGet
+            , methodPost
+            , methodHead
+            , methodDelete
+            ]
         }
