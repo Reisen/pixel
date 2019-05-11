@@ -3,11 +3,10 @@ module Pixel.API.Token
   , tokenText
   ) where
 
---------------------------------------------------------------------------------
-
-import           Protolude
-import           Control.Lens
-import           Servant                        ( FromHttpApiData(..) )
+import Protolude
+import Control.Lens
+import Data.Aeson ( ToJSON(..), FromJSON(..) )
+import Servant    ( FromHttpApiData(..) )
 
 --------------------------------------------------------------------------------
 
@@ -17,5 +16,10 @@ import           Servant                        ( FromHttpApiData(..) )
 newtype Token = Token
   { _tokenText :: Text
   } deriving (Show, Generic, FromHttpApiData)
+
+--------------------------------------------------------------------------------
+
+instance ToJSON Token where
+instance FromJSON Token where
 
 makeLenses ''Token

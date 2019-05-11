@@ -6,8 +6,9 @@ module API.Image.Types
 
 import Protolude
 
-import Data.Aeson ( ToJSON (..) )
-import Pixel      ( DigestText, pixelToEncoding, pixelToJSON )
+import Data.Aeson       ( ToJSON(..) )
+import Pixel            ( pixelToEncoding, pixelToJSON )
+import Pixel.API.Images ( DigestText )
 
 --------------------------------------------------------------------------------
 

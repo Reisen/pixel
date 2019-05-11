@@ -1,17 +1,29 @@
-module Projections where
-
---------------------------------------------------------------------------------
+module Projections
+  ( handleProjections
+  , prepareProjections
+  ) where
 
 import Protolude
 import Control.Lens
 
-import API.Image.Projections  ( projectImages )
+import API.Image.Projections  ( setupImageProjections, projectImages )
+import API.User.Projections   ( setupUserProjections, projectUsers )
 import Data.Aeson             ( FromJSON, eitherDecode )
 import Data.UUID              ( UUID )
 import Database.SQLite.Simple ( Connection )
 import Eventless              ( Event (..), kind )
 
 --------------------------------------------------------------------------------
+
+prepareProjections
+  :: MonadIO m
+  => Connection
+  -> m ()
+
+prepareProjections conn = do
+  setupImageProjections conn
+  setupUserProjections conn
+
 
 handleProjections
   :: MonadIO m
@@ -26,6 +38,7 @@ handleProjections conn uuid events = do
     Nothing    -> pure ()
     Just event -> case event ^. kind of
       "Image" -> overDecoded event $ projectImages conn uuid
+      "User"  -> overDecoded event $ projectUsers conn uuid
       _       -> pure ()
 
 --------------------------------------------------------------------------------

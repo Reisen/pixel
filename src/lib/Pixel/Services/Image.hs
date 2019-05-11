@@ -5,10 +5,9 @@ where
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-
-import qualified Data.UUID                     as U
-import qualified Pixel.API.Images.Types        as Pixel
+import Protolude
+import Data.UUID              ( UUID )
+import Pixel.API.Images.Types ( Image, TagList )
 
 --------------------------------------------------------------------------------
 
@@ -17,16 +16,16 @@ import qualified Pixel.API.Images.Types        as Pixel
 class MonadImage m where
   -- Persist an image in the database, this assumes a brand new image each time
   -- and so always produces a new UUID for the recorded image.
-  saveImage :: U.UUID -> Pixel.Image -> m ()
+  saveImage :: UUID -> Image -> m ()
 
   -- Attempts to retrieve a saved image from somewhere.
-  loadImage :: U.UUID -> m (Maybe Pixel.Image)
+  loadImage :: UUID -> m (Maybe Image)
 
   -- Retrieve all images (lmited to a max) from backend.
-  loadImages :: Int -> m [(U.UUID, Pixel.Image)]
+  loadImages :: Int -> m [(UUID, Image)]
 
   -- Append tags to a specific image UUID.
-  appendTags :: U.UUID -> Pixel.TagList -> m ()
+  appendTags :: UUID -> TagList -> m ()
 
   -- Remove tags from a specific image UUID.
-  removeTags :: U.UUID -> Pixel.TagList -> m ()
+  removeTags :: UUID -> TagList -> m ()

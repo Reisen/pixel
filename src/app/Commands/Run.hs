@@ -1,67 +1,84 @@
 module Commands.Run
   ( commandRun
-  , run
+  , Commands.Run.run
   ) where
 
---------------------------------------------------------------------------------
+import Protolude
+import Configuration
+import Control.Lens
+import Server
 
-import           Protolude
-import           Control.Lens
-
-import           Commands.Types ( Options (..), RunOptions (..) )
-import qualified Configuration                 as C
-import qualified Database.SQLite.Simple        as S
-import qualified Eventless.Backend.Hook        as E
-import qualified Eventless.Backend.SQLite      as E
-import qualified Network.Wai.Handler.Warp      as W
-import qualified Options.Applicative as O
-import qualified Projections                   as P
-import qualified Server
+import Commands.Types                   ( Options (..), RunOptions (..) )
+import Database.SQLite.Simple           ( open )
+import Eventless.Backend.Hook           ( hookMiddleware )
+import Eventless.Backend.SQLite         ( makeSQLite3Backend )
+import Network.Wai.Handler.Warp as Warp ( run )
+import Options.Applicative as A         ( Mod
+                                        , CommandFields
+                                        , Parser
+                                        , auto
+                                        , command
+                                        , help
+                                        , info
+                                        , long
+                                        , option
+                                        , progDesc
+                                        , short
+                                        , showDefault
+                                        , strOption
+                                        , value
+                                        )
+import Projections                      ( prepareProjections, handleProjections )
 
 --------------------------------------------------------------------------------
 
 run :: RunOptions -> IO ()
 run _ = do
   -- Create configuration from IO.
-  readSchema <- S.open "pixel.db"
-  config     <- C.readConfig $ C.Config
-    { C._configStaticLocation = C.readTextEnv "PIXEL_STATIC" "tmp/"
-    , C._configPort           = C.readNumericEnv "PIXEL_PORT" 6666
-    , C._configReadSchema     = pure readSchema
-    , C._configConnection     = identity
-      .   E.hookMiddleware (P.handleProjections readSchema)
-      .   E.makeSQLite3Backend
-      <$> S.open "event.db"
+  readSchema  <- open "pixel.db"
+  writeSchema <- open "event.db"
+  config      <- readConfig $ Config
+    { _configStaticLocation = readTextEnv "PIXEL_STATIC" "tmp/"
+    , _configPort           = readNumericEnv "PIXEL_PORT" 6666
+    , _configReadSchema     = pure readSchema
+    , _configConnection     = pure
+        . hookMiddleware (handleProjections readSchema)
+        $ makeSQLite3Backend writeSchema
     }
 
+  -- Prepare Projection Tables
+  prepareProjections readSchema
+
   -- WAI Run Application
-  W.run (config ^. C.configPort) (Server.server config)
+  Warp.run (config ^. configPort) (server config)
 
 --------------------------------------------------------------------------------
 
-commandRun :: O.Mod O.CommandFields Options
-commandRun = O.command "run"
-  (O.info parseOptions
-    (O.progDesc "Run API"))
+commandRun :: Mod CommandFields Options
+commandRun = command "run"
+  (info parseOptions
+    (progDesc "Run API"))
 
-parseOptions :: O.Parser Options
+parseOptions :: Parser Options
 parseOptions = Run <$>
   (   RunOptions
   <$> portOption
   <*> addressOption
   )
 
-portOption :: O.Parser Int
-portOption = O.option O.auto
-  (  O.long  "port"
-  <> O.short 'p'
-  <> O.help  "Port to listen on."
-  <> O.showDefault
-  <> O.value 3001
+--------------------------------------------------------------------------------
+
+portOption :: Parser Int
+portOption = A.option auto
+  (  long  "port"
+  <> short 'p'
+  <> help  "Port to listen on."
+  <> showDefault
+  <> value 3001
   )
 
-addressOption :: O.Parser Text
-addressOption = O.strOption
-  (  O.long "address"
-  <> O.help "Address to listen on."
+addressOption :: Parser Text
+addressOption = strOption
+  (  long "address"
+  <> help "Address to listen on."
   )

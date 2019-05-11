@@ -10,18 +10,12 @@ where
 import Protolude
 import Servant
 
-import API.Image.Types as API         ( Image(..) )
-import Data.Aeson                     ( ToJSON (..) )
-import Pixel as Pixel                 ( DigestText
-                                      , Error (..)
-                                      , Image (..)
-                                      , ImageError (..)
-                                      , Token
-                                      , fetchImages
-                                      , pixelToEncoding
-                                      , pixelToJSON
-                                      )
-import MonadPixel                     ( Pixel )
+import API.Image.Types as API    ( Image(..) )
+import Data.Aeson                ( ToJSON(..) )
+import Pixel                     ( Error(..), pixelToEncoding, pixelToJSON )
+import Pixel.API.Token           ( Token )
+import Pixel.API.Images as Pixel ( Image(..), ImageError(..), DigestText, fetchImages )
+import MonadPixel                ( Pixel )
 
 --------------------------------------------------------------------------------
 

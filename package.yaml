@@ -97,5 +97,9 @@ library:
     source-dirs: src/lib
     dependencies:
         - aeson
+        - argon2
+        - attoparsec
         - eventless
+        - text-short
+        - transformers
         - uuid

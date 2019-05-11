@@ -7,19 +7,21 @@ where
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import           Servant
+import Protolude
+import Servant
 
-import qualified Data.Aeson                    as A
-import qualified Pixel                         as Pixel
-import qualified MonadPixel                    as C
+import Data.Aeson       ( ToJSON(..) )
+import Pixel            ( Error(..), pixelToEncoding, pixelToJSON )
+import Pixel.API.Token  ( Token )
+import Pixel.API.Images ( DigestText, TagList, ImageError(..), fetchTags )
+import MonadPixel       ( Pixel )
 
 --------------------------------------------------------------------------------
 
 -- We wrap up responses in an HTTP endpoint type, in order to abstract away
 -- from the backend.
 type GetTags =
-  Header "Authorization" Pixel.Token
+  Header "Authorization" Token
     :> Capture "uuid" Text
     :> "tags"
     :> Get '[JSON] GetTagsResponse
@@ -27,22 +29,22 @@ type GetTags =
 --------------------------------------------------------------------------------
 
 newtype GetTagsResponse = GetTagsResponse
-  { getTagsResponseTags :: Pixel.TagList
+  { getTagsResponseTags :: TagList
   } deriving (Show, Generic)
 
-instance A.ToJSON GetTagsResponse where
-  toEncoding = Pixel.pixelToEncoding
-  toJSON     = Pixel.pixelToJSON
+instance ToJSON GetTagsResponse where
+  toEncoding = pixelToEncoding
+  toJSON     = pixelToJSON
 
 --------------------------------------------------------------------------------
 
 getTags
-  :: Maybe Pixel.Token
-  -> Pixel.DigestText
-  -> C.Pixel GetTagsResponse
+  :: Maybe Token
+  -> DigestText
+  -> Pixel GetTagsResponse
 
-getTags Nothing _     = throwError (Pixel.ImageError Pixel.MissingToken)
+getTags Nothing _     = throwError (ImageError MissingToken)
 getTags (Just _) uuid =
-  Pixel.fetchTags uuid >>= \case
-    Nothing       -> throwError (Pixel.ImageError Pixel.InvalidUUID)
+  fetchTags uuid >>= \case
+    Nothing       -> throwError (ImageError InvalidUUID)
     Just response -> pure (GetTagsResponse response)
