@@ -35,15 +35,15 @@ handleAuthenticateUser
 
 handleAuthenticateUser AuthenticateDetails{..} =
   runMaybeT $ do
-    (uuid, user) <- MaybeT $ traceShowId <$> findUserByEmail (Email _adEmail)
-    password     <- MaybeT $ traceShowId <$> pure (user ^. userPassword)
+    (uuid, user) <- MaybeT $ findUserByEmail (Email _adEmail)
+    password     <- MaybeT $ pure (user ^. userPassword)
     let passwordCheck = verifyPassword password _adPassword
     let statusCheck   = user ^. userState
     putText "End"
     MaybeT . pure $ case (passwordCheck, statusCheck) of
-      (_,               Banned) -> traceShowId Nothing
-      (VerifySucceeded, _     ) -> traceShowId . Just . Token . toText $ uuid
-      (_,               _     ) -> traceShowId Nothing
+      (_,               Banned) -> Nothing
+      (VerifySucceeded, _     ) -> Just . Token . toText $ uuid
+      (_,               _     ) -> Nothing
 
 --------------------------------------------------------------------------------
 
