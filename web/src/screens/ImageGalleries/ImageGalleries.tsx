@@ -31,7 +31,8 @@ interface Props {
 }
 
 const Image = (props: Props) => {
-    useEffect(() => { props.fetchImages() }, []);
+    const { fetchImages } = props
+    useEffect(() => { fetchImages() }, [fetchImages]);
     return (
         <div className="Page">
             <NavigationBar links={[]} username={props.username} />

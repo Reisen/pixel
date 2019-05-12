@@ -1,5 +1,4 @@
 import React       from 'react';
-import IconButton  from '../IconButton';
 import styles      from './NavigationBar.module.css';
 import { Link }    from 'react-router-dom';
 

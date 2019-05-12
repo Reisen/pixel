@@ -103,7 +103,8 @@ const Index = (props: Props) => {
 
     // Load Images, On First Mount Only, we only re-request on page reload or
     // when a new search is made.
-    useEffect(() => { props.fetchImages() }, []);
+    const { fetchImages } = props
+    useEffect(() => { fetchImages() }, [fetchImages]);
 
     return (
         <div className="Page">

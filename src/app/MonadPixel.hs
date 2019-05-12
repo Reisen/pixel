@@ -97,4 +97,7 @@ runPixel config m =
   )
 
   where
-    runner = liftIO . flip runReaderT config . runExceptT . unwrapPixel
+    runner = liftIO
+      . flip runReaderT config
+      . runExceptT
+      . unwrapPixel
