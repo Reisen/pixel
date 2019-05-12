@@ -40,7 +40,7 @@ postAuthenticateUser
   -> Pixel Token
 
 postAuthenticateUser AuthUserRequest{..} = do
-  mayToken <- handleAuthenticateUser $ traceShowId $ AuthenticateDetails
+  mayToken <- handleAuthenticateUser $ AuthenticateDetails
     { _adEmail    = _authUserRequestEmail
     , _adPassword = _authUserRequestPassword
     }

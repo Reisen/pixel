@@ -80,7 +80,7 @@ pixelFindUserByUUID userUUID = do
   |]
 
   pure $ case head mayUser of
-    _                                -> Nothing
+    Nothing                          -> Nothing
     Just (username, email, password) ->
       Just $ def
         { _userUsername = username
@@ -97,11 +97,11 @@ pixelFindUserByEmail
 
 pixelFindUserByEmail (Email email) = do
   schema  <- view configReadSchema
-  mayUser <- traceShowId <$> (liftIO $ flip (query schema) (Only $ traceShowId email) [qns|
+  mayUser <- liftIO $ flip (query schema) (Only email) [qns|
     SELECT  u.uuid, u.username, u.password
     FROM    users u
     WHERE   u.email = ?
-  |])
+  |]
 
   pure $ case head mayUser of
     Nothing                            -> Nothing
