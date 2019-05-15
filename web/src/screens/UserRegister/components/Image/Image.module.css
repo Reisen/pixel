@@ -1,0 +1,44 @@
+/* Components */
+.Root {
+    background-color: #F3F3FF;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+}
+
+.Resolution {
+    background-color: rgba(22, 22, 22, 0.8);
+    border-top: 1px solid white;
+    color: white;
+    display: inline-block;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 11px;
+    line-height: 20px;
+    opacity: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    left: 0px;
+    bottom: 0px;
+}
+
+.Root:hover .Resolution {
+    opacity: 1;
+}
+
+/* States */
+.Root__empty {
+    background-color: #F3F3FF;
+    background-size: auto;
+}
+
+.Root__contained {
+    background-size: contain;
+    background-color: white;
+    border-bottom: 8px solid white;
+}

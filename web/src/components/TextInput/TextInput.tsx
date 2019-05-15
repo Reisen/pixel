@@ -7,6 +7,7 @@ interface Props {
     placeholder: string;
     suggestion?: string;
     value?:      string;
+    type?:       string;
     onChange?:   (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
@@ -20,6 +21,7 @@ const TextInput = (props: Props) => (
         />
 
         <input
+            type={props.type || 'text'}
             value={props.value}
             onChange={props.onChange}
             onKeyPress={props.onKeyPress}

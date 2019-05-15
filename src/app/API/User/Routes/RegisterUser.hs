@@ -1,5 +1,6 @@
 module API.User.Routes.RegisterUser
   ( RegisterUser
+  , RegisterRequest
   , postRegisterUser
   ) where
 

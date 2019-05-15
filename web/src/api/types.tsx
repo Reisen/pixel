@@ -1,3 +1,9 @@
+export type Token = IToken;
+
+export interface IToken {
+    text: string;
+}
+
 export type Image = IImage;
 
 export interface IImage {
@@ -36,4 +42,26 @@ export type PostTagsRequest = IPostTagsRequest;
 
 export interface IPostTagsRequest {
     tags: string[];
+}
+
+export type User = IUser;
+
+export interface IUser {
+    username?: string;
+    email?: string;
+    role?: string;
+}
+
+export type AuthUserRequest = IAuthUserRequest;
+
+export interface IAuthUserRequest {
+    email: string;
+    password: string;
+}
+
+export type RegisterRequest = IRegisterRequest;
+
+export interface IRegisterRequest {
+    email: string;
+    password: string;
 }

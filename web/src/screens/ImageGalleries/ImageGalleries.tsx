@@ -37,8 +37,7 @@ const Image = (props: Props) => {
         <div className="Page">
             <NavigationBar links={[]} username={props.username} />
             <div className={styles.Root}>
-                <SearchSidebar initialPanel="metadata">
-                </SearchSidebar>
+                <SearchSidebar initialPanel="metadata" />
                 <ImageGalleries image={onlyImage} />
             </div>
         </div>

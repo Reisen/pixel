@@ -1,5 +1,6 @@
 module API.User.Routes.AuthenticateUser
   ( AuthenticateUser
+  , AuthUserRequest(..)
   , postAuthenticateUser
   ) where
 
