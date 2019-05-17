@@ -19,6 +19,7 @@ import ImageView                          from './screens/ImageView';
 import ImageUpload                        from './screens/ImageUpload';
 import ImageGalleries                     from './screens/ImageGalleries';
 import UserRegister                       from './screens/UserRegister';
+import UserLogin                          from './screens/UserLogin';
 
 // Global Styles
 import 'normalize.css';
@@ -39,6 +40,10 @@ const store = createStore(
     applyMiddleware(thunk)
 );
 
+console.log(
+    reducers.user(undefined, { type: 'SET_TOKEN', payload: { username: 'Bar' } })
+);
+
 // Used to Write/Read redux state to an offline store.
 const persistor = persistStore(store);
 
@@ -53,7 +58,7 @@ const App = () => (
 
                 {/* User Routes */}
                 <Route exact path="/my/register"       component={UserRegister} />
-                <Route exact path="/my/login"          component={UserRegister} />
+                <Route exact path="/my/login"          component={UserLogin} />
 
                 {/* Image Routes */}
                 <Route exact path="/my/upload"         component={ImageUpload} />

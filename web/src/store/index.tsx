@@ -1,7 +1,7 @@
 // Types
 import { ApiState }     from './api/types';
 import { ImageState }   from './images/types';
-import { UserState }    from './user';
+import { UserState }    from './users/types';
 
 // Reducers
 import { apiReducer }   from './api';

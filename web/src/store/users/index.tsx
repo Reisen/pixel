@@ -1,12 +1,9 @@
 export {
-    imageReducer
+    userReducer
 } from './reducer';
 
 export {
-    getGalleryScaling,
-    getImages,
-} from './selectors';
-
-export {
+    loginUser,
     registerUser,
+    setToken,
 } from './actions';

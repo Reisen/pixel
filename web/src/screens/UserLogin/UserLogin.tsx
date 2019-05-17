@@ -8,17 +8,19 @@ import React            from 'react';
 import { connect }      from 'react-redux';
 import { State }        from '../../store';
 import { History }      from 'history'
-// import { registerUser } from '../../store/users';
+import { loginUser }    from '../../store/users';
 
 // Components
 import NavigationBar    from '../../components/NavigationBar';
-import styles           from './UserRegister.module.css';
+import TextInput        from '../../components/TextInput';
+import Button           from '../../components/Button';
+import styles           from './UserLogin.module.css';
 
 
 interface Props {
-    registerUser: () => void;
-    username:     string;
-    history:      History;
+    loginUser: (email: string, password: string) => void;
+    username:  string;
+    history:   History;
 }
 
 const headerLinks = [
@@ -26,12 +28,39 @@ const headerLinks = [
     {name: 'Register', path: ''},
 ];
 
-const UserRegister = (props: Props) => {
+const UserLogin = (props: Props) => {
+    const [email, setEmail]       = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [waiting, setWaiting]   = React.useState(true);
+
+    // Handle Registration Clicks
+    const handleCreate = () => {
+        setWaiting(true);
+        props.loginUser(email, password);
+    };
+
     return (
         <div className="Page">
             <NavigationBar links={headerLinks} username={props.username} />
-            <div className={styles.UserRegister}>
-                Foo Bar Baz I'm Registering yo Ass
+            <div className={styles.Root}>
+                <div className={styles.RegisterForm}>
+                    <TextInput
+                        onChange={e => setEmail(e.target.value)}
+                        placeholder="Email"
+                        value={email}
+                    />
+
+                    <TextInput
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder="Password"
+                        type="password"
+                        value={password}
+                    />
+
+                    <Button disabled={waiting} onClick={handleCreate}>
+                        Create My Account
+                    </Button>
+                </div>
             </div>
         </div>
     );
@@ -41,7 +70,7 @@ const mapState = (state: State) => ({
 });
 
 const mapDispatch = {
-    // registerUser
+    loginUser
 };
 
-export default connect(mapState, mapDispatch)(UserRegister);
+export default connect(mapState, mapDispatch)(UserLogin);

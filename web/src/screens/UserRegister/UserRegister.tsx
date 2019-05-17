@@ -21,6 +21,7 @@ interface Props {
     registerUser: (email: string, password: string) => void;
     username:     string;
     history:      History;
+    token?:       string;
 }
 
 const headerLinks = [
@@ -31,7 +32,7 @@ const headerLinks = [
 const UserRegister = (props: Props) => {
     const [email, setEmail]       = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [waiting, setWaiting]   = React.useState(true);
+    const [waiting, setWaiting]   = React.useState(false);
 
     // Handle Registration Clicks
     const handleCreate = () => {
@@ -42,7 +43,7 @@ const UserRegister = (props: Props) => {
     return (
         <div className="Page">
             <NavigationBar links={headerLinks} username={props.username} />
-            <div className={styles.UserRegister}>
+            <div className={styles.Root}>
                 <div className={styles.RegisterForm}>
                     <TextInput
                         onChange={e => setEmail(e.target.value)}
@@ -60,6 +61,10 @@ const UserRegister = (props: Props) => {
                     <Button disabled={waiting} onClick={handleCreate}>
                         Create My Account
                     </Button>
+
+                    {
+                        props.token && ('Token: ' + props.token)
+                    }
                 </div>
             </div>
         </div>
@@ -67,6 +72,7 @@ const UserRegister = (props: Props) => {
 };
 
 const mapState = (state: State) => ({
+    token: state.user.token
 });
 
 const mapDispatch = {

@@ -4,11 +4,13 @@ import { lensProp, set } from 'ramda';
 
 
 const initialState: State = {
-    galleryScalingMode: 'cover',
-    images:             [],
+    username: 'Reisen',
+    token:    undefined
 };
 
-export const imageReducer = handleActions<State>({
-    'LOAD_IMAGES':       (state, action) => set(lensProp('images'), action.payload)(state),
-    'SET_IMAGE_SCALING': (state, action) => set(lensProp('galleryScalingMode'), action.payload)(state)
+export const userReducer = handleActions<State>({
+    'SET_TOKEN':  (state, action) => {
+        alert('Token Set');
+        return set(lensProp('token'), action.payload)(state);
+    }
 }, initialState);

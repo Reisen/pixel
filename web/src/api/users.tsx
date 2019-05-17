@@ -20,6 +20,7 @@ const findApiBase = () => {
 const apiRegisterUser = async (req: RegisterRequest): Promise<Token> => {
     const base = findApiBase();
     const request = {
+        headers: { 'Content-Type': 'application/json' },
         method:  'POST',
         body:     JSON.stringify(req),
     };
@@ -32,6 +33,7 @@ const apiRegisterUser = async (req: RegisterRequest): Promise<Token> => {
 const apiAuthUser = async (req: AuthUserRequest): Promise<Token> => {
     const base = findApiBase();
     const request = {
+        headers: { 'Content-Type': 'application/json' },
         method:  'POST',
         body:     JSON.stringify(req),
     };

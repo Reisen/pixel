@@ -1,15 +1,8 @@
-import { Image as image } from '../../api/types';
-
-export type ScalingMode =
-    | 'fill'
-    | 'cover'
-    | 'contain';
-
-export interface ImageState {
-    galleryScalingMode: ScalingMode,
-    images:             image[];
+export interface UserState {
+    username: string;
+    token?:   string;
 }
 
 export type State =
-    | ImageState
+    | UserState
     | undefined;
