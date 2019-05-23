@@ -14,9 +14,14 @@ import Data.UUID           ( toText )
 import Data.UUID.V4        ( nextRandom )
 import Data.Time           ( getCurrentTime )
 import MonadPixel          ( Pixel )
-import Pixel               ( pixelParseJSON )
-import Pixel.API.Users     ( RegisterDetails(..)
+import Pixel               ( Error(..), pixelParseJSON )
+import Pixel.API.Token     ( Token(..) )
+import Pixel.API.Users     ( UserError(..)
+                           , AuthenticateDetails(..)
+                           , RegisterDetails(..)
+                           , RegistrationFailedReason(..)
                            , handleRegisterUser
+                           , handleAuthenticateUser
                            )
 import Web.Cookie          ( SetCookie(..), defaultSetCookie )
 
@@ -50,6 +55,7 @@ postRegisterUser
   -> Pixel TokenInHeader
 
 postRegisterUser RegisterRequest{..} = do
+  -- First Register the User
   uuid                   <- liftIO nextRandom
   createdAt              <- liftIO getCurrentTime
   hashSalt :: ByteString <- liftIO $ getRandomBytes 16
@@ -61,11 +67,21 @@ postRegisterUser RegisterRequest{..} = do
     , _rdSalt      = show (hash hashSalt :: Digest SHA3_224)
     }
 
-  pure
-    . flip addHeader NoContent
-    $ defaultSetCookie
-        { setCookieName     = "token"
-        , setCookieValue    = toS (toText uuid)
-        , setCookiePath     = Just "/"
-        -- , setCookieHttpOnly = True
-        }
+  -- Validate the user can authenticate.
+  mayToken <- handleAuthenticateUser $ AuthenticateDetails
+    { _adEmail    = _registerRequestEmail
+    , _adPassword = _registerRequestPassword
+    }
+
+  case mayToken of
+    Nothing            -> throwError (UserError . RegistrationFailed $ OtherRegistrationFailure "Unknown")
+    Just (Token token) -> if token /= toText uuid
+      then throwError (UserError . RegistrationFailed $ AccountExists)
+      else pure
+        . flip addHeader NoContent
+        $ defaultSetCookie
+            { setCookieName     = "token"
+            , setCookieValue    = toS (toText uuid)
+            , setCookiePath     = Just "/"
+            , setCookieHttpOnly = True
+            }

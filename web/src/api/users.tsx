@@ -25,12 +25,7 @@ const apiRegisterUser = async (req: RegisterRequest): Promise<Response> => {
         method:      'POST',
     };
 
-    const result = await fetch(`${base}/api/user`, request);
-    console.log(result);
-    result.headers.forEach(header => {
-        console.log(header);
-    });
-    return result;
+    return fetch(`${base}/api/user`, request);
 };
 
 const apiAuthUser = async (req: AuthUserRequest): Promise<Response> => {

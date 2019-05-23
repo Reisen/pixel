@@ -1,5 +1,6 @@
 module Pixel.API.Users.Error
   ( AuthenticationFailedReason(..)
+  , RegistrationFailedReason(..)
   , UserError(..)
   ) where
 
@@ -14,8 +15,14 @@ data AuthenticationFailedReason
   | OtherAuthFailure !Text
   deriving Show
 
+data RegistrationFailedReason
+  = AccountExists
+  | OtherRegistrationFailure !Text
+  deriving Show
+
 data UserError
   = MissingToken
   | InvalidUUID
   | AuthenticationFailed !AuthenticationFailedReason
+  | RegistrationFailed !RegistrationFailedReason
   deriving Show

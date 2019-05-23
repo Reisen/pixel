@@ -18,7 +18,7 @@ import styles           from './UserRegister.module.css';
 
 
 interface Props {
-    registerUser: (email: string, password: string) => void;
+    registerUser: (email: string, password: string) => Promise<Response>;
     username:     string;
     history:      History;
     token?:       string;
@@ -33,12 +33,17 @@ const UserRegister = (props: Props) => {
     const [email, setEmail]       = React.useState('');
     const [password, setPassword] = React.useState('');
     const [waiting, setWaiting]   = React.useState(false);
+    const [error, setError]       = React.useState('');
 
     // Handle Registration Clicks
-    const handleCreate = () => {
+    const handleCreate = async () => {
         setWaiting(true);
-        props.registerUser(email, password);
-        props.history.push('/');
+        const result = await props.registerUser(email, password)
+        if (result.ok) props.history.push('/');
+        else {
+            setWaiting(false);
+            setError('Registration Failed');
+        }
     };
 
     return (
@@ -62,6 +67,10 @@ const UserRegister = (props: Props) => {
                     <Button disabled={waiting} onClick={handleCreate}>
                         Create My Account
                     </Button>
+
+                    { error &&
+                        <span>{error}</span>
+                    }
                 </div>
             </div>
         </div>
