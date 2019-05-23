@@ -34,13 +34,25 @@ import Projections                      ( prepareProjections, handleProjections 
 
 run :: RunOptions -> IO ()
 run _ = do
-  -- Create configuration from IO.
+  -- Create DB Connections
   readSchema  <- open "pixel.db"
   writeSchema <- open "event.db"
-  config      <- readConfig $ Config
+
+  -- Configure Authentication Requirements
+  -- jwtKey     <- generateKey
+  -- let jwt     = defaultJWTSettings jwtKey
+  -- let cookies =
+  --       defaultCookieSettings
+  --         :. jwt
+  --         :. EmptyContext
+
+  -- Create Parsed Configuration
+  config <- readConfig $ Config
     { _configStaticLocation = readTextEnv "PIXEL_STATIC" "tmp/"
     , _configPort           = readNumericEnv "PIXEL_PORT" 6666
     , _configReadSchema     = pure readSchema
+    -- , _configJWT            = jwt
+    -- , _configCookies        = cookies
     , _configConnection     = pure
         . hookMiddleware (handleProjections readSchema)
         $ makeSQLite3Backend writeSchema

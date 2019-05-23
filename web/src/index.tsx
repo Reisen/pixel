@@ -40,10 +40,6 @@ const store = createStore(
     applyMiddleware(thunk)
 );
 
-console.log(
-    reducers.user(undefined, { type: 'SET_TOKEN', payload: { username: 'Bar' } })
-);
-
 // Used to Write/Read redux state to an offline store.
 const persistor = persistStore(store);
 

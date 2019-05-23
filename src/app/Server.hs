@@ -1,5 +1,6 @@
 module Server
-  ( server
+  ( API
+  , server
   ) where
 
 --------------------------------------------------------------------------------
@@ -13,6 +14,7 @@ import Network.Wai.Middleware.Cors          ( cors
                                             , simpleCorsResourcePolicy
                                             , corsRequestHeaders
                                             , corsMethods
+                                            , corsOrigins
                                             )
 import Network.Wai.Middleware.RequestLogger ( logStdout )
 import MonadPixel                           ( Pixel, runPixel )
@@ -46,22 +48,26 @@ import API.User.Routes                      ( AuthenticateUser
 -- swagger doc, a mock, etc.
 
 type ImageAPI =
-  "image"
-    :> (    PostImage        -- POST    /image/
-       :<|> GetImage         -- GET     /image/
-       :<|> GetImageByUUID   -- GET     /image/:uuid
-       :<|> GetTags          -- GET     /image/:uuid/tags
-       :<|> PostTags         -- POST    /image/:uuid/tags
-       :<|> DeleteTags       -- DELETE  /image/:uuid/tags
-       )
+  "image" :>
+    (    PostImage        -- POST    /image/
+    :<|> GetImage         -- GET     /image/
+    :<|> GetImageByUUID   -- GET     /image/:uuid
+    :<|> GetTags          -- GET     /image/:uuid/tags
+    :<|> PostTags         -- POST    /image/:uuid/tags
+    :<|> DeleteTags       -- DELETE  /image/:uuid/tags
+    )
 
 type UserAPI =
-  "user"
-    :> (    AuthenticateUser -- POST /user/login
-       :<|> RegisterUser     -- POST /user
-       )
+  "user" :>
+    (    AuthenticateUser -- POST /user/login
+    :<|> RegisterUser     -- POST /user
+    )
 
-type API = "api" :> (ImageAPI :<|> UserAPI)
+type API =
+  "api" :>
+    (    ImageAPI
+    :<|> UserAPI
+    )
 
 
 -- Proxy for Servant, Ignore.
@@ -109,6 +115,9 @@ server config =
             [ "Content-Type"
             , "Authorization"
             ]
+
+        , corsOrigins = Just
+            ( ["http://localhost:3000"], True )
 
         , corsMethods =
             [ methodGet

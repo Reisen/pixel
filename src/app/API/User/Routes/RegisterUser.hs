@@ -7,24 +7,31 @@ module API.User.Routes.RegisterUser
 import Protolude hiding ( hash )
 import Servant
 
-import Crypto.Random    ( getRandomBytes )
-import Crypto.Hash      ( Digest, SHA3_224(..), hash )
-import Data.Aeson       ( FromJSON(..) )
-import Data.UUID        ( toText )
-import Data.UUID.V4     ( nextRandom )
-import Data.Time        ( getCurrentTime )
-import Pixel            ( pixelParseJSON )
-import Pixel.API.Token  ( Token(..) )
-import Pixel.API.Users  ( RegisterDetails(..)
-                        , handleRegisterUser
-                        )
-import MonadPixel       ( Pixel )
+import Crypto.Random       ( getRandomBytes )
+import Crypto.Hash         ( Digest, SHA3_224(..), hash )
+import Data.Aeson          ( FromJSON(..) )
+import Data.UUID           ( toText )
+import Data.UUID.V4        ( nextRandom )
+import Data.Time           ( getCurrentTime )
+import MonadPixel          ( Pixel )
+import Pixel               ( pixelParseJSON )
+import Pixel.API.Users     ( RegisterDetails(..)
+                           , handleRegisterUser
+                           )
+import Web.Cookie          ( SetCookie(..), defaultSetCookie )
 
 --------------------------------------------------------------------------------
 
+-- Wrap up Token with a Set-Cookie header, this is so rather than storing the
+-- token in a JS accessible place we can secure the cookie with `Secure` and
+-- `HttpsOnly` to prevent XSS.
+type TokenInHeader = Headers
+  '[ Header "Set-Cookie" SetCookie
+   ] NoContent
+
 type RegisterUser =
   ReqBody '[JSON] RegisterRequest
-    :> Post '[JSON] Token
+    :> Post '[JSON] TokenInHeader
 
 --------------------------------------------------------------------------------
 
@@ -40,7 +47,7 @@ instance FromJSON RegisterRequest where
 
 postRegisterUser
   :: RegisterRequest
-  -> Pixel Token
+  -> Pixel TokenInHeader
 
 postRegisterUser RegisterRequest{..} = do
   uuid                   <- liftIO nextRandom
@@ -54,4 +61,11 @@ postRegisterUser RegisterRequest{..} = do
     , _rdSalt      = show (hash hashSalt :: Digest SHA3_224)
     }
 
-  pure . Token . toText $ uuid
+  pure
+    . flip addHeader NoContent
+    $ defaultSetCookie
+        { setCookieName     = "token"
+        , setCookieValue    = toS (toText uuid)
+        , setCookiePath     = Just "/"
+        -- , setCookieHttpOnly = True
+        }

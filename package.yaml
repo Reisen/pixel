@@ -87,6 +87,8 @@ executables:
 
         dependencies:
             - aeson-typescript
+            - binary
+            - cookie
             - eventless
             - http-types
             - optparse-applicative

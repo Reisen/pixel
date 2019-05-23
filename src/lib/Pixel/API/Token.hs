@@ -5,8 +5,9 @@ module Pixel.API.Token
 
 import Protolude
 import Control.Lens
-import Data.Aeson ( ToJSON(..), FromJSON(..) )
-import Servant    ( FromHttpApiData(..) )
+import Data.Aeson   ( ToJSON(..), FromJSON(..) )
+import Pixel.JSON   ( pixelToJSON, pixelToEncoding, pixelParseJSON )
+import Servant      ( FromHttpApiData(..) )
 
 --------------------------------------------------------------------------------
 
@@ -20,6 +21,12 @@ newtype Token = Token
 --------------------------------------------------------------------------------
 
 instance ToJSON Token where
+  toJSON     = pixelToJSON
+  toEncoding = pixelToEncoding
+
 instance FromJSON Token where
+  parseJSON  = pixelParseJSON
+
+--------------------------------------------------------------------------------
 
 makeLenses ''Token

@@ -63,6 +63,8 @@ newtype Pixel a = Pixel
     deriving newtype Applicative
     deriving newtype Monad
 
+--------------------------------------------------------------------------------
+
 -- Configure Pixel Instances
 instance MonadImage Pixel where
   saveImage  = pixelSaveImage

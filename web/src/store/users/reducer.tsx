@@ -9,8 +9,8 @@ const initialState: State = {
 };
 
 export const userReducer = handleActions<State>({
-    'SET_TOKEN':  (state, action) => {
-        alert('Token Set');
-        return set(lensProp('token'), action.payload)(state);
-    }
+    'SET_USERNAME':  (state, action) => set(
+        lensProp('username'),
+        action.payload
+    )(state),
 }, initialState);

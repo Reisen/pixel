@@ -38,6 +38,7 @@ const UserRegister = (props: Props) => {
     const handleCreate = () => {
         setWaiting(true);
         props.registerUser(email, password);
+        props.history.push('/');
     };
 
     return (
@@ -61,10 +62,6 @@ const UserRegister = (props: Props) => {
                     <Button disabled={waiting} onClick={handleCreate}>
                         Create My Account
                     </Button>
-
-                    {
-                        props.token && ('Token: ' + props.token)
-                    }
                 </div>
             </div>
         </div>

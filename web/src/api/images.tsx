@@ -30,8 +30,9 @@ const getImages = async (): Promise<GetImageResponse> => {
     const base    = findApiBase();
     const token   = findApiToken();
     const request = {
-        headers: { 'Authorization': token },
-        method:  'GET',
+        credentials: 'include' as 'include',
+        headers:     { 'Authorization': token },
+        method:      'GET',
     };
 
     const response = await fetch(`${base}/api/image`, request);
@@ -45,9 +46,10 @@ const deleteTags = async (uuid: string, req: DeleteTagsRequest): Promise<void> =
     const base    = findApiBase();
     const token   = findApiToken();
     const request = {
-        headers: { 'Authorization': token, 'Content-Type': 'application/json' },
-        method:  'DELETE',
-        body:    JSON.stringify(req),
+        body:         JSON.stringify(req),
+        credentials: 'include' as 'include',
+        headers:     { 'Authorization': token, 'Content-Type': 'application/json' },
+        method:      'DELETE',
     };
 
     fetch(`${base}/api/image/${uuid}/tags`, request);
@@ -60,8 +62,9 @@ const getTags = async (uuid: string): Promise<GetTagsResponse> => {
     const base    = findApiBase();
     const token   = findApiToken();
     const request = {
-        headers: { 'Authorization': token },
-        method:  'GET',
+        credentials: 'include' as 'include',
+        headers:     { 'Authorization': token },
+        method:      'GET',
     };
 
     const response = await fetch(`${base}/api/image/${uuid}/tags`, request);
@@ -75,9 +78,10 @@ const uploadImage = async (req: FormData): Promise<Response> => {
     const base    = findApiBase();
     const token   = findApiToken();
     const request = {
-        headers: { 'Authorization': token },
-        method:  'POST',
-        body:    req
+        body:        req,
+        credentials: 'include' as 'include',
+        headers:     { 'Authorization': token },
+        method:      'POST',
     };
 
     return fetch(`${base}/api/image`, request);
@@ -89,9 +93,10 @@ const uploadTags = async (uuid: string, req: PostTagsRequest): Promise<void> => 
     const base    = findApiBase();
     const token   = findApiToken();
     const request = {
-        headers: { 'Authorization': token, 'Content-Type': 'application/json' },
-        method:  'POST',
-        body:    JSON.stringify(req),
+        body:        JSON.stringify(req),
+        credentials: 'include' as 'include',
+        headers:     { 'Authorization': token, 'Content-Type': 'application/json' },
+        method:      'POST',
     };
 
     fetch(`${base}/api/image/${uuid}/tags`, request);

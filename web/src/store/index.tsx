@@ -6,7 +6,7 @@ import { UserState }    from './users/types';
 // Reducers
 import { apiReducer }   from './api';
 import { imageReducer } from './images';
-import { userReducer }  from './user';
+import { userReducer }  from './users';
 
 
 // State represents the full state type for our entire Redux store once it

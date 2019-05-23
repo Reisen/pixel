@@ -85,13 +85,10 @@ const Image = (props: Props) => {
             data.append('image', ref.current.files[0]);
             tags.map(tag => {
                 data.append('tag', tag);
-                console.log('Tag Added: ' + tag);
                 return null;
             });
 
-            console.log('A');
             setUploading(true);
-            console.log('B');
             uploadImage(data).then(() => {
                 props.history.push('/');
             });

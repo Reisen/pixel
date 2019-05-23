@@ -5,5 +5,5 @@ export {
 export {
     loginUser,
     registerUser,
-    setToken,
+    setUsername,
 } from './actions';
