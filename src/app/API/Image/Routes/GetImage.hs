@@ -10,7 +10,7 @@ where
 import Protolude
 import Servant
 
-import API.Cookies               ( CookieList(..) )
+import API.Cookies               ( CookieToken(..) )
 import API.Image.Types as API    ( Image(..) )
 import Data.Aeson                ( ToJSON(..) )
 import MonadPixel                ( Pixel )
@@ -23,7 +23,7 @@ import Pixel.API.Images as Pixel ( Image(..), ImageError(..), DigestText, fetchI
 -- We wrap up responses in an HTTP endpoint type, in order to abstract
 -- away from the backend.
 type GetImage =
-  Header "Cookie" CookieList
+  Header "Cookie" CookieToken
     :> Get '[JSON] GetImageResponse
 
 --------------------------------------------------------------------------------
@@ -57,15 +57,12 @@ convertImage uuid Pixel.Image{..} = API.Image
 -- date and the filter should encompass all possible queries a user might have,
 -- from tags to uploader, to ordering.
 getImage
-  :: Maybe CookieList
+  :: Maybe CookieToken
   -> Pixel GetImageResponse
 
-getImage Nothing                     = throwError (ImageError MissingToken)
-getImage (Just (CookieList cookies)) = do
-  for_ cookies $ \(name, value) -> do
-    putText $ fold ["Cookie: ", name, " -- ", value]
-    pure ()
-
+getImage Nothing                    = throwError (ImageError MissingToken)
+getImage (Just (CookieToken token)) = do
+  putText (show token)
   images <- fetchImages
   pure GetImageResponse
     { getImageResponseImages =

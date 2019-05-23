@@ -112,8 +112,8 @@ server config =
     corsHandler =
       cors . const $ Just $ simpleCorsResourcePolicy
         { corsRequestHeaders =
-            [ "Content-Type"
-            , "Authorization"
+            [ "Authorization"
+            , "Content-Type"
             ]
 
         , corsOrigins = Just

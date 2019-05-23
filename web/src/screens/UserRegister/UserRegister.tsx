@@ -69,7 +69,8 @@ const UserRegister = (props: Props) => {
 };
 
 const mapState = (state: State) => ({
-    token: state.user.token
+    token:    state.user.token,
+    username: state.user.username
 });
 
 const mapDispatch = {

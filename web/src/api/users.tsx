@@ -7,7 +7,6 @@ import Cookies from 'universal-cookie';
 import {
     AuthUserRequest,
     RegisterRequest,
-    Token,
 } from './types';
 
 
@@ -17,30 +16,33 @@ const findApiBase = () => {
     return cookies.get('api') || 'http://localhost:3001';
 };
 
-const apiRegisterUser = async (req: RegisterRequest): Promise<Token> => {
+const apiRegisterUser = async (req: RegisterRequest): Promise<Response> => {
     const base = findApiBase();
     const request = {
-        headers: { 'Content-Type': 'application/json' },
-        method:  'POST',
-        body:     JSON.stringify(req),
+        body:         JSON.stringify(req),
+        credentials: 'include' as 'include',
+        headers:     { 'Content-Type': 'application/json' },
+        method:      'POST',
     };
 
-    const response = await fetch(`${base}/api/user`, request)
-    const json     = await response.json();
-    return json;
+    const result = await fetch(`${base}/api/user`, request);
+    console.log(result);
+    result.headers.forEach(header => {
+        console.log(header);
+    });
+    return result;
 };
 
-const apiAuthUser = async (req: AuthUserRequest): Promise<Token> => {
+const apiAuthUser = async (req: AuthUserRequest): Promise<Response> => {
     const base = findApiBase();
     const request = {
-        headers: { 'Content-Type': 'application/json' },
-        method:  'POST',
-        body:     JSON.stringify(req),
+        body:         JSON.stringify(req),
+        credentials: 'include' as 'include',
+        headers:     { 'Content-Type': 'application/json' },
+        method:      'POST',
     };
 
-    const response = await fetch(`${base}/api/user/login`, request)
-    const json     = await response.json();
-    return json;
+    return fetch(`${base}/api/user/login`, request);
 }
 
 export {

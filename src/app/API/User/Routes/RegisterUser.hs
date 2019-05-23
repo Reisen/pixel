@@ -52,7 +52,7 @@ postRegisterUser
 postRegisterUser RegisterRequest{..} = do
   uuid                   <- liftIO nextRandom
   createdAt              <- liftIO getCurrentTime
-  hashSalt :: ByteString <- liftIO $ getRandomBytes 8
+  hashSalt :: ByteString <- liftIO $ getRandomBytes 16
   handleRegisterUser RegisterDetails
     { _rdUUID      = uuid
     , _rdCreatedAt = createdAt

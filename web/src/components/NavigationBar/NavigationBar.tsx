@@ -18,7 +18,7 @@ const NavigationBar = (props: Props) => (
                 <div className={styles.RightNavigation}>
                     <Link to="/my/upload" className={styles.UploadLink}>Upload Images</Link>
                     <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">{props.username}</Link>
-                    <Link to="/u/acb38921-9ab39ab1-112cb1212-90bfe32">Logout</Link>
+                    <Link to="/my/register">Register</Link>
                 </div>
             </div>
         </div>
