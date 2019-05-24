@@ -16,6 +16,7 @@ const TextInput = (props: Props) => (
     <div className={styles.Root}>
         <input
             readOnly
+            tabIndex={-1}
             className={styles.ShadowInput}
             value={props.suggestion}
         />
