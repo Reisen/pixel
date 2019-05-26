@@ -3,6 +3,7 @@ packages:
     - .
 
 extra-deps:
+    - argon2-1.3.0.1@sha256:5b8e515bfb9ac48f3650728c154d087a69af3acbb625cc07d503b4eb98701faf
     - servant-multipart-0.11.3
 
     - github: Reisen/eventless

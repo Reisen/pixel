@@ -18,11 +18,14 @@ import Index                              from './screens/Index/Index';
 import ImageView                          from './screens/ImageView';
 import ImageUpload                        from './screens/ImageUpload';
 import ImageGalleries                     from './screens/ImageGalleries';
+import UserRegister                       from './screens/UserRegister';
+import UserLogin                          from './screens/UserLogin';
+import UserFeed                           from './screens/UserFeed';
 
 // Global Styles
-import './App.css';
 import 'normalize.css';
 import './static/icofont/icofont.min.css';
+import './App.css';
 
 
 // Create Redux-Persist Configuration, we use this so that when viewing pages
@@ -49,6 +52,13 @@ const App = () => (
         <Router>
             <div className="dark">
                 <Route exact path="/"                  component={Index} />
+
+                {/* User Routes */}
+                <Route exact path="/my/register"       component={UserRegister} />
+                <Route exact path="/my/login"          component={UserLogin} />
+                <Route       path="/u/:uuid"           component={UserFeed} />
+
+                {/* Image Routes */}
                 <Route exact path="/my/upload"         component={ImageUpload} />
                 <Route       path="/my/upload/:mode"   component={ImageUpload} />
                 <Route exact path="/my/images/:page"   component={Index} />

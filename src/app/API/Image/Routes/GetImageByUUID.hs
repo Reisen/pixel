@@ -6,30 +6,32 @@ where
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import           Servant
+import Protolude
+import Servant
 
-import           API.Image.Types                ( Image(..) )
-import qualified Pixel                         as Pixel
-import qualified MonadPixel                    as C
+import API.Image.Types as API    ( Image(..) )
+import Pixel                     ( Error(..) )
+import Pixel.API.Token           ( Token )
+import Pixel.API.Images as Pixel ( Image(..), DigestText, ImageError(..), handleImageRequest )
+import MonadPixel                ( Pixel )
 
 --------------------------------------------------------------------------------
 
 -- We wrap up responses in an HTTP endpoint type, in order to abstract away
 -- from the backend.
 type GetImageByUUID =
-  Header "Authorization" Pixel.Token
+  Header "Authorization" Token
     :> Capture "uuid" Text
-    :> Get '[JSON] Image
+    :> Get '[JSON] API.Image
 
 --------------------------------------------------------------------------------
 
 convertImage
-  :: Pixel.DigestText
+  :: DigestText
   -> Pixel.Image
-  -> Image
+  -> API.Image
 
-convertImage uuid Pixel.Image{..} = Image
+convertImage uuid Pixel.Image{..} = API.Image
   { imagePath  = fold ["/static/images/", _imageHash]
   , imageTags  = _imageTags
   , imageThumb = fold ["/static/thumbs/", _imageHash]
@@ -39,12 +41,12 @@ convertImage uuid Pixel.Image{..} = Image
 --------------------------------------------------------------------------------
 
 getImageByUUID
-  :: Maybe Pixel.Token
-  -> Pixel.DigestText
-  -> C.Pixel Image
+  :: Maybe Token
+  -> DigestText
+  -> Pixel API.Image
 
-getImageByUUID Nothing _     = throwError (Pixel.ImageError Pixel.MissingToken)
+getImageByUUID Nothing _     = throwError (ImageError MissingToken)
 getImageByUUID (Just _) uuid =
-  Pixel.handleImageRequest uuid >>= \case
-    Nothing       -> throwError (Pixel.ImageError Pixel.InvalidUUID)
+  handleImageRequest uuid >>= \case
+    Nothing       -> throwError (ImageError InvalidUUID)
     Just response -> pure $ convertImage uuid response

@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
+import { connect }                 from 'react-redux';
 import { Image as image }          from '../../api/types';
 import { State }                   from '../../store';
-import { connect }                 from 'react-redux';
 import { getImages }               from '../../store/images';
+import { logoutUser }              from '../../store/users';
 import { uploadImage }             from '../../api/images';
 import { History }                 from 'history'
 
@@ -16,9 +17,10 @@ import styles                      from './ImageUpload.module.css';
 
 
 interface Props {
-    images:   image[];
-    username: string;
-    history:  History;
+    images:     image[];
+    logoutUser: () => void;
+    username:   string;
+    history:    History;
 }
 
 const headerLinks = [
@@ -85,13 +87,10 @@ const Image = (props: Props) => {
             data.append('image', ref.current.files[0]);
             tags.map(tag => {
                 data.append('tag', tag);
-                console.log('Tag Added: ' + tag);
                 return null;
             });
 
-            console.log('A');
             setUploading(true);
-            console.log('B');
             uploadImage(data).then(() => {
                 props.history.push('/');
             });
@@ -146,5 +145,9 @@ const mapState = (state: State) => ({
     username: state.user.username
 });
 
+const mapDispatch = {
+    logoutUser
+};
 
-export default connect(mapState)(Image);
+
+export default connect(mapState, mapDispatch)(Image);

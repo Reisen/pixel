@@ -5,28 +5,30 @@
 //   - User's Private Galleries
 //   - Public/Shared Galleries
 
-import React, { useEffect } from 'react';
-import { Image as image }   from '../../api/types';
-import { connect }          from 'react-redux';
-import { match }            from 'react-router-dom';
-import { State }            from '../../store';
-import { ScalingMode }      from '../../store/images/types';
-import { History }          from 'history'
+import React, { useEffect }    from 'react';
+import { connect }             from 'react-redux';
+import { match }               from 'react-router-dom';
+import { History }             from 'history'
+import { Image as image }      from '../../api/types';
+import { State }               from '../../store';
+import { ScalingMode }         from '../../store/images/types';
+import { User }                from '../../store/users/types';
+import { getUser, logoutUser } from '../../store/users';
 import {
     getImages,
     fetchImages,
     setGalleryScaling,
     getGalleryScaling
-}                           from '../../store/images';
+}                              from '../../store/images';
 
 // Components
-import NavigationBar        from '../../components/NavigationBar';
-import SearchSideBar        from '../../components/SearchSideBar';
-import TagPanel             from '../../panels/TagPanel';
-import SettingsPanel        from '../../panels/SettingsPanel';
-import ImageGrid            from './components/ImageGrid';
-import Pager                from './components/Pager';
-import styles               from './Index.module.css';
+import NavigationBar           from '../../components/NavigationBar';
+import SearchSideBar           from '../../components/SearchSideBar';
+import TagPanel                from '../../panels/TagPanel';
+import SettingsPanel           from '../../panels/SettingsPanel';
+import ImageGrid               from './components/ImageGrid';
+import Pager                   from './components/Pager';
+import styles                  from './Index.module.css';
 
 
 interface Params {
@@ -35,10 +37,11 @@ interface Params {
 
 interface Props {
     fetchImages:        () => void;
-    setGalleryScaling:  (mode: ScalingMode) => void;
     galleryScalingMode: ScalingMode;
     images:             image[];
-    username:           string;
+    logoutUser:         () => void;
+    setGalleryScaling:  (mode: ScalingMode) => void;
+    user:               User;
     history:            History;
     match:              match<Params>;
 }
@@ -103,11 +106,17 @@ const Index = (props: Props) => {
 
     // Load Images, On First Mount Only, we only re-request on page reload or
     // when a new search is made.
-    useEffect(() => { props.fetchImages() }, []);
+    const { fetchImages } = props
+    useEffect(() => { fetchImages() }, [fetchImages]);
 
     return (
         <div className="Page">
-            <NavigationBar links={headerLinks} username={props.username} />
+            <NavigationBar
+                links={headerLinks}
+                username={props.user.username}
+                onLogout={props.logoutUser}
+            />
+
             <div className={styles.PanelContainer}>
                 <SearchSideBar initialPanel="Tag List">
                     {
@@ -139,11 +148,12 @@ const Index = (props: Props) => {
 const mapState = (state: State) => ({
     images:             getImages(state.images),
     galleryScalingMode: getGalleryScaling(state.images),
-    username:           state.user.username
+    user:               getUser(state.user),
 });
 
 const mapDispatch = {
     fetchImages,
+    logoutUser,
     setGalleryScaling
 };
 

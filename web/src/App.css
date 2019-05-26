@@ -1,3 +1,5 @@
+/* Global Styles */
+/* -------------------------------------------------------------------------- */
 * {
     box-sizing: border-box;
     padding: 0px;
@@ -6,7 +8,9 @@
 }
 
 html, body {
+    height: 100%;
     padding-bottom: 32px;
+    background-color: #F9F9FF;
 }
 
 a {
@@ -14,7 +18,9 @@ a {
     color: #336699;
 }
 
-/* ClearFix */
+
+/* Utilities */
+/* -------------------------------------------------------------------------- */
 .cf:before,
 .cf:after {
     content: " "; /* 1 */
@@ -29,5 +35,19 @@ a {
     *zoom: 1;
 }
 
+
 /* Shared Global Pages */
-.Page {}
+/* -------------------------------------------------------------------------- */
+.Page {
+    height: 100%;
+}
+
+.Title {
+    font-size: 18px;
+    padding-bottom: 8px;
+    color: #336699;
+    font-weight: normal;
+    margin: 0px 4px;
+    margin-bottom: 24px;
+    margin-top: 40px;
+}

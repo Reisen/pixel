@@ -5,30 +5,51 @@ module Commands.GenerateTypes
   , generateTypes
   ) where
 
---------------------------------------------------------------------------------
+import Protolude
+import Commands.Types           ( Options (..), GenerateTypesOptions (..) )
 
-import           Protolude
-
-import           Commands.Types                 ( Options (..), GenerateTypesOptions (..) )
-import qualified API.Image.Routes              as API
-import qualified API.Image.Types               as API
-import qualified Data.Aeson.TypeScript.TH      as TS
-import qualified Data.Text                     as T
-import qualified Data.Text.IO                  as T.IO
-import qualified Options.Applicative           as O
-import qualified Pixel                         as Pixel
+import API.Image.Routes         ( DeleteTagsRequest
+                                , GetImageResponse
+                                , GetTagsResponse
+                                , PostImageRequest
+                                , PostTagsRequest
+                                )
+import API.Image.Types          ( Image )
+import API.User.Routes          ( AuthUserRequest, RegisterRequest )
+import API.User.Types           ( User, DangerousUser )
+import Data.Aeson.TypeScript.TH ( TSDeclaration
+                                , FormattingOptions(..)
+                                , deriveTypeScript
+                                , formatTSDeclaration
+                                , getTypeScriptDeclarations
+                                )
+import Data.Text as T           ( intercalate, pack )
+import Data.Text.IO             ( writeFile )
+import Options.Applicative      ( Parser
+                                , Mod
+                                , CommandFields
+                                , command
+                                , help
+                                , info
+                                , long
+                                , metavar
+                                , progDesc
+                                , strOption
+                                )
+import Pixel                    ( createOptions )
+import Pixel.API.Token          ( Token )
 
 --------------------------------------------------------------------------------
 
 formatExports
-  :: [TS.TSDeclaration]
+  :: [TSDeclaration]
   -> Text
 
 formatExports declarations =
   T.intercalate "\n\n"
     $   ("export " <>)
-    .   T.pack
-    .   TS.formatTSDeclaration (TS.FormattingOptions 4)
+    .   pack
+    .   formatTSDeclaration (FormattingOptions 4)
     <$> declarations
 
 -- Here we take all exposed API types, including all
@@ -39,60 +60,89 @@ formatExports declarations =
 generateTypes :: GenerateTypesOptions -> IO ()
 generateTypes (GenerateTypesOptions folder) = do
   putText $ "Creating " <> (show $ length definitions) <> " definitions."
-  T.IO.writeFile (toS folder) . formatExports $ definitions
+  writeFile (toS folder) . formatExports $ definitions
   where
-    definitions =
-      TS.getTypeScriptDeclarations (Proxy @API.Image)
-        <> TS.getTypeScriptDeclarations (Proxy @API.DeleteTagsRequest)
-        <> TS.getTypeScriptDeclarations (Proxy @API.GetImageResponse)
-        <> TS.getTypeScriptDeclarations (Proxy @API.GetTagsResponse)
-        <> TS.getTypeScriptDeclarations (Proxy @API.PostImageRequest)
-        <> TS.getTypeScriptDeclarations (Proxy @API.PostTagsRequest)
+    definitions = fold
+      [ getTypeScriptDeclarations (Proxy @Token)
+
+      -- Image API Types
+      , getTypeScriptDeclarations (Proxy @Image)
+      , getTypeScriptDeclarations (Proxy @DeleteTagsRequest)
+      , getTypeScriptDeclarations (Proxy @GetImageResponse)
+      , getTypeScriptDeclarations (Proxy @GetTagsResponse)
+      , getTypeScriptDeclarations (Proxy @PostImageRequest)
+      , getTypeScriptDeclarations (Proxy @PostTagsRequest)
+
+      -- User API Types
+      , getTypeScriptDeclarations (Proxy @User)
+      , getTypeScriptDeclarations (Proxy @AuthUserRequest)
+      , getTypeScriptDeclarations (Proxy @RegisterRequest)
+      ]
 
 --------------------------------------------------------------------------------
 -- Generate TypeScript Instances
 
-TS.deriveTypeScript
-  (Pixel.createOptions @API.DeleteTagsRequest)
-  ''API.DeleteTagsRequest
+deriveTypeScript
+  (createOptions @DeleteTagsRequest)
+  ''DeleteTagsRequest
 
-TS.deriveTypeScript
-  (Pixel.createOptions @API.GetImageResponse)
-  ''API.GetImageResponse
+deriveTypeScript
+  (createOptions @GetImageResponse)
+  ''GetImageResponse
 
-TS.deriveTypeScript
-  (Pixel.createOptions @API.GetTagsResponse)
-  ''API.GetTagsResponse
+deriveTypeScript
+  (createOptions @GetTagsResponse)
+  ''GetTagsResponse
 
-TS.deriveTypeScript
-  (Pixel.createOptions @API.PostTagsRequest)
-  ''API.PostTagsRequest
+deriveTypeScript
+  (createOptions @PostTagsRequest)
+  ''PostTagsRequest
 
-TS.deriveTypeScript
-  (Pixel.createOptions @API.PostImageRequest)
-  ''API.PostImageRequest
+deriveTypeScript
+  (createOptions @PostImageRequest)
+  ''PostImageRequest
 
-TS.deriveTypeScript
-  (Pixel.createOptions @API.Image)
-  ''API.Image
+deriveTypeScript
+  (createOptions @Image)
+  ''Image
+
+deriveTypeScript
+  (createOptions @AuthUserRequest)
+  ''AuthUserRequest
+
+deriveTypeScript
+  (createOptions @RegisterRequest)
+  ''RegisterRequest
+
+deriveTypeScript
+  (createOptions @User)
+  ''User
+
+deriveTypeScript
+  (createOptions @DangerousUser)
+  ''DangerousUser
+
+deriveTypeScript
+  (createOptions @Token)
+  ''Token
 
 --------------------------------------------------------------------------------
 -- Define primitives used for optparse
 
-commandGenerateTypes :: O.Mod O.CommandFields Options
-commandGenerateTypes = O.command "generate-types"
-  (O.info parseOptions
-    (O.progDesc "Generate TypeScript definitions for API."))
+commandGenerateTypes :: Mod CommandFields Options
+commandGenerateTypes = command "generate-types"
+  (info parseOptions
+    (progDesc "Generate TypeScript definitions for API."))
 
-parseOptions :: O.Parser Options
+parseOptions :: Parser Options
 parseOptions = GenerateTypes <$>
   (   GenerateTypesOptions
   <$> folderOption
   )
 
-folderOption :: O.Parser Text
-folderOption = O.strOption
-  (  O.long "file"
-  <> O.help "File to write TypeScript definitions into."
-  <> O.metavar "FILE"
+folderOption :: Parser Text
+folderOption = strOption
+  (  long "file"
+  <> help "File to write TypeScript definitions into."
+  <> metavar "FILE"
   )

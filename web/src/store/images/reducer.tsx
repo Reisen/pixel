@@ -9,6 +9,6 @@ const initialState: State = {
 };
 
 export const imageReducer = handleActions<State>({
-    'LOAD_IMAGES':       (state, action) => set(lensProp('images'), action.payload)(state),
+    'SET_IMAGES':        (state, action) => set(lensProp('images'), action.payload)(state),
     'SET_IMAGE_SCALING': (state, action) => set(lensProp('galleryScalingMode'), action.payload)(state)
 }, initialState);

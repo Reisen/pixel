@@ -4,17 +4,15 @@ module API.Image.Commands
   , removeTags
   ) where
 
---------------------------------------------------------------------------------
-
 import Protolude
 import Control.Lens
 
-import Data.UUID ( UUID )
-import Eventless ( Command, emit, loadSnapshot )
-import Pixel     ( Image (..)
-                 , ImageEvent (..)
-                 , imageTags
-                 )
+import Data.UUID        ( UUID )
+import Eventless        ( Command, emit, loadSnapshot )
+import Pixel.API.Images ( Image(..)
+                        , ImageEvent (..)
+                        , imageTags
+                        )
 
 --------------------------------------------------------------------------------
 

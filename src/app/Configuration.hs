@@ -29,6 +29,8 @@ data Config' f = Config
   , _configPort           :: HKD f Int
   , _configConnection     :: HKD f BackendStore
   , _configReadSchema     :: HKD f Connection
+  -- , _configJWT            :: HKD f JWT
+  -- , _configCookies        :: HKD f Cookies
   }
 
 -- Concrete Configuration
@@ -48,6 +50,8 @@ readConfig Config {..} =
     <*> _configPort
     <*> _configConnection
     <*> _configReadSchema
+    -- <*> _configJWT
+    -- <*> _configCookies
 
 -- Environment Reading Helpers
 --

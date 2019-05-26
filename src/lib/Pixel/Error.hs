@@ -4,11 +4,9 @@ module Pixel.Error
   )
 where
 
---------------------------------------------------------------------------------
-
-import           Protolude
-
-import           Pixel.API.Images.Error         ( ImageError(..) )
+import Protolude
+import Pixel.API.Images.Error ( ImageError(..) )
+import Pixel.API.Users.Error  ( UserError(..) )
 
 --------------------------------------------------------------------------------
 
@@ -18,6 +16,7 @@ data AuthenticationError
   deriving Show
 
 data Error
-  = ImageError ImageError
-  | AuthError  AuthenticationError
+  = AuthError  !AuthenticationError
+  | ImageError !ImageError
+  | UserError  !UserError
   deriving Show

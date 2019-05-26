@@ -1,0 +1,21 @@
+.Root {
+    background-image: url('https://raikou2.donmai.us/9a/c2/__original_drawn_by_peko_akibakeisena__9ac2395672f4660123522163123d8738.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-top: 1px solid white;
+    height: 700px;
+}
+
+.RegisterForm {
+    width: 400px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 16px;
+    padding-top: 24px;
+    margin-top: 200px;
+}
+
+.RegisterForm input {
+    margin-bottom: 8px;
+}

@@ -1,5 +1,6 @@
 module Server
-  ( server
+  ( API
+  , server
   ) where
 
 --------------------------------------------------------------------------------
@@ -7,6 +8,18 @@ module Server
 import Protolude
 import Servant
 
+import Configuration                        ( Config )
+import Network.HTTP.Types.Method            ( methodGet, methodPost, methodHead, methodDelete )
+import Network.Wai.Middleware.Cors          ( cors
+                                            , simpleCorsResourcePolicy
+                                            , corsRequestHeaders
+                                            , corsMethods
+                                            , corsOrigins
+                                            )
+import Network.Wai.Middleware.RequestLogger ( logStdout )
+import MonadPixel                           ( Pixel, runPixel )
+
+-- Import Routes
 import API.Image.Routes                     ( PostImage
                                             , GetImage
                                             , GetImageByUUID
@@ -20,15 +33,11 @@ import API.Image.Routes                     ( PostImage
                                             , postImage
                                             , postTags
                                             )
-import Configuration                        ( Config )
-import Network.HTTP.Types.Method            ( methodGet, methodPost, methodHead, methodDelete )
-import Network.Wai.Middleware.Cors          ( cors
-                                            , simpleCorsResourcePolicy
-                                            , corsRequestHeaders
-                                            , corsMethods
+import API.User.Routes                      ( AuthenticateUser
+                                            , RegisterUser
+                                            , postAuthenticateUser
+                                            , postRegisterUser
                                             )
-import Network.Wai.Middleware.RequestLogger ( logStdout )
-import MonadPixel                           ( Pixel, runPixel )
 
 --------------------------------------------------------------------------------
 
@@ -39,16 +48,26 @@ import MonadPixel                           ( Pixel, runPixel )
 -- swagger doc, a mock, etc.
 
 type ImageAPI =
-  "image"
-    :> (    PostImage       -- POST    /image/
-       :<|> GetImage        -- GET     /image/
-       :<|> GetImageByUUID  -- GET     /image/:uuid
-       :<|> GetTags         -- GET     /image/:uuid/tags
-       :<|> PostTags        -- POST    /image/:uuid/tags
-       :<|> DeleteTags      -- DELETE  /image/:uuid/tags
-       )
+  "image" :>
+    (    PostImage        -- POST    /image/
+    :<|> GetImage         -- GET     /image/
+    :<|> GetImageByUUID   -- GET     /image/:uuid
+    :<|> GetTags          -- GET     /image/:uuid/tags
+    :<|> PostTags         -- POST    /image/:uuid/tags
+    :<|> DeleteTags       -- DELETE  /image/:uuid/tags
+    )
 
-type API = "api" :> ImageAPI
+type UserAPI =
+  "user" :>
+    (    AuthenticateUser -- POST /user/login
+    :<|> RegisterUser     -- POST /user
+    )
+
+type API =
+  "api" :>
+    (    ImageAPI
+    :<|> UserAPI
+    )
 
 
 -- Proxy for Servant, Ignore.
@@ -60,12 +79,24 @@ proxyAPI = Proxy
 -- order our API type above expects them to be in.
 implAPI :: ServerT API Pixel
 implAPI =
-  postImage
-    :<|> getImage
-    :<|> getImageByUUID
-    :<|> getTags
-    :<|> postTags
-    :<|> postDeleteTags
+  (    imageAPI
+  :<|> userAPI
+  )
+
+  where
+    imageAPI =
+      (    postImage
+      :<|> getImage
+      :<|> getImageByUUID
+      :<|> getTags
+      :<|> postTags
+      :<|> postDeleteTags
+      )
+
+    userAPI =
+      (    postAuthenticateUser
+      :<|> postRegisterUser
+      )
 
 --------------------------------------------------------------------------------
 
@@ -81,9 +112,12 @@ server config =
     corsHandler =
       cors . const $ Just $ simpleCorsResourcePolicy
         { corsRequestHeaders =
-            [ "Content-Type"
-            , "Authorization"
+            [ "Authorization"
+            , "Content-Type"
             ]
+
+        , corsOrigins = Just
+            ( ["http://localhost:3000"], True )
 
         , corsMethods =
             [ methodGet

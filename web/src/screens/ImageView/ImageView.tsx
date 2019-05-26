@@ -39,11 +39,9 @@ const headerLinks = [
     {name: 'Tags', path: ''}
 ];
 
-const panels = (uuid: string, tags: [string, number][]) => {
-}
-
 const Image = (props: Props) => {
-    useEffect(() => { props.fetchImages() }, []);
+    const { fetchImages } = props
+    useEffect(() => { fetchImages() }, [fetchImages]);
 
     // Scan for image by UUID, and extract the tags into a counted tag list.
     const image = props.images.find(image => image.UUID === props.match.params.uuid);

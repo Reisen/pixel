@@ -87,6 +87,8 @@ executables:
 
         dependencies:
             - aeson-typescript
+            - binary
+            - cookie
             - eventless
             - http-types
             - optparse-applicative
@@ -97,5 +99,9 @@ library:
     source-dirs: src/lib
     dependencies:
         - aeson
+        - argon2
+        - attoparsec
         - eventless
+        - text-short
+        - transformers
         - uuid

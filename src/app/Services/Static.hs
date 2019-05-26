@@ -5,10 +5,9 @@ where
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-
-import qualified Data.ByteString               as B
-import qualified Pixel                         as Pixel
+import Protolude
+import Data.ByteString as B ( writeFile )
+import Pixel.API.Images     ( DigestText )
 
 --------------------------------------------------------------------------------
 
@@ -16,7 +15,7 @@ import qualified Pixel                         as Pixel
 pixelWriteStaticImage
   :: MonadIO m
   => Text
-  -> Pixel.DigestText
+  -> DigestText
   -> ByteString
   -> m ()
 

@@ -1,8 +1,7 @@
 module API.Image.Projections
   ( projectImages
+  , setupImageProjections
   ) where
-
---------------------------------------------------------------------------------
 
 import Protolude
 import Text.InterpolatedString.QM
@@ -15,9 +14,25 @@ import Database.SQLite.Simple ( Query
                               , execute
                               , withTransaction
                               )
-import Pixel                  ( Image (..) )
+import Pixel.API.Images       ( Image (..) )
 
 --------------------------------------------------------------------------------
+
+-- Ran on first run in order to setup table schema for projection, this also
+-- writes any non-projected (but required data), such as standard roles. As
+-- they are not event backed, they always exist and survive deletion after a
+-- restart.
+setupImageProjections
+  :: MonadIO m
+  => Connection
+  -> m ()
+
+setupImageProjections conn = liftIO $ withTransaction conn $ do
+  -- Create Core Tables
+  execute_ conn createImageTable
+  execute_ conn createTagsTable
+  execute_ conn createTagAssociationTable
+
 
 projectImages
   :: MonadIO m
@@ -26,22 +41,18 @@ projectImages
   -> Image
   -> m ()
 
-projectImages conn uuid Image {..} = do
+projectImages conn uuid Image {..} = liftIO $ withTransaction conn $ do
   putText $ fold ["[P:Image] ", show _imageCreatedAt, " ", _imageHash, ", Tags: ", show _imageTags]
-  liftIO $ withTransaction conn $ do
-    -- Create Tables
-    execute_ conn createImageTable
-    execute_ conn createTagsTable
-    execute_ conn createTagAssociationTable
 
-    -- Insert Image Updates
-    execute conn insertImageRow (toText uuid, _imageHash, _imageCreatedAt)
-    execute conn clearAssociations (Only $ toText uuid)
+  -- Insert Image Updates
+  execute conn upsertImageRow (toText uuid, _imageHash, _imageCreatedAt)
 
-    -- Recreate Tag Mapping
-    for_ _imageTags $ \tag -> do
-      execute conn insertTagRow (tag, "tag" :: Text)
-      execute conn insertAssociationRow (tag, toText uuid)
+  -- Recreate Tag Mapping
+  execute conn clearAssociations (Only $ toText uuid)
+
+  for_ _imageTags $ \tag -> do
+    execute conn insertTagRow (tag, "tag" :: Text)
+    execute conn insertAssociationRow (tag, toText uuid)
 
 --------------------------------------------------------------------------------
 
@@ -75,8 +86,8 @@ createTagAssociationTable = [qns|
   );
 |]
 
-insertImageRow :: Query
-insertImageRow = [qns|
+upsertImageRow :: Query
+upsertImageRow = [qns|
   REPLACE INTO images ( uuid , hash , created )
   VALUES              ( ?    , ?    , ?       );
 |]

@@ -5,15 +5,27 @@ module MonadPixel
   , runPixel
   ) where
 
---------------------------------------------------------------------------------
+import Protolude
+import Servant
 
-import           Protolude
-import           Servant
-
-import qualified Configuration                 as C
-import qualified Pixel                         as Pixel
-import qualified Services.Image                as Services
-import qualified Services.Static               as Services
+import Configuration   ( Config )
+import Pixel           ( Error(..)
+                       , MonadImage(..)
+                       , MonadStatic(..)
+                       , MonadUser(..)
+                       )
+import Services.Image  ( pixelSaveImage
+                       , pixelLoadImage
+                       , pixelLoadImages
+                       , pixelAppendTags
+                       , pixelRemoveTags
+                       )
+import Services.Static ( pixelWriteStaticImage )
+import Services.User   ( pixelCreateUser
+                       , pixelFindRoleByName
+                       , pixelFindUserByUUID
+                       , pixelFindUserByEmail
+                       )
 
 --------------------------------------------------------------------------------
 
@@ -43,24 +55,32 @@ type MakeMonadPixel err context m =
 
 -- Concrete Wrapper
 newtype Pixel a = Pixel
-  { unwrapPixel :: MakePixel Pixel.Error C.Config a
-  } deriving newtype (MonadReader C.Config)
-    deriving newtype (MonadError Pixel.Error)
+  { unwrapPixel :: MakePixel Error Config a
+  } deriving newtype (MonadReader Config)
+    deriving newtype (MonadError Error)
     deriving newtype MonadIO
     deriving newtype Functor
     deriving newtype Applicative
     deriving newtype Monad
 
--- Configure Pixel Instances
-instance Pixel.MonadImage Pixel where
-  saveImage  = Services.pixelSaveImage
-  loadImage  = Services.pixelLoadImage
-  loadImages = Services.pixelLoadImages
-  appendTags = Services.pixelAppendTags
-  removeTags = Services.pixelRemoveTags
+--------------------------------------------------------------------------------
 
-instance Pixel.MonadStatic Pixel where
-  writeStaticImage = Services.pixelWriteStaticImage
+-- Configure Pixel Instances
+instance MonadImage Pixel where
+  saveImage  = pixelSaveImage
+  loadImage  = pixelLoadImage
+  loadImages = pixelLoadImages
+  appendTags = pixelAppendTags
+  removeTags = pixelRemoveTags
+
+instance MonadStatic Pixel where
+  writeStaticImage = pixelWriteStaticImage
+
+instance MonadUser Pixel where
+  createUser      = pixelCreateUser
+  findRoleByName  = pixelFindRoleByName
+  findUserByEmail = pixelFindUserByEmail
+  findUserByUUID  = pixelFindUserByUUID
 
 --------------------------------------------------------------------------------
 
@@ -68,7 +88,7 @@ instance Pixel.MonadStatic Pixel where
 -- IO, this means once fully unwrapped we still need to liftIO into Servant's
 -- monad.
 runPixel
-  :: C.Config
+  :: Config
   -> Pixel a
   -> Handler a
 
@@ -79,4 +99,7 @@ runPixel config m =
   )
 
   where
-    runner = liftIO . flip runReaderT config . runExceptT . unwrapPixel
+    runner = liftIO
+      . flip runReaderT config
+      . runExceptT
+      . unwrapPixel

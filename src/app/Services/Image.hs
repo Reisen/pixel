@@ -8,56 +8,55 @@ module Services.Image
 
 --------------------------------------------------------------------------------
 
-import           Protolude
-import           Control.Lens
-import           Text.InterpolatedString.QM
-
-import qualified API.Image.Commands            as API
-import qualified Configuration                 as C
-import qualified Data.UUID                     as U
-import qualified Data.Text                     as T
-import qualified Database.SQLite.Simple        as S
-import qualified Eventless                     as E
-import qualified Pixel                         as Pixel
+import Protolude
+import Control.Lens
+import Text.InterpolatedString.QM
+import API.Image.Commands            ( createImage, addTags, removeTags )
+import Configuration                 ( Config, configConnection, configReadSchema )
+import Data.UUID                     ( UUID, fromText )
+import Data.Text                     ( splitOn )
+import Database.SQLite.Simple        ( query_ )
+import Eventless                     ( runCommand, loadLatest, value )
+import Pixel.API.Images              ( Image(..), TagList, imageUploader )
 
 --------------------------------------------------------------------------------
 
 pixelSaveImage
   :: MonadIO m
-  => MonadReader C.Config m
-  => U.UUID
-  -> Pixel.Image
+  => MonadReader Config m
+  => UUID
+  -> Image
   -> m ()
 
-pixelSaveImage uuid image = case image ^. Pixel.imageUploader of
+pixelSaveImage uuid image = case image ^. imageUploader of
   Nothing       -> pure ()
   Just userUUID -> do
-    backend <- view C.configConnection
-    let create = API.createImage userUUID image
-    void $ E.runCommand backend uuid create
+    backend <- view configConnection
+    let create = createImage userUUID image
+    void $ runCommand backend uuid create
 
 
 pixelLoadImage
   :: MonadIO m
-  => MonadReader C.Config m
-  => U.UUID
-  -> m (Maybe Pixel.Image)
+  => MonadReader Config m
+  => UUID
+  -> m (Maybe Image)
 
 pixelLoadImage uuid = do
-  backend <- view C.configConnection
-  image   <- E.loadLatest backend uuid
-  pure $ (^. E.value) <$> image
+  backend <- view configConnection
+  image   <- loadLatest backend uuid
+  pure $ (^. value) <$> image
 
 
 pixelLoadImages
   :: MonadIO m
-  => MonadReader C.Config m
+  => MonadReader Config m
   => Int
-  -> m [(U.UUID, Pixel.Image)]
+  -> m [(UUID, Image)]
 
 pixelLoadImages _limit = do
-  schema <- view C.configReadSchema
-  images <- liftIO $ S.query_ schema [qns|
+  schema <- view configReadSchema
+  images <- liftIO $ query_ schema [qns|
       SELECT    i.uuid
               , i.hash
               , i.created
@@ -69,40 +68,40 @@ pixelLoadImages _limit = do
   |]
 
   pure . catMaybes $ images <&> \(textUUID, imageHash, date, tags) ->
-    case U.fromText textUUID of
+    case fromText textUUID of
       Nothing   -> Nothing
       Just uuid -> Just
         ( uuid
-        , Pixel.Image
-          { Pixel._imageHash      = imageHash
-          , Pixel._imageTags      = fromMaybe [] $ T.splitOn "," <$> tags
-          , Pixel._imageUploader  = Nothing
-          , Pixel._imageCreatedAt = Just date
-          , Pixel._imageDeletedAt = Nothing
+        , Image
+          { _imageHash      = imageHash
+          , _imageTags      = fromMaybe [] $ splitOn "," <$> tags
+          , _imageUploader  = Nothing
+          , _imageCreatedAt = Just date
+          , _imageDeletedAt = Nothing
           }
         )
 
 
 pixelAppendTags
   :: MonadIO m
-  => MonadReader C.Config m
-  => U.UUID
-  -> Pixel.TagList
+  => MonadReader Config m
+  => UUID
+  -> TagList
   -> m ()
 
 pixelAppendTags uuid tags = do
-  backend <- view C.configConnection
-  void . E.runCommand backend uuid $ API.addTags tags
+  backend <- view configConnection
+  void . runCommand backend uuid $ addTags tags
 
 
 -- Remove tags
 pixelRemoveTags
   :: MonadIO m
-  => MonadReader C.Config m
-  => U.UUID
-  -> Pixel.TagList
+  => MonadReader Config m
+  => UUID
+  -> TagList
   -> m ()
 
 pixelRemoveTags uuid tags = do
-  backend <- view C.configConnection
-  void . E.runCommand backend uuid $ API.removeTags tags
+  backend <- view configConnection
+  void . runCommand backend uuid $ removeTags tags

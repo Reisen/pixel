@@ -10,20 +10,22 @@ import Control.Lens
 import Servant
 import Servant.Multipart
 
-import Configuration ( configStaticLocation )
-import MonadPixel    ( Pixel )
-import Data.Aeson                    as A
-import qualified Data.ByteString               as B
-import qualified Data.UUID.V4                  as U
-import qualified Data.Time                     as T
-import qualified Pixel                         as Pixel
+import Configuration        ( configStaticLocation )
+import MonadPixel           ( Pixel )
+import Data.Aeson           ( ToJSON(..) )
+import Data.ByteString as B ( readFile )
+import Data.UUID.V4         ( nextRandom )
+import Data.Time            ( getCurrentTime )
+import Pixel                ( Error(..), pixelToEncoding, pixelToJSON )
+import Pixel.API.Token      ( Token )
+import Pixel.API.Images     ( ImageError(..), ImageDetails(..), handleImageUpload )
 
 --------------------------------------------------------------------------------
 
 -- We receive incoming images as a multi-part form so we can receive file data
 -- from the sender.
 type PostImage =
-  Header "Authorization" Pixel.Token
+  Header "Authorization" Token
     :> MultipartForm Tmp PostImageRequest
     :> Post '[JSON] Text
 
@@ -35,9 +37,9 @@ data PostImageRequest = PostImageRequest
   , postImageRequestTags :: ![Text]
   } deriving (Show, Generic)
 
-instance A.ToJSON PostImageRequest where
-  toEncoding = Pixel.pixelToEncoding
-  toJSON     = Pixel.pixelToJSON
+instance ToJSON PostImageRequest where
+  toEncoding = pixelToEncoding
+  toJSON     = pixelToJSON
 
 makeFields ''PostImageRequest
 
@@ -59,16 +61,16 @@ instance FromMultipart Tmp PostImageRequest where
 -- request object, copies the uploaded content to our local static directory
 -- and persists meta information to the DB.
 postImage
-  :: Maybe Pixel.Token
+  :: Maybe Token
   -> PostImageRequest
   -> Pixel Text
 
-postImage Nothing _        = throwError (Pixel.ImageError Pixel.MissingToken)
+postImage Nothing _        = throwError (ImageError MissingToken)
 postImage (Just token) req = do
   putText (show req)
   directory <- view configStaticLocation
   content   <- liftIO . B.readFile $ req ^. path
-  uuid      <- liftIO U.nextRandom
-  createdAt <- liftIO T.getCurrentTime
-  Pixel.handleImageUpload $ Pixel.ImageDetails content createdAt directory token (req ^. tags) uuid
+  uuid      <- liftIO nextRandom
+  createdAt <- liftIO getCurrentTime
+  handleImageUpload $ ImageDetails content createdAt directory token (req ^. tags) uuid
   pure (show uuid)
