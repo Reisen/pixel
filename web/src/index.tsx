@@ -20,6 +20,7 @@ import ImageUpload                        from './screens/ImageUpload';
 import ImageGalleries                     from './screens/ImageGalleries';
 import UserRegister                       from './screens/UserRegister';
 import UserLogin                          from './screens/UserLogin';
+import UserFeed                           from './screens/UserFeed';
 
 // Global Styles
 import 'normalize.css';
@@ -55,6 +56,7 @@ const App = () => (
                 {/* User Routes */}
                 <Route exact path="/my/register"       component={UserRegister} />
                 <Route exact path="/my/login"          component={UserLogin} />
+                <Route       path="/u/:uuid"           component={UserFeed} />
 
                 {/* Image Routes */}
                 <Route exact path="/my/upload"         component={ImageUpload} />

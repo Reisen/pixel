@@ -21,7 +21,6 @@ interface Props {
     registerUser: (email: string, password: string) => Promise<Response>;
     username:     string;
     history:      History;
-    token?:       string;
 }
 
 const headerLinks = [
@@ -78,7 +77,6 @@ const UserRegister = (props: Props) => {
 };
 
 const mapState = (state: State) => ({
-    token:    state.user.token,
     username: state.user.username
 });
 

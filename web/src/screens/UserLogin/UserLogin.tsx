@@ -18,7 +18,7 @@ import styles           from './UserLogin.module.css';
 
 
 interface Props {
-    loginUser: (email: string, password: string) => void;
+    loginUser: (email: string, password: string) => Promise<Response>;
     username:  string;
     history:   History;
 }
@@ -31,19 +31,25 @@ const headerLinks = [
 const UserLogin = (props: Props) => {
     const [email, setEmail]       = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [waiting, setWaiting]   = React.useState(true);
+    const [waiting, setWaiting]   = React.useState(false);
+    const [error, setError]       = React.useState('');
 
     // Handle Registration Clicks
-    const handleCreate = () => {
+    const handleLogin = async () => {
         setWaiting(true);
-        props.loginUser(email, password);
+        const result = await props.loginUser(email, password)
+        if (result.ok) props.history.push('/');
+        else {
+            setWaiting(false);
+            setError('Registration Failed');
+        }
     };
 
     return (
         <div className="Page">
             <NavigationBar links={headerLinks} username={props.username} />
             <div className={styles.Root}>
-                <div className={styles.RegisterForm}>
+                <div className={styles.LoginForm}>
                     <TextInput
                         onChange={e => setEmail(e.target.value)}
                         placeholder="Email"
@@ -57,9 +63,13 @@ const UserLogin = (props: Props) => {
                         value={password}
                     />
 
-                    <Button disabled={waiting} onClick={handleCreate}>
-                        Create My Account
+                    <Button disabled={waiting} onClick={handleLogin}>
+                        Login
                     </Button>
+
+                    { error &&
+                        <span>{error}</span>
+                    }
                 </div>
             </div>
         </div>
@@ -67,6 +77,7 @@ const UserLogin = (props: Props) => {
 };
 
 const mapState = (state: State) => ({
+    username: state.user.username
 });
 
 const mapDispatch = {

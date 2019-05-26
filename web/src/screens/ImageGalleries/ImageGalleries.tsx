@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { State }            from '../../store';
 import { connect }          from 'react-redux';
+import { logoutUser }       from '../../store/users';
 import { fetchImages }      from '../../store/images';
 import { image }            from '../../types/image';
 
@@ -25,9 +26,10 @@ const onlyImage: image = {
 };
 
 interface Props {
-    image?: image;
-    username: string;
     fetchImages: () => void;
+    image?:      image;
+    logoutUser:  () => void;
+    username:    string;
 }
 
 const Image = (props: Props) => {
@@ -35,7 +37,12 @@ const Image = (props: Props) => {
     useEffect(() => { fetchImages() }, [fetchImages]);
     return (
         <div className="Page">
-            <NavigationBar links={[]} username={props.username} />
+            <NavigationBar
+                links={[]}
+                username={props.username}
+                onLogout={props.logoutUser}
+            />
+
             <div className={styles.Root}>
                 <SearchSidebar initialPanel="metadata" />
                 <ImageGalleries image={onlyImage} />
@@ -49,7 +56,8 @@ const mapState = (state: State) => ({
 });
 
 const mapDispatch = {
-    fetchImages
+    fetchImages,
+    logoutUser
 };
 
 

@@ -1,0 +1,71 @@
+.Root {
+    width: 1200px;
+    margin: 0px auto;
+    position: relative;
+}
+
+.Bio {
+    padding: 8px;
+    padding-top: 92px;
+}
+
+.Bio > h1 {
+    font-size: 20px;
+    color: #5588CC;
+    text-align: center;
+    font-weight: normal;
+}
+
+.Avatar {
+    width: 160px;
+    height: 160px;
+    position: absolute;
+    top: -64px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    border: 8px solid #FFF;
+    outline: 1px solid #DDD;
+}
+
+.Feed {
+    width: 960px;
+    margin: 0px auto;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 16px;
+}
+
+.FeedImage {
+    height: 160px;
+    background-color: #CCC;
+    background-image: url('https://www.guthriepet.net/blog/wp-content/uploads/2017/07/crazy-dog.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Styles to Extract for Navigation */
+.NavigationBar {
+    width: 960px;
+    margin: 0px auto;
+    text-transform: uppercase;
+    border-bottom: 1px solid #DDF;
+    line-height: 32px;
+    margin-bottom: 16px;
+    color: #999;
+    font-size: 14px;
+}
+
+.NavigationBar > span {
+    margin-right: 32px;
+}
+
+.NavigationBar > span > i {
+    margin-right: 4px;
+}
+
+.Active {
+    color: #5588CC;
+}

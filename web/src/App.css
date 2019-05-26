@@ -10,6 +10,7 @@
 html, body {
     height: 100%;
     padding-bottom: 32px;
+    background-color: #F9F9FF;
 }
 
 a {

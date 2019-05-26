@@ -65,5 +65,6 @@ postAuthenticateUser AuthUserRequest{..} = do
       $ defaultSetCookie
           { setCookieName     = "token"
           , setCookieValue    = toS (_tokenText token)
+          , setCookiePath     = Just "/"
           , setCookieHttpOnly = True
           }
