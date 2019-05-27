@@ -5,6 +5,7 @@ module Configuration
   , configPort
   , configReadSchema
   , configStaticLocation
+  , configClientAddress
   , readConfig
   , readNumericEnv
   , readTextEnv
@@ -29,8 +30,7 @@ data Config' f = Config
   , _configPort           :: HKD f Int
   , _configConnection     :: HKD f BackendStore
   , _configReadSchema     :: HKD f Connection
-  -- , _configJWT            :: HKD f JWT
-  -- , _configCookies        :: HKD f Cookies
+  , _configClientAddress  :: HKD f Text
   }
 
 -- Concrete Configuration
@@ -50,8 +50,7 @@ readConfig Config {..} =
     <*> _configPort
     <*> _configConnection
     <*> _configReadSchema
-    -- <*> _configJWT
-    -- <*> _configCookies
+    <*> _configClientAddress
 
 -- Environment Reading Helpers
 --
