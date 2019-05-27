@@ -8,7 +8,7 @@ module Server
 import Protolude
 import Servant
 
-import Configuration                        ( Config )
+import Configuration                        ( Config, Config'(..) )
 import Network.HTTP.Types.Method            ( methodGet, methodPost, methodHead, methodDelete )
 import Network.Wai.Middleware.Cors          ( cors
                                             , simpleCorsResourcePolicy
@@ -102,7 +102,7 @@ implAPI =
 
 -- Create a Servant Server to run in WAI.
 server :: Config -> Application
-server config =
+server config@Config{..} =
   logStdout
     $ corsHandler
     $ serve proxyAPI
@@ -112,12 +112,11 @@ server config =
     corsHandler =
       cors . const $ Just $ simpleCorsResourcePolicy
         { corsRequestHeaders =
-            [ "Authorization"
-            , "Content-Type"
+            [ "Content-Type"
             ]
 
         , corsOrigins = Just
-            ( ["http://localhost:3000"], True )
+            ( [toS _configClientAddress], True )
 
         , corsMethods =
             [ methodGet

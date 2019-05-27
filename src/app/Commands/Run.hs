@@ -38,21 +38,12 @@ run _ = do
   readSchema  <- open "pixel.db"
   writeSchema <- open "event.db"
 
-  -- Configure Authentication Requirements
-  -- jwtKey     <- generateKey
-  -- let jwt     = defaultJWTSettings jwtKey
-  -- let cookies =
-  --       defaultCookieSettings
-  --         :. jwt
-  --         :. EmptyContext
-
   -- Create Parsed Configuration
   config <- readConfig $ Config
     { _configStaticLocation = readTextEnv "PIXEL_STATIC" "tmp/"
     , _configPort           = readNumericEnv "PIXEL_PORT" 6666
     , _configReadSchema     = pure readSchema
-    -- , _configJWT            = jwt
-    -- , _configCookies        = cookies
+    , _configClientAddress  = readTextEnv "PIXEL_CLIENT_ADDRESS" "http://localhost:3000"
     , _configConnection     = pure
         . hookMiddleware (handleProjections readSchema)
         $ makeSQLite3Backend writeSchema
