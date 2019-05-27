@@ -43,7 +43,7 @@ run _ = do
     { _configStaticLocation = readTextEnv "PIXEL_STATIC" "tmp/"
     , _configPort           = readNumericEnv "PIXEL_PORT" 6666
     , _configReadSchema     = pure readSchema
-    , _configClientAddress  = readTextEnv "PIXEL_CLIENT_ADDRESS" "localhost:3000"
+    , _configClientAddress  = readTextEnv "PIXEL_CLIENT_ADDRESS" "http://localhost:3000"
     , _configConnection     = pure
         . hookMiddleware (handleProjections readSchema)
         $ makeSQLite3Backend writeSchema
