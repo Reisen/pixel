@@ -8,7 +8,7 @@ module Server
 import Protolude
 import Servant
 
-import Configuration                        ( Config(..) )
+import Configuration                        ( Config, Config'(..) )
 import Network.HTTP.Types.Method            ( methodGet, methodPost, methodHead, methodDelete )
 import Network.Wai.Middleware.Cors          ( cors
                                             , simpleCorsResourcePolicy
@@ -116,7 +116,7 @@ server config@Config{..} =
             ]
 
         , corsOrigins = Just
-            ( [_configClientAddress], True )
+            ( [toS _configClientAddress], True )
 
         , corsMethods =
             [ methodGet
