@@ -60,7 +60,7 @@ jobs:
         - stage: dockerize
           if: branch = master
           script:
-            - ln -s $HOME/.stack .stack
+            - cp -r $HOME/.stack .stack
             - docker login -u $DOCKER_USER -p $DOCKER_PASS
             - docker build -t reisern/pixel:latest .
             - docker push reisern/pixel:latest
