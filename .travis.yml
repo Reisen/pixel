@@ -54,7 +54,7 @@ jobs:
 
         # Build Docker Releases for Master
         - stage: dockerize
-          if: branch = master
+          if: branch = master AND type = push
           script:
             - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
             - docker build -t reisern/pixel:latest .
