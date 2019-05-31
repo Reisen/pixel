@@ -56,6 +56,6 @@ jobs:
         - stage: dockerize
           if: branch = master
           script:
-            - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+            - docker login -u $DOCKER_USER -p $DOCKER_PASS
             - docker build -t reisern/pixel:latest .
             - docker push reisern/pixel:latest
