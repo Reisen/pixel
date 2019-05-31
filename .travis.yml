@@ -46,6 +46,10 @@ env:
 # Define Job Matrix
 jobs:
     include:
+        # Warm Cache
+        - stage: prepare cache
+          script: true
+
         # Build Dependencies
         - stage: compile
           script:
