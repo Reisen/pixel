@@ -38,7 +38,7 @@ const Image = (props: Props) => {
     // We need a Ref to the file element so we can capture events from the DOM
     // when it is set. This allows is to capture the image data when a file is
     // chosen and render it as a preview.
-    const ref               = useRef<HTMLInputElement>(null);
+    const ref = useRef<HTMLInputElement>(null);
 
     // TODO: Extract Into Helper
     const suggestions: string[] = props.images.reduce((all: string[], image) => {
@@ -103,6 +103,65 @@ const Image = (props: Props) => {
             <NavigationBar links={headerLinks} username={props.username} />
 
             <div className={styles.Root}>
+                <div className={styles.TagManager}>
+                    <TextInput placeholder="Enter Tags"/>
+
+                    <h1 className="Title--underline">Tags</h1>
+                    <p>These tags will apply to every image.</p>
+                    <Tag icon="tag" name="dog" value="" onIcon={() => {}}/>
+                    <Tag icon="tag" name="glasses" value="" onIcon={() => {}}/>
+                    <Tag icon="tag" name="too_cool_for_school" value="" onIcon={() => {}}/>
+                    <Tag icon="tag" name="barknold_schwarznegger" value="" onIcon={() => {}}/>
+                    <Tag icon="tag" name="admin" value="" onIcon={() => {}}/>
+
+                    <h1 className="Title--underline">Tags (Selection)</h1>
+                    <p>These tags will apply to your current selection.</p>
+                    <Tag icon="tag" name="hotdog" value="" onIcon={() => {}}/>
+                    <Tag icon="tag" name="hotterdog" value="" onIcon={() => {}}/>
+                </div>
+
+                <div className={styles.UploadGrid}>
+                    <div className={styles.Slot}>
+                        <div className={styles.UploadSquare}>
+                            <span>
+                                <i className="icofont-upload"/><br/>
+                                Choose Files
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className={styles.Slot}>
+                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
+                        </div>
+                    </div>
+
+                    <div className={styles.Slot}>
+                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={`${styles.Upload} ${styles.Upload_selected}`}>
+                        </div>
+                    </div>
+
+                    <div className={styles.Slot}>
+                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
+                        </div>
+                    </div>
+
+                    <div className={styles.Slot}>
+                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
+                        </div>
+                    </div>
+
+                    <div className={styles.Slot}>
+                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
+                        </div>
+                    </div>
+
+                    <div className={styles.Slot}>
+                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
+                        </div>
+                    </div>
+                </div>
+
+                {/*
                 <div className={styles.Tags}>
                     <Button
                         icon="upload"
@@ -135,6 +194,7 @@ const Image = (props: Props) => {
                         onClick={() => ref.current && ref.current.click()}
                         onChange={setImage} />
                 </div>
+                */}
             </div>
         </div>
     );

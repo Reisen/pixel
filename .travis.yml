@@ -1,23 +1,59 @@
+# Use downloaded stack tool to build, instead of the haskell/GHC setups that
+# travis provide. This is just a bit more flexible. Sudo is required to give us
+# access to docker.
+# ------------------------------------------------------------------------------
 sudo: false
 language: generic
 
+
+# Cache .stack for library dependencies, and .stack-work for fast re-builds for
+# pushing commits to a branch for example.
+# ------------------------------------------------------------------------------
 cache:
   directories:
     - $HOME/.stack
     - .stack-work/
+
+
+# We need APT for libgmp, which is a required library by GHC in order to implement
+# its bignum support.
+# ------------------------------------------------------------------------------
+services:
+  - docker
 
 addons:
   apt:
     packages:
       - libgmp-dev
 
+
+# Fetch and setup stack and any other dependencies.
+# ------------------------------------------------------------------------------
 before_install:
   - mkdir -p ~/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
   - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 
-install:
-  - stack --no-terminal --install-ghc test --only-dependencies
 
-script:
-  - stack --no-terminal test
+# Job Definition
+# ------------------------------------------------------------------------------
+env:
+  global:
+    - secure:
+
+# Define Job Matrix
+jobs:
+    include:
+        # Build Dependencies
+        - stage: compile
+          script:
+            - stack --no-terminal --install-ghc test --only-dependencies
+            - stack --no-terminal test
+
+        # Build Docker Releases for Master
+        - stage: dockerize
+          if: branch = master
+          script:
+            - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+            - docker build -t reisern/pixel:latest .
+            - docker push reisern/pixel:latest
