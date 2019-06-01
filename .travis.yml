@@ -52,7 +52,7 @@ jobs:
           script:
             - stack --no-terminal --install-ghc test --only-dependencies
             - stack --no-terminal test
-            - docker build -f Dockerfile.quick reisern/pixel:latest
+            - docker build -f Dockerfile.quick -t reisern/pixel:latest .
 
         # Build Docker Releases for Master
         - stage: dockerize
