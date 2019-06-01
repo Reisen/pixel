@@ -2,6 +2,7 @@
 # image.
 FROM    haskell:8.6.3 as depends
 WORKDIR /app
+COPY    stack.yaml package.yaml /app/
 COPY    .stack-work /app/.stack-work
 RUN     mv $(stack path --local-install-root)/bin/pixel .
 
