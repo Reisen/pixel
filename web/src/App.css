@@ -51,3 +51,14 @@ a {
     margin-bottom: 24px;
     margin-top: 40px;
 }
+
+.Title--underline {
+    font-size: 18px;
+    padding-bottom: 8px;
+    color: #336699;
+    font-weight: normal;
+    margin: 0px 0px;
+    margin-bottom: 24px;
+    margin-top: 40px;
+    border-bottom: 1px solid #DDF;
+}

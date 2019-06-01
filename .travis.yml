@@ -1,23 +1,61 @@
+# Use downloaded stack tool to build, instead of the haskell/GHC setups that
+# travis provide. This is just a bit more flexible. Sudo is required to give us
+# access to docker.
+# ------------------------------------------------------------------------------
 sudo: false
 language: generic
 
+
+# Cache .stack for library dependencies, and .stack-work for fast re-builds for
+# pushing commits to a branch for example.
+# ------------------------------------------------------------------------------
 cache:
   directories:
     - $HOME/.stack
     - .stack-work/
+
+
+# We need APT for libgmp, which is a required library by GHC in order to implement
+# its bignum support.
+# ------------------------------------------------------------------------------
+services:
+  - docker
 
 addons:
   apt:
     packages:
       - libgmp-dev
 
+
+# Fetch and setup stack and any other dependencies.
+# ------------------------------------------------------------------------------
 before_install:
   - mkdir -p ~/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
   - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 
-install:
-  - stack --no-terminal --install-ghc test --only-dependencies
 
-script:
-  - stack --no-terminal test
+# Job Definition
+# ------------------------------------------------------------------------------
+env:
+  global:
+    - secure: BKsroT4tng0jNCkB1qkgmymGWap1S1wdHAEfeMFSB4hXkUgZsqneV5pm/dKOsHG6V0bdHgEFm6Tj/zFjiC6lp1zOmBMurQ4cnzlNu9x2pETK4D6/Q3cDgxU3bbmDI/k/ZQXlzJOxHAZRWFQ3ddfn/+XDbkJ90E+hCUvcgXJSJKXsNA0zB+29mnDee9hlvvELtKNwBthJVhw6vM+H6p4sJkHaKOmV0nJ0dHffAUb7QRiXXa8dUPuQt84oY8uunPZnz5SsA2Ye4cklW9zw8Z3iiUZaQ5MJeVBjvbzUbhIsdRaN3NjKpWMV9hsTwNGy8MDUwCQ+z+BqrtvfbG+pwvkctefBvlSaWzjwgYT3tSwUoFw/LhJ7131pStLt0Qr+sKk0j27bidCyfqBGVM3hn3eadtHTN/BaWw77uPwI1rTudFOf69v+y14U1RjD4dd3trhkrzJUe1DbM4GnLFwqN3tU6cw03wJHpP1PRH3Rk7rbfdRfD14L5TM0UQqFHuux6xuDttjLjaouuysgopsmYkMSdCPztakwYatjJM8DapCtmmJBIzFOVx6WHkRmbHDPkCzHdafXjjEPPF1T0p6ty9XHHUTlgYoKBDi9FVEHKch8QbzOiGPhlWEMKsj+FTsMhPTMrWNMUZb1R44MX2YmYIQTjFi0vT75UPub2d69ar7+q54=
+    - secure: llCKz64ZI7R5N7vL+B1H/3LYMXxJf2eW07U6byWfKKe5R8eRr4lkcLBv27Qh7mDwCAVJYDqPavRBhhKlm6/9xhKNGvVWNOO50R0sycrv0nu+vf67XaJ0+1gwiG6DFc6YP0UVZnvupPC2k8pdfvslBCPFNbNPw16VLgi3tWNsIzAKJvKoBWgYFneXAotDAnVL5hoyrvx7rAqoqpj2XtlERNQhsvxkjgU5m0/Q24fEPkriFuyWG48+cB0jVosRzlaH7MXSh68r/b4vrw6uDuzM7KfA90K4sZ0ZI0cGRNBMIFGgv2Vo9e1jhJSEZQ3s8GJLX5tmIqz0l/NVq0ffhQw5XS6cw4POx5cYc8w2ge+ASTChkPIpiPjm0Sh/Jv9GZBAectexIAvk8Fto4vjOKmm2FL9WRK/U2P1ibliNlIPc7RTcCqodfFmgR+EehTIZ/76H7C9avVPnxgoiU72fxHXqdylnFYYcl8OaA/I831PreYbE427wXf+t6fhyluiTkZtdl7pnZdOcvwj1NqZemZSS1I4QIJ2H6pJFIlcFk7RRp3XO8xQnr0iRSAL2fv2kXDLNHQK8ubZhzrGxMskA40HaItlQDy5BtsA4EwiNIKGTXSZGekG1rsMj3rt/M+dCWvz/1/wfXr8aiFlE7bKEplWHpxQ9N5XmyjzYO+WCjFCefig=
+    - secure: i6udOftbiHwfE54hPdxXJDuzKAfglbSxXVcZgnQyJA1eyNNBK5hZXhZ355mplbHnrMx0FK+AaO/rQ5zh8UDKjb92GQpwt+SgIteetVxVbWsxxOaAZj+xMnwlzg6lxlv9Yj3fZh2Sl1tS9G5/aokDkjtoTuknvr+AIRYKKZvKb7ClnyYaFx/hP5zVFWKx2eUfLhDc6Pp3/6V69vqAufPb+CQ33c27UgsRStVXlEhZf3Xdl/qu4GYzqivoMzbb3LxW3ykbyeC94+IUPJv9fDMq7yaVqqEeddcpx2r/wLdeJ7G224O9m9okVM10pWIssy41jXiqKK6oloe6WBAnRDdGwvxu6nV1Q6ADeuyxU31SkmDWy6K7vfQWZuQfiyLNZ69LOOYlsk4u2Z9Y887yxJgou4zMtdfjbIntlct3i/QeTQlwyX3K+eBctsEusWrC8RERg/qNtrxyY2Y6j8g9RCVvaZoHBaM82QdTkD2TgqoHZWD3DC37QJXhuSpngzu3JqPZEerEf4WV6Rz8MIK51tRvMohPvXCgO4ZqKRCddW+5YTC1s+jnGGYDIeABg5Ini0ULP6GCfvHoZZGZjwnkKihKoaH800Xo65QrjMm9goEOCsO2jo2BGbK8ygAlAUSdPj9p9Peoj6BWNuaZHNYEwhEj7gr0jKih6xXMmuEqFeeaIy4=
+
+# Define Job Matrix
+jobs:
+    include:
+        # Build Dependencies
+        - stage: build
+          script:
+            - stack --no-terminal --install-ghc test --only-dependencies
+            - stack --no-terminal test
+
+        # Build Docker Releases for Master
+        - stage: deploy
+          if: branch = master AND type = push
+          script:
+            - docker login -u $DOCKER_USER -p $DOCKER_PASS
+            - docker build -f Dockerfile.quick -t reisern/pixel:latest .
+            - docker push reisern/pixel:latest
