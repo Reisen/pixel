@@ -3,8 +3,6 @@
 # cached between source changes.
 FROM    haskell:8.6.3 as depends
 WORKDIR /app
-COPY    .stack/ /root/.stack
-COPY    .stack-work /app/.stack-work
 COPY    stack.yaml package.yaml /app/
 RUN     stack build --resolver lts-13.4 --only-dependencies -j 2
 

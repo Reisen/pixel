@@ -46,19 +46,17 @@ env:
 # Define Job Matrix
 jobs:
     include:
-        # Warm Cache
-        - stage: prepare cache
-          script: true
-
         # Build Dependencies
         - stage: compile
+          if: branch = master
           script:
             - stack --no-terminal --install-ghc test --only-dependencies
             - stack --no-terminal test
+            - docker build -f Dockerfile.quick reisern/pixel:latest
 
         # Build Docker Releases for Master
         - stage: dockerize
-          if: branch = master
+          if: branch = master AND type = push
           script:
             - cp -r $HOME/.stack .stack
             - docker login -u $DOCKER_USER -p $DOCKER_PASS
