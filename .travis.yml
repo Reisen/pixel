@@ -47,18 +47,18 @@ env:
 jobs:
     include:
         # Build Dependencies
-        - stage: compile
-          if: branch = master
+        - stage: branch build
+          if: branch = master AND type != pull_request
           script:
             - stack --no-terminal --install-ghc test --only-dependencies
             - stack --no-terminal test
-            - docker build -f Dockerfile.quick -t reisern/pixel:latest .
 
         # Build Docker Releases for Master
-        - stage: dockerize
+        - stage: master build
           if: branch = master AND type = push
           script:
-            - cp -r $HOME/.stack .stack
+            - stack --no-terminal --install-ghc test --only-dependencies
+            - stack --no-terminal test
             - docker login -u $DOCKER_USER -p $DOCKER_PASS
-            - docker build -t reisern/pixel:latest .
+            - docker build -f Dockerfile.quick -t reisern/pixel:latest .
             - docker push reisern/pixel:latest
