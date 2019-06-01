@@ -34,8 +34,6 @@ before_install:
   - export PATH=$HOME/.local/bin:$PATH
   - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 
-script: true
-
 
 # Job Definition
 # ------------------------------------------------------------------------------
@@ -49,18 +47,15 @@ env:
 jobs:
     include:
         # Build Dependencies
-        - stage: branch build
-          if: branch = master AND type = pull_request
+        - stage: build
           script:
             - stack --no-terminal --install-ghc test --only-dependencies
             - stack --no-terminal test
 
         # Build Docker Releases for Master
-        - stage: master build
+        - stage: deploy
           if: branch = master AND type = push
           script:
-            - stack --no-terminal --install-ghc test --only-dependencies
-            - stack --no-terminal test
             - docker login -u $DOCKER_USER -p $DOCKER_PASS
             - docker build -f Dockerfile.quick -t reisern/pixel:latest .
             - docker push reisern/pixel:latest
