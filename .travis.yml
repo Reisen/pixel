@@ -48,7 +48,7 @@ jobs:
     include:
         # Build Dependencies
         - stage: branch build
-          if: branch = master AND type != pull_request
+          if: branch = master AND type = pull_request
           script:
             - stack --no-terminal --install-ghc test --only-dependencies
             - stack --no-terminal test
