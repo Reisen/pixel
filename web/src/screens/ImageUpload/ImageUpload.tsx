@@ -13,6 +13,7 @@ import Button                      from '../../components/Button';
 import TextInput                   from '../../components/TextInput';
 import NavigationBar               from '../../components/NavigationBar';
 import ImageInput                  from './components/ImageInput';
+import UploadGrid                  from './components/UploadGrid';
 import styles                      from './ImageUpload.module.css';
 
 
@@ -120,46 +121,7 @@ const Image = (props: Props) => {
                     <Tag icon="tag" name="hotterdog" value="" onIcon={() => {}}/>
                 </div>
 
-                <div className={styles.UploadGrid}>
-                    <div className={styles.Slot}>
-                        <div className={styles.UploadSquare}>
-                            <span>
-                                <i className="icofont-upload"/><br/>
-                                Choose Files
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={`${styles.Upload} ${styles.Upload_selected}`}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-                </div>
+                <UploadGrid />
 
                 {/*
                 <div className={styles.Tags}>

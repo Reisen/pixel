@@ -1,0 +1,68 @@
+.Root {
+    grid-column: 8 / 33;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 8px;
+}
+
+.Slot {
+    text-align: center;
+    font-size: 14px;
+    height: 152px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.Upload {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.Upload_selected {
+    border: 4px dashed #5588CC;
+    outline: 1px solid #5588CC;
+}
+
+.UploadSquare {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #BBF;
+    background-color: white;
+    position: relative;
+}
+
+.UploadSquare input {
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    margin: 0px;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.UploadSquare span {
+    text-align: center;
+    color: #5588CC;
+    display: inline-block;
+    margin: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: 72px;
+    height: 72px;
+    position: absolute;
+}
+
+.UploadSquare span i {
+    font-size: 32px;
+}
+
