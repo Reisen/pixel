@@ -11,42 +11,53 @@ interface Props {
     onClick?:  () => void;
 }
 
-type PreviewAction =
-    | string
-    | string[];
+// Manage Preview Metadata with a React Reducer
+// -----------------------------------------------------------------------------
+
+interface Meta {
+    name: string;
+    data: string;
+    size: number;
+}
 
 // Reducer Managing Dispatched Image Data
-const reducer = (state: string[], action: PreviewAction) =>
-    typeof action === 'string'
-        ? [...state, action]
-        : action;
+const reducer = (state: Meta[], payload: Meta | Meta[]): Meta[] =>
+    Array.isArray(payload)
+        ? payload
+        : [...state, payload];
 
+// Define Views for both List and Grid
+// -----------------------------------------------------------------------------
 
-const UploadList = (props: Props & { previews: string[] }) => (
+const UploadList = (props: Props & { previews: Meta[] }) => (
     <div className={styles.UploadList}>
         { props.previews.map(preview => (
-            <span>{ preview }</span>
+            <span key={preview.name}>
+                { preview.name }
+            </span>
           ))
         }
     </div>
 );
 
 const UploadGrid = React.forwardRef(
-    ( props: Props & { previews: string[] }
+    ( props: Props & { previews: Meta[] }
     , ref: React.Ref<HTMLInputElement>
     ) => (
         <React.Fragment>
             { props.previews.map((preview, k) => (
                 <div key={k} className={styles.Slot}>
-                    <div style={{backgroundImage: `url(${preview})`}} className={styles.Upload}>
+                    <div style={{backgroundImage: `url(${preview.data})`}} className={styles.Upload}>
                     </div>
                 </div>
-                ))
+              ))
             }
         </React.Fragment>
     )
 );
 
+// Wrap Views around an Upliad Input
+// -----------------------------------------------------------------------------
 
 const UploadWrapper = React.forwardRef(
     (props: Props, ref: React.Ref<HTMLInputElement>) => {
@@ -78,7 +89,11 @@ const UploadWrapper = React.forwardRef(
                                         // Fetch File Information
                                         const fileOfInterest = files.item(i);
                                         if (!fileOfInterest) continue;
-                                        dispatch(fileOfInterest.name);
+                                        dispatch({
+                                            name: fileOfInterest.name,
+                                            size: fileOfInterest.size,
+                                            data: '',
+                                        });
                                     }
                                 } else {
                                     for (let i = 0; i < files.length; i++) {
@@ -91,9 +106,11 @@ const UploadWrapper = React.forwardRef(
                                         const reader = new FileReader();
                                         (function (reader: FileReader) {
                                             reader.addEventListener('load', () => {
-                                                if (reader.result) {
-                                                    dispatch(reader.result.toString());
-                                                }
+                                                reader.result && dispatch({
+                                                    data: reader.result.toString(),
+                                                    name: '',
+                                                    size: 0
+                                                });
                                             });
 
                                             reader.readAsDataURL(fileOfInterest);
