@@ -66,3 +66,21 @@
     font-size: 32px;
 }
 
+.UploadList {
+    grid-column: 1 / 7;
+}
+
+.UploadList span {
+    display: block;
+    background-color: white;
+    font-size: 14px;
+    padding: 8px;
+    margin-bottom: 4px;
+    color: #5588CC;
+    border: 1px dashed #DDF;
+}
+
+.Stats {
+    grid-column: 1 / 7;
+    grod-row: 1 / 2;
+}
