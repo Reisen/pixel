@@ -82,19 +82,24 @@ const Image = (props: Props) => {
     }
 
     // Handle Image Upload
-    const onImageUpload = () => {
+    const startUpload = async () => {
         if (ref.current && ref.current.files) {
-            const data = new FormData();
-            data.append('image', ref.current.files[0]);
-            tags.map(tag => {
-                data.append('tag', tag);
-                return null;
-            });
-
             setUploading(true);
-            uploadImage(data).then(() => {
-                props.history.push('/');
-            });
+
+            // Upload Each File
+            for(let i = 0; i < ref.current.files.length; ++i) {
+                // Create FormData containing the image and tags.
+                const data = new FormData();
+                data.append('image', ref.current.files[i]);
+                tags.map(tag => {
+                    data.append('tag', tag);
+                    return null;
+                });
+
+                await uploadImage(data)
+            }
+
+            props.history.push('/');
         }
     }
 
@@ -105,6 +110,7 @@ const Image = (props: Props) => {
 
             <div className={styles.Root}>
                 <div className={styles.TagManager}>
+                    <Button onClick={startUpload} >Start Upload</Button>
                     <TextInput placeholder="Enter Tags"/>
 
                     <h1 className="Title--underline">Tags</h1>
@@ -121,42 +127,7 @@ const Image = (props: Props) => {
                     <Tag icon="tag" name="hotterdog" value="" onIcon={() => {}}/>
                 </div>
 
-                <UploadGrid />
-
-                {/*
-                <div className={styles.Tags}>
-                    <Button
-                        icon="upload"
-                        disabled={!image || uploading}
-                        onClick={onImageUpload}
-                    >
-                        { uploading ? 'Uploading...' : 'Upload' }
-                    </Button>
-
-                    <TextInput
-                        value={input}
-                        suggestion={suggestion && suggestion.trim()}
-                        onChange={onTagsChange}
-                        placeholder="Enter Tags Here"
-                        onKeyPress={onTagsKeyPress}
-                    />
-
-                    <div className={styles.TagList}>
-                        {
-                            tags.map((tag, k) =>
-                                <Tag key={k} icon="close-circled" name={tag} value="" onIcon={() => removeTag(k)}/>
-                            )
-                        }
-                    </div>
-                </div>
-
-                <div className={styles.Uploader}>
-                    <ImageInput
-                        ref={ref}
-                        onClick={() => ref.current && ref.current.click()}
-                        onChange={setImage} />
-                </div>
-                */}
+                <UploadGrid ref={ref} />
             </div>
         </div>
     );

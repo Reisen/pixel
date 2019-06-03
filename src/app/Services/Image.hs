@@ -9,15 +9,16 @@ module Services.Image
 --------------------------------------------------------------------------------
 
 import Protolude
+import Pixel.Lens
 import Control.Lens
 import Text.InterpolatedString.QM
-import API.Image.Commands            ( createImage, addTags, removeTags )
-import Configuration                 ( Config, configConnection, configReadSchema )
-import Data.UUID                     ( UUID, fromText )
-import Data.Text                     ( splitOn )
-import Database.SQLite.Simple        ( query_ )
-import Eventless                     ( runCommand, loadLatest, value )
-import Pixel.API.Images              ( Image(..), TagList, imageUploader )
+import API.Image.Commands         ( createImage, addTags, removeTags )
+import Configuration              ( Config, configConnection, configReadSchema )
+import Data.Text                  ( splitOn )
+import Data.UUID                  ( UUID, fromText )
+import Database.SQLite.Simple     ( query_ )
+import Eventless                  ( runCommand, loadLatest, value )
+import Pixel.Model.Images         ( Image(..), TagList )
 
 --------------------------------------------------------------------------------
 
@@ -28,7 +29,7 @@ pixelSaveImage
   -> Image
   -> m ()
 
-pixelSaveImage uuid image = case image ^. imageUploader of
+pixelSaveImage uuid image = case image ^. uploader of
   Nothing       -> pure ()
   Just userUUID -> do
     backend <- view configConnection
@@ -67,17 +68,17 @@ pixelLoadImages _limit = do
       ORDER BY  i.created DESC
   |]
 
-  pure . catMaybes $ images <&> \(textUUID, imageHash, date, tags) ->
+  pure . catMaybes $ images <&> \(textUUID, imageHash, date, imageTags) ->
     case fromText textUUID of
       Nothing   -> Nothing
       Just uuid -> Just
         ( uuid
         , Image
-          { _imageHash      = imageHash
-          , _imageTags      = fromMaybe [] $ splitOn "," <$> tags
-          , _imageUploader  = Nothing
-          , _imageCreatedAt = Just date
-          , _imageDeletedAt = Nothing
+          { _hash      = imageHash
+          , _tags      = fromMaybe [] $ splitOn "," <$> imageTags
+          , _uploader  = Nothing
+          , _createdAt = Just date
+          , _deletedAt = Nothing
           }
         )
 
@@ -89,9 +90,9 @@ pixelAppendTags
   -> TagList
   -> m ()
 
-pixelAppendTags uuid tags = do
+pixelAppendTags uuid imageTags = do
   backend <- view configConnection
-  void . runCommand backend uuid $ addTags tags
+  void . runCommand backend uuid $ addTags imageTags
 
 
 -- Remove tags
@@ -102,6 +103,6 @@ pixelRemoveTags
   -> TagList
   -> m ()
 
-pixelRemoveTags uuid tags = do
+pixelRemoveTags uuid imageTags = do
   backend <- view configConnection
-  void . runCommand backend uuid $ removeTags tags
+  void . runCommand backend uuid $ removeTags imageTags

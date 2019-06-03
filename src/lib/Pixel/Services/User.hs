@@ -4,9 +4,9 @@ module Pixel.Services.User
 where
 
 import Protolude
-import Data.Time             ( UTCTime )
-import Data.UUID             ( UUID )
-import Pixel.API.Users.Types ( User, Role, Email, Password )
+import Data.Time               ( UTCTime )
+import Data.UUID               ( UUID )
+import Pixel.Model.Users.Types ( User, Role, Email, Password )
 
 --------------------------------------------------------------------------------
 

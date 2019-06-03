@@ -1,4 +1,4 @@
-module Pixel.API.Users.Types.Role
+module Pixel.Model.Users.Types.Role
   ( Role (..)
   , RoleEvent (..)
   , Permission (..)
@@ -17,8 +17,8 @@ import Pixel.JSON           ( pixelToJSON, pixelToEncoding, pixelParseJSON )
 --------------------------------------------------------------------------------
 
 data Permission = Permission
-  { _permissionTarget :: !Text
-  , _permissionScope  :: !Text
+  { _target :: !Text
+  , _scope  :: !Text
   } deriving (Eq, Show, Generic, Typeable, Data)
 
 makePermission :: Text -> Maybe Permission
@@ -27,14 +27,14 @@ makePermission encoded = maybeResult . flip parse encoded $ do
   _      <- anyChar
   scope  <- many1 anyChar
   pure $ Permission
-    { _permissionTarget = toS $ target
-    , _permissionScope  = toS $ scope
+    { _target = toS $ target
+    , _scope  = toS $ scope
     }
 
 data Role = Role
-  { _roleName        :: !Text
-  , _rolePermissions :: ![Permission]
-  , _roleDeletedAt   :: !(Maybe UTCTime)
+  { _name        :: !Text
+  , _permissions :: ![Permission]
+  , _deletedAt   :: !(Maybe UTCTime)
   } deriving (Eq, Show, Generic, Typeable, Data)
 
 --------------------------------------------------------------------------------
@@ -65,6 +65,6 @@ type instance Events Role = RoleEvent
 
 instance Project Role where
   foldEvent role = \case
-    RolePermAdded v   -> role { _rolePermissions = nub (_rolePermissions role <> [v]) }
-    RolePermRemoved v -> role { _rolePermissions = delete v (_rolePermissions role) }
-    RoleDeletedAt v   -> role { _roleDeletedAt   = Just v }
+    RolePermAdded v   -> role { _permissions = nub (_permissions role <> [v]) }
+    RolePermRemoved v -> role { _permissions = delete v (_permissions role) }
+    RoleDeletedAt v   -> role { _deletedAt   = Just v }

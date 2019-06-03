@@ -7,29 +7,30 @@ module API.User.Routes.RegisterUser
 import Protolude hiding ( hash )
 import Servant
 
-import Crypto.Random       ( getRandomBytes )
-import Crypto.Hash         ( Digest, SHA3_224(..), hash )
-import Data.Aeson          ( FromJSON(..) )
-import Data.UUID           ( toText )
-import Data.UUID.V4        ( nextRandom )
-import Data.Time           ( getCurrentTime )
-import MonadPixel          ( Pixel )
-import Pixel               ( Error(..), pixelParseJSON )
-import Pixel.API.Token     ( Token(..) )
-import Pixel.API.Users     ( UserError(..)
-                           , AuthenticateDetails(..)
-                           , RegisterDetails(..)
-                           , RegistrationFailedReason(..)
-                           , handleRegisterUser
-                           , handleAuthenticateUser
-                           )
-import Web.Cookie          ( SetCookie(..), defaultSetCookie )
+import Crypto.Random     ( getRandomBytes )
+import Crypto.Hash       ( Digest, SHA3_224(..), hash )
+import Data.Aeson        ( FromJSON(..) )
+import Data.UUID         ( toText )
+import Data.UUID.V4      ( nextRandom )
+import Data.Time         ( getCurrentTime )
+import MonadPixel        ( Pixel )
+import Pixel             ( Error(..), pixelParseJSON )
+import Pixel.Model.Token ( Token(..) )
+import Pixel.Model.Users ( UserError(..)
+                         , AuthenticateDetails(..)
+                         , RegisterDetails(..)
+                         , RegistrationFailedReason(..)
+                         , handleRegisterUser
+                         , handleAuthenticateUser
+                         )
+import Web.Cookie        ( SetCookie(..), defaultSetCookie )
 
 --------------------------------------------------------------------------------
 
 -- Wrap up Token with a Set-Cookie header, this is so rather than storing the
 -- token in a JS accessible place we can secure the cookie with `Secure` and
 -- `HttpsOnly` to prevent XSS.
+
 type TokenInHeader = Headers
   '[ Header "Set-Cookie" SetCookie
    ] NoContent
@@ -60,17 +61,17 @@ postRegisterUser RegisterRequest{..} = do
   createdAt              <- liftIO getCurrentTime
   hashSalt :: ByteString <- liftIO $ getRandomBytes 16
   handleRegisterUser RegisterDetails
-    { _rdUUID      = uuid
-    , _rdCreatedAt = createdAt
-    , _rdEmail     = _registerRequestEmail
-    , _rdPassword  = _registerRequestPassword
-    , _rdSalt      = show (hash hashSalt :: Digest SHA3_224)
+    { _uuid      = uuid
+    , _createdAt = createdAt
+    , _email     = _registerRequestEmail
+    , _password  = _registerRequestPassword
+    , _salt      = show (hash hashSalt :: Digest SHA3_224)
     }
 
   -- Validate the user can authenticate.
   mayToken <- handleAuthenticateUser $ AuthenticateDetails
-    { _adEmail    = _registerRequestEmail
-    , _adPassword = _registerRequestPassword
+    { _email    = _registerRequestEmail
+    , _password = _registerRequestPassword
     }
 
   case mayToken of

@@ -7,9 +7,10 @@ module Server
 
 import Protolude
 import Servant
+import Pixel.API
 
 import Configuration                        ( Config, Config'(..) )
-import Network.HTTP.Types.Method            ( methodGet, methodPost, methodHead, methodDelete )
+import Network.HTTP.Types.Method          as Method
 import Network.Wai.Middleware.Cors          ( cors
                                             , simpleCorsResourcePolicy
                                             , corsRequestHeaders
@@ -20,9 +21,7 @@ import Network.Wai.Middleware.RequestLogger ( logStdout )
 import MonadPixel                           ( Pixel, runPixel )
 
 -- Import Routes
-import API.Image.Routes                     ( PostImage
-                                            , GetImage
-                                            , GetImageByUUID
+import API.Image.Routes                     ( GetImageByUUID
                                             , GetTags
                                             , PostTags
                                             , DeleteTags
@@ -49,8 +48,8 @@ import API.User.Routes                      ( AuthenticateUser
 
 type ImageAPI =
   "image" :>
-    (    PostImage        -- POST    /image/
-    :<|> GetImage         -- GET     /image/
+    (    CreateImageRoute -- POST    /image/
+    :<|> FetchImagesRoute -- GET     /image/
     :<|> GetImageByUUID   -- GET     /image/:uuid
     :<|> GetTags          -- GET     /image/:uuid/tags
     :<|> PostTags         -- POST    /image/:uuid/tags
@@ -119,9 +118,9 @@ server config@Config{..} =
             ( [toS _configClientAddress], True )
 
         , corsMethods =
-            [ methodGet
-            , methodPost
-            , methodHead
-            , methodDelete
+            [ Method.methodGet
+            , Method.methodPost
+            , Method.methodHead
+            , Method.methodDelete
             ]
         }

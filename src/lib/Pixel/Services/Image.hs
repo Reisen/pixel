@@ -6,8 +6,8 @@ where
 --------------------------------------------------------------------------------
 
 import Protolude
-import Data.UUID              ( UUID )
-import Pixel.API.Images.Types ( Image, TagList )
+import Data.UUID                ( UUID )
+import Pixel.Model.Images.Types ( Image, TagList )
 
 --------------------------------------------------------------------------------
 

@@ -32,9 +32,15 @@ const reducer = (state: Meta[], payload: Meta | Meta[]): Meta[] =>
 const UploadList = (props: Props & { previews: Meta[] }) => (
     <div className={styles.UploadList}>
         { props.previews.map(preview => (
-            <span key={preview.name}>
-                { preview.name }
-            </span>
+            <div key={preview.name}>
+                <span className={styles.UploadName}>
+                    <i className="icofont-upload-alt"/>
+                    { preview.name }
+                </span>
+                <span className={styles.UploadBar}>
+                    <span style={{marginRight: Math.floor((Math.random() * 100)) + '%'}}></span>
+                </span>
+            </div>
           ))
         }
     </div>
@@ -63,8 +69,9 @@ const UploadWrapper = React.forwardRef(
     (props: Props, ref: React.Ref<HTMLInputElement>) => {
         // Track Renderable Previews, the Limit is used to decide whether to
         // render a grid view or a list view.
-        const previewCountLimit    = 5;
-        const [previews, dispatch] = React.useReducer(reducer, []);
+        const previewCountLimit       = 50;
+        const [previews, dispatch]    = React.useReducer(reducer, []);
+        const [fileSize, setFileSize] = React.useState(0);
 
         const UploadSlot = () => (
             <div className={styles.Slot}>
@@ -130,7 +137,11 @@ const UploadWrapper = React.forwardRef(
 
         const UploadStat = () => (
             <div className={styles.Stats}>
-                Stats! { previews.length }
+                <i className="icofont-upload"/><br/>
+                Number of Files: { previews.length }<br/>
+                Total Upload Size: {
+                    (previews.reduce((n, preview) => n + preview.size, 0) / 1024 / 1024).toFixed(2)
+                }MB
             </div>
         );
 

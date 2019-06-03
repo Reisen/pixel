@@ -17,7 +17,7 @@ import Data.Time              ( UTCTime )
 import Data.UUID              ( UUID, toText, fromText )
 import Database.SQLite.Simple ( Only(..), query )
 import Eventless              ( runCommand )
-import Pixel.API.Users        ( User(..), Role(..), Email(..), Password(..), makePermission )
+import Pixel.Model.Users      ( User(..), Role(..), Email(..), Password(..), makePermission )
 
 --------------------------------------------------------------------------------
 
@@ -58,9 +58,9 @@ pixelFindRoleByName name = do
       Just uuid -> Just
         ( uuid
         , Role
-          { _roleName        = name
-          , _rolePermissions = catMaybes $ makePermission <$> splitOn "," permissions
-          , _roleDeletedAt   = Nothing
+          { _name        = name
+          , _permissions = catMaybes $ makePermission <$> splitOn "," permissions
+          , _deletedAt   = Nothing
           }
         )
 
@@ -83,9 +83,9 @@ pixelFindUserByUUID userUUID = do
     Nothing                          -> Nothing
     Just (username, email, password) ->
       Just $ def
-        { _userUsername = username
-        , _userEmail    = Just (Email email)
-        , _userPassword = Just (UnsafeMkPassword_ password)
+        { _username = username
+        , _email    = Just (Email email)
+        , _password = Just (UnsafeMkPassword_ password)
         }
 
 
@@ -111,8 +111,8 @@ pixelFindUserByEmail (Email email) = do
         Just uuid -> Just
           ( uuid
           , def
-            { _userUsername = username
-            , _userEmail    = Just (Email email)
-            , _userPassword = Just (UnsafeMkPassword_ password)
+            { _username = username
+            , _email    = Just (Email email)
+            , _password = Just (UnsafeMkPassword_ password)
             }
           )

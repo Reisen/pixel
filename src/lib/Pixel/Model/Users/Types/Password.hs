@@ -1,4 +1,4 @@
-module Pixel.API.Users.Types.Password
+module Pixel.Model.Users.Types.Password
   ( Password(..)
   , VerifyPasswordResult(..)
   , makePassword
@@ -17,7 +17,7 @@ import Pixel.JSON      ( pixelToJSON, pixelToEncoding, pixelParseJSON )
 -- Password's should never be just text, we wrap them here to enforce some kind
 -- of validation through construction.
 newtype Password = UnsafeMkPassword_
-  { passwordText :: Text
+  { _passwordText :: Text
   } deriving (Show, Generic, Typeable, Data)
 
 -- Used to distinguish between a legitimate failure, and a need to rehash from

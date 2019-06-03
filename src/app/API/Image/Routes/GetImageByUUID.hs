@@ -4,16 +4,13 @@ module API.Image.Routes.GetImageByUUID
   )
 where
 
---------------------------------------------------------------------------------
-
 import Protolude
 import Servant
-
-import API.Image.Types as API    ( Image(..) )
-import Pixel                     ( Error(..) )
-import Pixel.API.Token           ( Token )
-import Pixel.API.Images as Pixel ( Image(..), DigestText, ImageError(..), handleImageRequest )
-import MonadPixel                ( Pixel )
+import API.Image.Types as API      ( Image(..) )
+import Pixel                       ( Error(..) )
+import Pixel.Model.Token           ( Token )
+import Pixel.Model.Images as Pixel ( Image(..), DigestText, ImageError(..), handleImageRequest )
+import MonadPixel                  ( Pixel )
 
 --------------------------------------------------------------------------------
 
@@ -32,9 +29,9 @@ convertImage
   -> API.Image
 
 convertImage uuid Pixel.Image{..} = API.Image
-  { imagePath  = fold ["/static/images/", _imageHash]
-  , imageTags  = _imageTags
-  , imageThumb = fold ["/static/thumbs/", _imageHash]
+  { imagePath  = fold ["/static/images/", _hash]
+  , imageTags  = _tags
+  , imageThumb = fold ["/static/thumbs/", _hash]
   , imageUUID  = uuid
   }
 

@@ -5,16 +5,13 @@ module API.Image.Routes.GetTags
   )
 where
 
---------------------------------------------------------------------------------
-
 import Protolude
 import Servant
-
-import Data.Aeson       ( ToJSON(..) )
-import Pixel            ( Error(..), pixelToEncoding, pixelToJSON )
-import Pixel.API.Token  ( Token )
-import Pixel.API.Images ( DigestText, TagList, ImageError(..), fetchTags )
-import MonadPixel       ( Pixel )
+import Data.Aeson         ( ToJSON(..) )
+import Pixel              ( Error(..), pixelToEncoding, pixelToJSON )
+import Pixel.Model.Token  ( Token )
+import Pixel.Model.Images ( DigestText, TagList, ImageError(..), fetchTags )
+import MonadPixel         ( Pixel )
 
 --------------------------------------------------------------------------------
 

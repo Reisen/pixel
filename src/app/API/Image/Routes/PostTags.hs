@@ -8,12 +8,11 @@ where
 import Protolude
 import Control.Lens
 import Servant
-
-import Data.Aeson       ( FromJSON (..) )
-import MonadPixel       ( Pixel )
-import Pixel            ( Error(..), pixelParseJSON )
-import Pixel.API.Images ( DigestText, ImageError(..), TagList, addTags )
-import Pixel.API.Token  ( Token )
+import Data.Aeson         ( FromJSON (..) )
+import MonadPixel         ( Pixel )
+import Pixel              ( Error(..), pixelParseJSON )
+import Pixel.Model.Images ( DigestText, ImageError(..), TagList, addTags )
+import Pixel.Model.Token  ( Token )
 
 --------------------------------------------------------------------------------
 -- Post tags require:

@@ -9,9 +9,7 @@ import Protolude
 import Commands.Types           ( Options (..), GenerateTypesOptions (..) )
 
 import API.Image.Routes         ( DeleteTagsRequest
-                                , GetImageResponse
                                 , GetTagsResponse
-                                , PostImageRequest
                                 , PostTagsRequest
                                 )
 import API.Image.Types          ( Image )
@@ -37,7 +35,8 @@ import Options.Applicative      ( Parser
                                 , strOption
                                 )
 import Pixel                    ( createOptions )
-import Pixel.API.Token          ( Token )
+import Pixel.API
+import Pixel.Model.Token        ( Token )
 
 --------------------------------------------------------------------------------
 
@@ -68,9 +67,10 @@ generateTypes (GenerateTypesOptions folder) = do
       -- Image API Types
       , getTypeScriptDeclarations (Proxy @Image)
       , getTypeScriptDeclarations (Proxy @DeleteTagsRequest)
-      , getTypeScriptDeclarations (Proxy @GetImageResponse)
+      , getTypeScriptDeclarations (Proxy @FetchImagesResponse)
+      , getTypeScriptDeclarations (Proxy @GalleryImage)
       , getTypeScriptDeclarations (Proxy @GetTagsResponse)
-      , getTypeScriptDeclarations (Proxy @PostImageRequest)
+      , getTypeScriptDeclarations (Proxy @CreateImageRequest)
       , getTypeScriptDeclarations (Proxy @PostTagsRequest)
 
       -- User API Types
@@ -87,8 +87,12 @@ deriveTypeScript
   ''DeleteTagsRequest
 
 deriveTypeScript
-  (createOptions @GetImageResponse)
-  ''GetImageResponse
+  (createOptions @FetchImagesResponse)
+  ''FetchImagesResponse
+
+deriveTypeScript
+  (createOptions @GalleryImage)
+  ''GalleryImage
 
 deriveTypeScript
   (createOptions @GetTagsResponse)
@@ -99,8 +103,8 @@ deriveTypeScript
   ''PostTagsRequest
 
 deriveTypeScript
-  (createOptions @PostImageRequest)
-  ''PostImageRequest
+  (createOptions @CreateImageRequest)
+  ''CreateImageRequest
 
 deriveTypeScript
   (createOptions @Image)

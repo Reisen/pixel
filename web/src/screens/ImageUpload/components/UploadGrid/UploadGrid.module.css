@@ -66,21 +66,49 @@
     font-size: 32px;
 }
 
+/* Bar Rendered Above Large Upload Lists */
+.Stats {
+    grid-column: 1 / 7;
+    border: 1px solid black;
+    padding: 8px;
+    background-color: white;
+}
+
+/* Components Used to render UploadList */
 .UploadList {
     grid-column: 1 / 7;
 }
 
-.UploadList span {
-    display: block;
+.UploadList > div {
     background-color: white;
     font-size: 14px;
-    padding: 8px;
-    margin-bottom: 4px;
     color: #5588CC;
-    border: 1px dashed #DDF;
+    display: flex;
+    padding: 4px 8px;
+    flex-direction: row;
+    margin-bottom: 4px;
+    justify-content: space-between;
 }
 
-.Stats {
-    grid-column: 1 / 7;
-    grod-row: 1 / 2;
+.UploadName i {
+    width: 24px;
+    display: inline-block;
+}
+
+.UploadName {
+    flex: 3;
+}
+
+/* Bar Rendered into Upload List */
+.UploadBar {
+    flex: 1;
+    background-color: #EEF;
+    padding: 3px;
+    margin: 1px 0px;
+}
+
+.UploadBar > span {
+    background-color: #5588CC;
+    display: block;
+    height: 100%;
 }

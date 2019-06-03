@@ -5,14 +5,11 @@ module API.Image.Commands
   ) where
 
 import Protolude
+import Pixel.Lens
 import Control.Lens
-
-import Data.UUID        ( UUID )
-import Eventless        ( Command, emit, loadSnapshot )
-import Pixel.API.Images ( Image(..)
-                        , ImageEvent (..)
-                        , imageTags
-                        )
+import Data.UUID          ( UUID )
+import Eventless          ( Command, emit, loadSnapshot )
+import Pixel.Model.Images ( Image(..), ImageEvent(..) )
 
 --------------------------------------------------------------------------------
 
@@ -30,9 +27,9 @@ createImage
 
 createImage userUUID Image {..} = do
   emit (AssociatedWithUser userUUID)
-  emit (HashChanged _imageHash)
-  traverse_ (emit . TagAppended) _imageTags
-  traverse_ (emit . CreatedAt) _imageCreatedAt
+  emit (HashChanged _hash)
+  traverse_ (emit . TagAppended) _tags
+  traverse_ (emit . CreatedAt) _createdAt
 
 --------------------------------------------------------------------------------
 
@@ -47,7 +44,7 @@ addTags
 addTags newtags = loadSnapshot @(Maybe Image) >>= \case
   Nothing    -> pure ()
   Just image -> for_ newtags $ \tag ->
-    unless (elem tag $ image ^. imageTags)
+    unless (elem tag $ image ^. tags)
       $ emit (TagAppended tag)
 
 --------------------------------------------------------------------------------
@@ -63,5 +60,5 @@ removeTags
 removeTags newtags = loadSnapshot @(Maybe Image) >>= \case
   Nothing    -> pure ()
   Just image -> for_ newtags $ \tag ->
-    when (elem tag $ image ^. imageTags)
+    when (elem tag $ image ^. tags)
       $ emit (TagRemoved tag)

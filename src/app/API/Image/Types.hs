@@ -2,13 +2,10 @@ module API.Image.Types
   ( Image (..)
   ) where
 
---------------------------------------------------------------------------------
-
 import Protolude
-
-import Data.Aeson       ( ToJSON(..) )
-import Pixel            ( pixelToEncoding, pixelToJSON )
-import Pixel.API.Images ( DigestText )
+import Data.Aeson         ( ToJSON(..) )
+import Pixel              ( pixelToEncoding, pixelToJSON )
+import Pixel.Model.Images ( DigestText )
 
 --------------------------------------------------------------------------------
 

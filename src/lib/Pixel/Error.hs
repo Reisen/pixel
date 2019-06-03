@@ -5,8 +5,8 @@ module Pixel.Error
 where
 
 import Protolude
-import Pixel.API.Images.Error ( ImageError(..) )
-import Pixel.API.Users.Error  ( UserError(..) )
+import Pixel.Model.Images.Error ( ImageError(..) )
+import Pixel.Model.Users.Error  ( UserError(..) )
 
 --------------------------------------------------------------------------------
 

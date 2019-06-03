@@ -1,54 +1,12 @@
 module API.Image.Routes.GetImage
-  ( GetImage
-  , GetImageResponse
-  , getImage
-  )
-where
-
---------------------------------------------------------------------------------
+  ( getImage
+  ) where
 
 import Protolude
-import Servant
-
-import API.Cookies               ( CookieToken(..) )
-import API.Image.Types as API    ( Image(..) )
-import Data.Aeson                ( ToJSON(..) )
-import MonadPixel                ( Pixel )
-import Pixel                     ( Error(..), pixelToEncoding, pixelToJSON )
--- import Pixel.API.Token           ( Token )
-import Pixel.API.Images as Pixel ( Image(..), ImageError(..), DigestText, fetchImages )
-
---------------------------------------------------------------------------------
-
--- We wrap up responses in an HTTP endpoint type, in order to abstract
--- away from the backend.
-type GetImage =
-  Header "Cookie" CookieToken
-    :> Get '[JSON] GetImageResponse
-
---------------------------------------------------------------------------------
-
-newtype GetImageResponse = GetImageResponse
-  { getImageResponseImages :: [API.Image]
-  } deriving (Show, Generic)
-
-instance ToJSON GetImageResponse where
-  toEncoding = pixelToEncoding
-  toJSON     = pixelToJSON
-
---------------------------------------------------------------------------------
-
-convertImage
-  :: DigestText
-  -> Pixel.Image
-  -> API.Image
-
-convertImage uuid Pixel.Image{..} = API.Image
-  { imagePath  = fold ["/static/images/", _imageHash]
-  , imageThumb = fold ["/static/thumbs/", _imageHash]
-  , imageUUID  = uuid
-  , imageTags  = _imageTags
-  }
+import MonadPixel                  ( Pixel )
+import Pixel                       ( Error(..) )
+import Pixel.API                   ( FetchImagesResponse(..), GalleryImage(..), CookieToken(..) )
+import Pixel.Model.Images as Pixel ( Image(..), ImageError(..), fetchImages )
 
 --------------------------------------------------------------------------------
 
@@ -56,15 +14,33 @@ convertImage uuid Pixel.Image{..} = API.Image
 -- to return from the backend. By default this is all images ordered by upload
 -- date and the filter should encompass all possible queries a user might have,
 -- from tags to uploader, to ordering.
+
 getImage
   :: Maybe CookieToken
-  -> Pixel GetImageResponse
+  -> Pixel FetchImagesResponse
 
 getImage Nothing                    = throwError (ImageError MissingToken)
 getImage (Just (CookieToken token)) = do
   putText (show token)
   images <- fetchImages
-  pure GetImageResponse
-    { getImageResponseImages =
-        map (uncurry convertImage . first show) images
+  pure FetchImagesResponse
+    { _images = uncurry convertImage . first show <$> images
     }
+
+--------------------------------------------------------------------------------
+
+convertImage
+  :: Text
+  -> Image
+  -> GalleryImage
+
+convertImage uuid Image{..} = GalleryImage
+  { _dimensions = (0, 0)
+  , _filename   = ""
+  , _filesize   = 0
+  , _path       = fold ["/static/images/", _hash]
+  , _tags       = _tags
+  , _thumb      = fold ["/static/thumbs/", _hash]
+  , _uuid       = uuid
+  }
+

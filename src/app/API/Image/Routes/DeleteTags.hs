@@ -4,17 +4,14 @@ module API.Image.Routes.DeleteTags
   , postDeleteTags
   ) where
 
---------------------------------------------------------------------------------
-
 import Protolude
 import Control.Lens
 import Servant
-
-import Data.Aeson       ( FromJSON(..) )
-import Pixel            ( Error(..), pixelParseJSON )
-import Pixel.API.Token  ( Token )
-import Pixel.API.Images ( ImageError(..), DigestText, TagList, deleteTags )
-import MonadPixel       ( Pixel )
+import Data.Aeson         ( FromJSON(..) )
+import Pixel              ( Error(..), pixelParseJSON )
+import Pixel.Model.Token  ( Token )
+import Pixel.Model.Images ( ImageError(..), DigestText, TagList, deleteTags )
+import MonadPixel         ( Pixel )
 
 --------------------------------------------------------------------------------
 

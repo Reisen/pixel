@@ -7,7 +7,7 @@ where
 
 import Protolude
 
-import qualified Pixel.API.Images.Types        as Pixel
+import qualified Pixel.Model.Images.Types as Pixel
 
 --------------------------------------------------------------------------------
 
