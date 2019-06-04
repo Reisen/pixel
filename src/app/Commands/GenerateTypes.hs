@@ -8,7 +8,6 @@ module Commands.GenerateTypes
 import Protolude
 import Commands.Types           ( Options (..), GenerateTypesOptions (..) )
 
-import API.Image.Routes         ( DeleteTagsRequest )
 import API.Image.Types          ( Image )
 import API.User.Routes          ( AuthUserRequest, RegisterRequest )
 import API.User.Types           ( User, DangerousUser )
@@ -34,6 +33,7 @@ import Options.Applicative      ( Parser
 import Pixel                    ( createOptions )
 import Pixel.API.AppendImageTags as AppendImageTags
 import Pixel.API.CreateImage     as CreateImage
+import Pixel.API.DeleteImageTags as DeleteImageTags
 import Pixel.API.FetchImages     as FetchImages
 import Pixel.API.FetchImageTags  as FetchImageTags
 
@@ -67,7 +67,7 @@ generateTypes (GenerateTypesOptions folder) = do
 
       -- Image API Types
       , getTypeScriptDeclarations (Proxy @Image)
-      , getTypeScriptDeclarations (Proxy @DeleteTagsRequest)
+      , getTypeScriptDeclarations (Proxy @DeleteImageTags.Request)
       , getTypeScriptDeclarations (Proxy @FetchImages.Response)
       , getTypeScriptDeclarations (Proxy @FetchImages.GalleryImage)
       , getTypeScriptDeclarations (Proxy @FetchImageTags.Response)
@@ -84,8 +84,8 @@ generateTypes (GenerateTypesOptions folder) = do
 -- Generate TypeScript Instances
 
 deriveTypeScript
-  (createOptions @DeleteTagsRequest)
-  ''DeleteTagsRequest
+  (createOptions @DeleteImageTags.Request)
+  ''DeleteImageTags.Request
 
 deriveTypeScript
   (createOptions @FetchImages.Response)

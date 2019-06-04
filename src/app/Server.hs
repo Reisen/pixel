@@ -7,12 +7,6 @@ module Server
 
 import Protolude
 import Servant
-import Pixel.API.AppendImageTags  as AppendImageTags
-import Pixel.API.CreateImage      as CreateImage
--- import Pixel.API.DeleteTags       as DeleteTags
-import Pixel.API.FetchImageByUUID as FetchImageByUUID
-import Pixel.API.FetchImageTags   as FetchImageTags
-import Pixel.API.FetchImages      as FetchImages
 
 import Configuration                        ( Config, Config'(..) )
 import Network.HTTP.Types.Method          as Method
@@ -24,16 +18,16 @@ import Network.Wai.Middleware.Cors          ( cors
                                             )
 import Network.Wai.Middleware.RequestLogger ( logStdout )
 import MonadPixel                           ( Pixel, runPixel )
+import Pixel.API.AppendImageTags           as AppendImageTags
+import Pixel.API.CreateImage               as CreateImage
+import Pixel.API.DeleteImageTags           as DeleteImageTags
+import Pixel.API.FetchImageByUUID          as FetchImageByUUID
+import Pixel.API.FetchImageTags            as FetchImageTags
+import Pixel.API.FetchImages               as FetchImages
+
 
 -- Import Routes
-import API.Image.Routes                     ( DeleteTags
-                                            , getImage
-                                            , getImageByUUID
-                                            , getTags
-                                            , postDeleteTags
-                                            , postImage
-                                            , postTags
-                                            )
+import API.Image.Routes                    as Routes
 import API.User.Routes                      ( AuthenticateUser
                                             , RegisterUser
                                             , postAuthenticateUser
@@ -54,8 +48,8 @@ type ImageAPI =
     :<|> FetchImages.Route      -- GET     /image/
     :<|> FetchImageByUUID.Route -- GET     /image/:uuid
     :<|> FetchImageTags.Route   -- GET     /image/:uuid/tags
-    :<|> AppendImageTags.Route -- POST    /image/:uuid/tags
-    :<|> DeleteTags            -- DELETE  /image/:uuid/tags
+    :<|> AppendImageTags.Route  -- POST    /image/:uuid/tags
+    :<|> DeleteImageTags.Route  -- DELETE  /image/:uuid/tags
     )
 
 type UserAPI =
@@ -86,12 +80,12 @@ implAPI =
 
   where
     imageAPI =
-      (    postImage
-      :<|> getImage
-      :<|> getImageByUUID
-      :<|> getTags
-      :<|> postTags
-      :<|> postDeleteTags
+      (    Routes.postImage
+      :<|> Routes.getImage
+      :<|> Routes.getImageByUUID
+      :<|> Routes.getTags
+      :<|> Routes.postTags
+      :<|> Routes.postDeleteTags
       )
 
     userAPI =

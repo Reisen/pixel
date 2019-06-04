@@ -1,46 +1,23 @@
 module API.Image.Routes.DeleteTags
-  ( DeleteTags
-  , DeleteTagsRequest
-  , postDeleteTags
+  ( postDeleteTags
   ) where
 
 import Protolude
 import Control.Lens
 import Servant
-import Data.Aeson         ( FromJSON(..) )
-import Pixel              ( Error(..), pixelParseJSON )
-import Pixel.Model.Token  ( Token )
-import Pixel.Model.Images ( ImageError(..), DigestText, TagList, deleteTags )
-import MonadPixel         ( Pixel )
-
---------------------------------------------------------------------------------
-
--- We wrap up responses in an HTTP endpoint type, in order to abstract away
--- from the backend.
-type DeleteTags =
-  Header "Authorization" Token
-    :> Capture "uuid" Text
-    :> "tags"
-    :> ReqBody '[JSON] DeleteTagsRequest
-    :> Delete '[JSON] NoContent
-
---------------------------------------------------------------------------------
-
-newtype DeleteTagsRequest = DeleteTagsRequest
-  { deleteTagsRequestTags :: TagList
-  } deriving (Show, Generic)
-
-instance FromJSON DeleteTagsRequest where
-  parseJSON = pixelParseJSON
-
-makeFields ''DeleteTagsRequest
+import Pixel                     ( Error(..) )
+import Pixel.API                 ( CookieToken(..) )
+import Pixel.API.DeleteImageTags ( Request(..) )
+import Pixel.Lens
+import Pixel.Model.Images        ( ImageError(..), DigestText, deleteTags )
+import MonadPixel                ( Pixel )
 
 --------------------------------------------------------------------------------
 
 postDeleteTags
-  :: Maybe Token
+  :: Maybe CookieToken
   -> DigestText
-  -> DeleteTagsRequest
+  -> Request
   -> Pixel NoContent
 
 postDeleteTags Nothing _ _ = throwError (ImageError MissingToken)

@@ -56,8 +56,8 @@ pixelLoadImages
   -> m [(UUID, Image)]
 
 pixelLoadImages _limit = do
-  schema <- view configReadSchema
-  images <- liftIO $ query_ schema [qns|
+  schema    <- view configReadSchema
+  imageRows <- liftIO $ query_ schema [qns|
       SELECT    i.uuid
               , i.hash
               , i.created
@@ -68,7 +68,7 @@ pixelLoadImages _limit = do
       ORDER BY  i.created DESC
   |]
 
-  pure . catMaybes $ images <&> \(textUUID, imageHash, date, imageTags) ->
+  pure . catMaybes $ imageRows <&> \(textUUID, imageHash, date, imageTags) ->
     case fromText textUUID of
       Nothing   -> Nothing
       Just uuid -> Just
