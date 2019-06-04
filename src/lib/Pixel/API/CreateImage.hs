@@ -1,7 +1,7 @@
 module Pixel.API.CreateImage
-  ( CreateImageRoute
-  , CreateImageRequest(..)
-  , CreateImageResponse(..)
+  ( Route
+  , Request(..)
+  , Response(..)
   ) where
 
 import Protolude
@@ -12,34 +12,34 @@ import Pixel.API.Types   ( CookieToken )
 
 --------------------------------------------------------------------------------
 
-type CreateImageRoute =
+type Route =
   Header "Cookie" CookieToken
-    :> MultipartForm Tmp CreateImageRequest
-    :> Post '[JSON] CreateImageResponse
+    :> MultipartForm Tmp Request
+    :> Post '[JSON] Response
 
 --------------------------------------------------------------------------------
 
-data CreateImageRequest = CreateImageRequest
+data Request = Request
   { _path :: !Text
   , _tags :: ![Text]
   } deriving (Show, Generic)
 
-data CreateImageResponse = CreateImageResponse
+data Response = Response
   { _uuid :: !Text
   } deriving (Show, Generic)
 
 --------------------------------------------------------------------------------
 
-instance FromMultipart Tmp CreateImageRequest where
+instance FromMultipart Tmp Request where
   fromMultipart multi =
     let allInputs = inputs multi in
     let tagInputs = flip filter allInputs $ (== "tag") . iName in
     let allValues = iValue <$> tagInputs in
-    CreateImageRequest
+    Request
       <$> map (toS . fdPayload) (lookupFile "image" multi)
       <*> pure allValues
 
-instance ToJSON CreateImageRequest where
-instance ToJSON CreateImageResponse where
-instance FromJSON CreateImageRequest where
-instance FromJSON CreateImageResponse where
+instance ToJSON Request where
+instance ToJSON Response where
+instance FromJSON Request where
+instance FromJSON Response where

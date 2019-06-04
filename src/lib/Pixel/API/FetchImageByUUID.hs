@@ -1,6 +1,6 @@
 module Pixel.API.FetchImageByUUID
-  ( FetchImageByUUIDRoute
-  , FetchImageByUUIDResponse(..)
+  ( Route
+  , Response(..)
   ) where
 
 import Protolude
@@ -10,14 +10,14 @@ import Pixel.API.Types ( CookieToken )
 
 --------------------------------------------------------------------------------
 
-type FetchImageByUUIDRoute =
+type Route =
   Header "Authorization" CookieToken
     :> Capture "uuid" Text
-    :> Get '[JSON] FetchImageByUUIDResponse
+    :> Get '[JSON] Response
 
 --------------------------------------------------------------------------------
 
-data FetchImageByUUIDResponse = FetchImageByUUIDResponse
+data Response = Response
   { _dimensions :: (Int, Int)
   , _filename   :: !Text
   , _filesize   :: !Int
@@ -29,5 +29,5 @@ data FetchImageByUUIDResponse = FetchImageByUUIDResponse
 
 --------------------------------------------------------------------------------
 
-instance ToJSON FetchImageByUUIDResponse where
-instance FromJSON FetchImageByUUIDResponse where
+instance ToJSON Response where
+instance FromJSON Response where

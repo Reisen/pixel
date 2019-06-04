@@ -4,14 +4,15 @@ module API.Image.Routes.PostImage
 
 import Protolude
 import Control.Lens
-import Configuration        ( configStaticLocation )
-import MonadPixel           ( Pixel )
-import Data.ByteString as B ( readFile )
-import Data.UUID.V4         ( nextRandom )
-import Data.Time            ( getCurrentTime )
-import Pixel                ( Error(..) )
-import Pixel.API            ( CreateImageRequest(..), CreateImageResponse(..), CookieToken(..) )
-import Pixel.Model.Images   ( ImageError(..), ImageDetails(..), createImage )
+import Configuration         ( configStaticLocation )
+import MonadPixel            ( Pixel )
+import Data.ByteString as B  ( readFile )
+import Data.UUID.V4          ( nextRandom )
+import Data.Time             ( getCurrentTime )
+import Pixel                 ( Error(..) )
+import Pixel.API             ( CookieToken(..) )
+import Pixel.API.CreateImage ( Request(..), Response(..) )
+import Pixel.Model.Images    ( ImageError(..), ImageDetails(..), createImage )
 
 --------------------------------------------------------------------------------
 
@@ -21,14 +22,14 @@ import Pixel.Model.Images   ( ImageError(..), ImageDetails(..), createImage )
 
 postImage
   :: Maybe CookieToken
-  -> CreateImageRequest
-  -> Pixel CreateImageResponse
+  -> Request
+  -> Pixel Response
 
-postImage Nothing _ = throwError (ImageError MissingToken)
-postImage (Just (CookieToken token)) CreateImageRequest{..} = do
+postImage Nothing _                              = throwError (ImageError MissingToken)
+postImage (Just (CookieToken token)) Request{..} = do
   directory <- view configStaticLocation
   content   <- liftIO . B.readFile . toS $ _path
   uuid      <- liftIO nextRandom
   createdAt <- liftIO getCurrentTime
   createImage $ ImageDetails content createdAt directory token _tags uuid
-  pure . CreateImageResponse . show $ uuid
+  pure . Response . show $ uuid

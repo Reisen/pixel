@@ -1,6 +1,6 @@
 module Pixel.API.FetchImages
-  ( FetchImagesRoute
-  , FetchImagesResponse(..)
+  ( Route
+  , Response(..)
   , GalleryImage(..)
   ) where
 
@@ -11,9 +11,9 @@ import Pixel.API.Types ( CookieToken )
 
 --------------------------------------------------------------------------------
 
-type FetchImagesRoute =
+type Route =
   Header "Cookie" CookieToken
-    :> Get '[JSON] FetchImagesResponse
+    :> Get '[JSON] Response
 
 --------------------------------------------------------------------------------
 
@@ -28,13 +28,13 @@ data GalleryImage = GalleryImage
   } deriving (Show, Generic)
 
 
-newtype FetchImagesResponse = FetchImagesResponse
+newtype Response = Response
   { _images :: [GalleryImage]
   } deriving (Show, Generic)
 
 --------------------------------------------------------------------------------
 
 instance ToJSON GalleryImage where
-instance ToJSON FetchImagesResponse where
+instance ToJSON Response where
 instance FromJSON GalleryImage where
-instance FromJSON FetchImagesResponse where
+instance FromJSON Response where

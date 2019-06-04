@@ -68,7 +68,7 @@
 
 /* Bar Rendered Above Large Upload Lists */
 .Stats {
-    grid-column: 1 / 7;
+    grid-column: 2 / 7;
     border: 1px solid black;
     padding: 8px;
     background-color: white;
@@ -84,10 +84,10 @@
     font-size: 14px;
     color: #5588CC;
     display: flex;
-    padding: 4px 8px;
+    padding: 8px 8px;
     flex-direction: row;
-    margin-bottom: 4px;
     justify-content: space-between;
+    margin-bottom: 2px;
 }
 
 .UploadName i {
@@ -104,11 +104,13 @@
     flex: 1;
     background-color: #EEF;
     padding: 3px;
-    margin: 1px 0px;
+    margin: 2px 0px 3px 0px;;
+    border-radius: 4px;
 }
 
 .UploadBar > span {
-    background-color: #5588CC;
+    background-color: #336699;
     display: block;
     height: 100%;
+    border-radius: 2px;
 }

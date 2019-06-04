@@ -3,10 +3,11 @@ module API.Image.Routes.GetImage
   ) where
 
 import Protolude
-import MonadPixel         ( Pixel )
-import Pixel              ( Error(..) )
-import Pixel.API          ( FetchImagesResponse(..), GalleryImage(..), CookieToken(..) )
-import Pixel.Model.Images ( Image(..), ImageError(..), fetchImages )
+import MonadPixel            ( Pixel )
+import Pixel                 ( Error(..) )
+import Pixel.API             ( CookieToken(..) )
+import Pixel.API.FetchImages ( Response(..), GalleryImage(..) )
+import Pixel.Model.Images    ( Image(..), ImageError(..), fetchImages )
 
 --------------------------------------------------------------------------------
 
@@ -17,13 +18,13 @@ import Pixel.Model.Images ( Image(..), ImageError(..), fetchImages )
 
 getImage
   :: Maybe CookieToken
-  -> Pixel FetchImagesResponse
+  -> Pixel Response
 
 getImage Nothing                    = throwError (ImageError MissingToken)
 getImage (Just (CookieToken token)) = do
   putText (show token)
   images <- fetchImages
-  pure FetchImagesResponse
+  pure Response
     { _images = uncurry convertImage . first show <$> images
     }
 

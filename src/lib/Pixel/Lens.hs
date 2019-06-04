@@ -7,13 +7,23 @@ import Pixel.Model.Users.Types.Password
 import Pixel.Model.Users.Types.User
 import Pixel.Model.Users.Types.Role
 
+import Pixel.API.AppendImageTags         as AppendImageTags
+
 --------------------------------------------------------------------------------
 
-makeFieldsNoPrefix ''Image
+-- Create HasX style lenses for core model types.
+
 makeFieldsNoPrefix ''Email
+makeFieldsNoPrefix ''Image
 makeFieldsNoPrefix ''Password
-makePrisms         ''VerifyPasswordResult
 makeFieldsNoPrefix ''Permission
 makeFieldsNoPrefix ''Role
 makeFieldsNoPrefix ''User
 makePrisms         ''UserState
+makePrisms         ''VerifyPasswordResult
+
+--------------------------------------------------------------------------------
+
+-- Create HasX style lenses for Request/Response types.
+
+makeFieldsNoPrefix ''AppendImageTags.Request

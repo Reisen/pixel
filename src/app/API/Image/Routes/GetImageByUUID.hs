@@ -3,17 +3,18 @@ module API.Image.Routes.GetImageByUUID
   ) where
 
 import Protolude
-import Pixel              ( Error(..) )
-import Pixel.API          ( FetchImageByUUIDResponse(..), CookieToken(..) )
-import Pixel.Model.Images ( Image(..), DigestText, ImageError(..), handleImageRequest )
-import MonadPixel         ( Pixel )
+import Pixel                      ( Error(..) )
+import Pixel.API                  ( CookieToken(..) )
+import Pixel.API.FetchImageByUUID ( Response(..) )
+import Pixel.Model.Images         ( Image(..), DigestText, ImageError(..), handleImageRequest )
+import MonadPixel                 ( Pixel )
 
 --------------------------------------------------------------------------------
 
 getImageByUUID
   :: Maybe CookieToken
   -> DigestText
-  -> Pixel FetchImageByUUIDResponse
+  -> Pixel Response
 
 getImageByUUID Nothing _     = throwError (ImageError MissingToken)
 getImageByUUID (Just _) uuid =
@@ -26,9 +27,9 @@ getImageByUUID (Just _) uuid =
 convertImage
   :: DigestText
   -> Image
-  -> FetchImageByUUIDResponse
+  -> Response
 
-convertImage uuid Image{..} = FetchImageByUUIDResponse
+convertImage uuid Image{..} = Response
   { _dimensions = (0, 0)
   , _filename   = ""
   , _filesize   = 0

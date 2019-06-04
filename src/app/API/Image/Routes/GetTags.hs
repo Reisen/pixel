@@ -4,20 +4,21 @@ module API.Image.Routes.GetTags
 where
 
 import Protolude
-import Pixel              ( Error(..) )
-import Pixel.API          ( FetchImageTagsResponse(..), CookieToken(..) )
-import Pixel.Model.Images ( DigestText, ImageError(..), fetchTags )
-import MonadPixel         ( Pixel )
+import Pixel                    ( Error(..) )
+import Pixel.API                ( CookieToken(..) )
+import Pixel.API.FetchImageTags ( Response(..) )
+import Pixel.Model.Images       ( DigestText, ImageError(..), fetchTags )
+import MonadPixel               ( Pixel )
 
 --------------------------------------------------------------------------------
 
 getTags
   :: Maybe CookieToken
   -> DigestText
-  -> Pixel FetchImageTagsResponse
+  -> Pixel Response
 
 getTags Nothing _     = throwError (ImageError MissingToken)
 getTags (Just _) uuid =
   fetchTags uuid >>= \case
     Nothing       -> throwError (ImageError InvalidUUID)
-    Just response -> pure . FetchImageTagsResponse $ response
+    Just response -> pure . Response $ response

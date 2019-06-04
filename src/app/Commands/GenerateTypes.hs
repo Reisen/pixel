@@ -8,9 +8,7 @@ module Commands.GenerateTypes
 import Protolude
 import Commands.Types           ( Options (..), GenerateTypesOptions (..) )
 
-import API.Image.Routes         ( DeleteTagsRequest
-                                , PostTagsRequest
-                                )
+import API.Image.Routes         ( DeleteTagsRequest )
 import API.Image.Types          ( Image )
 import API.User.Routes          ( AuthUserRequest, RegisterRequest )
 import API.User.Types           ( User, DangerousUser )
@@ -34,7 +32,11 @@ import Options.Applicative      ( Parser
                                 , strOption
                                 )
 import Pixel                    ( createOptions )
-import Pixel.API
+import Pixel.API.AppendImageTags as AppendImageTags
+import Pixel.API.CreateImage     as CreateImage
+import Pixel.API.FetchImages     as FetchImages
+import Pixel.API.FetchImageTags  as FetchImageTags
+
 import Pixel.Model.Token        ( Token )
 
 --------------------------------------------------------------------------------
@@ -66,11 +68,11 @@ generateTypes (GenerateTypesOptions folder) = do
       -- Image API Types
       , getTypeScriptDeclarations (Proxy @Image)
       , getTypeScriptDeclarations (Proxy @DeleteTagsRequest)
-      , getTypeScriptDeclarations (Proxy @FetchImagesResponse)
-      , getTypeScriptDeclarations (Proxy @GalleryImage)
-      , getTypeScriptDeclarations (Proxy @FetchImageTagsResponse)
-      , getTypeScriptDeclarations (Proxy @CreateImageRequest)
-      , getTypeScriptDeclarations (Proxy @PostTagsRequest)
+      , getTypeScriptDeclarations (Proxy @FetchImages.Response)
+      , getTypeScriptDeclarations (Proxy @FetchImages.GalleryImage)
+      , getTypeScriptDeclarations (Proxy @FetchImageTags.Response)
+      , getTypeScriptDeclarations (Proxy @CreateImage.Request)
+      , getTypeScriptDeclarations (Proxy @AppendImageTags.Request)
 
       -- User API Types
       , getTypeScriptDeclarations (Proxy @User)
@@ -86,24 +88,24 @@ deriveTypeScript
   ''DeleteTagsRequest
 
 deriveTypeScript
-  (createOptions @FetchImagesResponse)
-  ''FetchImagesResponse
+  (createOptions @FetchImages.Response)
+  ''FetchImages.Response
 
 deriveTypeScript
   (createOptions @GalleryImage)
   ''GalleryImage
 
 deriveTypeScript
-  (createOptions @FetchImageTagsResponse)
-  ''FetchImageTagsResponse
+  (createOptions @FetchImageTags.Response)
+  ''FetchImageTags.Response
 
 deriveTypeScript
-  (createOptions @PostTagsRequest)
-  ''PostTagsRequest
+  (createOptions @AppendImageTags.Request)
+  ''AppendImageTags.Request
 
 deriveTypeScript
-  (createOptions @CreateImageRequest)
-  ''CreateImageRequest
+  (createOptions @CreateImage.Request)
+  ''CreateImage.Request
 
 deriveTypeScript
   (createOptions @Image)

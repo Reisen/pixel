@@ -69,7 +69,7 @@ const UploadWrapper = React.forwardRef(
     (props: Props, ref: React.Ref<HTMLInputElement>) => {
         // Track Renderable Previews, the Limit is used to decide whether to
         // render a grid view or a list view.
-        const previewCountLimit       = 50;
+        const previewCountLimit       = 5;
         const [previews, dispatch]    = React.useReducer(reducer, []);
         const [fileSize, setFileSize] = React.useState(0);
 
@@ -147,7 +147,10 @@ const UploadWrapper = React.forwardRef(
 
         return (
             <div className={styles.Root}>
-                { previews.length < previewCountLimit ? <UploadSlot/> : <UploadStat/> }
+                <UploadSlot/>
+
+                { previews.length >= previewCountLimit && <UploadStat/> }
+
                 { previews.length < previewCountLimit
                     ? <UploadGrid previews={previews}/>
                     : <UploadList previews={previews}/>

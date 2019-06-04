@@ -7,7 +7,12 @@ module Server
 
 import Protolude
 import Servant
-import Pixel.API
+import Pixel.API.AppendImageTags  as AppendImageTags
+import Pixel.API.CreateImage      as CreateImage
+-- import Pixel.API.DeleteTags       as DeleteTags
+import Pixel.API.FetchImageByUUID as FetchImageByUUID
+import Pixel.API.FetchImageTags   as FetchImageTags
+import Pixel.API.FetchImages      as FetchImages
 
 import Configuration                        ( Config, Config'(..) )
 import Network.HTTP.Types.Method          as Method
@@ -21,8 +26,7 @@ import Network.Wai.Middleware.RequestLogger ( logStdout )
 import MonadPixel                           ( Pixel, runPixel )
 
 -- Import Routes
-import API.Image.Routes                     ( PostTags
-                                            , DeleteTags
+import API.Image.Routes                     ( DeleteTags
                                             , getImage
                                             , getImageByUUID
                                             , getTags
@@ -46,11 +50,11 @@ import API.User.Routes                      ( AuthenticateUser
 
 type ImageAPI =
   "image" :>
-    (    CreateImageRoute      -- POST    /image/
-    :<|> FetchImagesRoute      -- GET     /image/
-    :<|> FetchImageByUUIDRoute -- GET     /image/:uuid
-    :<|> FetchImageTagsRoute   -- GET     /image/:uuid/tags
-    :<|> PostTags              -- POST    /image/:uuid/tags
+    (    CreateImage.Route      -- POST    /image/
+    :<|> FetchImages.Route      -- GET     /image/
+    :<|> FetchImageByUUID.Route -- GET     /image/:uuid
+    :<|> FetchImageTags.Route   -- GET     /image/:uuid/tags
+    :<|> AppendImageTags.Route -- POST    /image/:uuid/tags
     :<|> DeleteTags            -- DELETE  /image/:uuid/tags
     )
 

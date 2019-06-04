@@ -114,7 +114,6 @@ const Image = (props: Props) => {
                     <TextInput placeholder="Enter Tags"/>
 
                     <h1 className="Title--underline">Tags</h1>
-                    <p>These tags will apply to every image.</p>
                     <Tag icon="tag" name="dog" value="" onIcon={() => {}}/>
                     <Tag icon="tag" name="glasses" value="" onIcon={() => {}}/>
                     <Tag icon="tag" name="too_cool_for_school" value="" onIcon={() => {}}/>
@@ -122,7 +121,6 @@ const Image = (props: Props) => {
                     <Tag icon="tag" name="admin" value="" onIcon={() => {}}/>
 
                     <h1 className="Title--underline">Tags (Selection)</h1>
-                    <p>These tags will apply to your current selection.</p>
                     <Tag icon="tag" name="hotdog" value="" onIcon={() => {}}/>
                     <Tag icon="tag" name="hotterdog" value="" onIcon={() => {}}/>
                 </div>

@@ -1,6 +1,6 @@
-module Pixel.API.FetchImageTags
+module Pixel.API.AppendImageTags
   ( Route
-  , Response(..)
+  , Request(..)
   ) where
 
 import Protolude
@@ -11,19 +11,19 @@ import Pixel.API.Types ( CookieToken )
 --------------------------------------------------------------------------------
 
 type Route =
-  Header "Authorization" CookieToken
+  Header "Cookie" CookieToken
     :> Capture "uuid" Text
     :> "tags"
-    :> Get '[JSON] Response
+    :> ReqBody '[JSON] Request
+    :> Post '[JSON] NoContent
 
 --------------------------------------------------------------------------------
 
-newtype Response = Response
+newtype Request = Request
   { _tags :: [Text]
   } deriving (Show, Generic)
 
 --------------------------------------------------------------------------------
 
-instance ToJSON Response where
-instance FromJSON Response where
-
+instance ToJSON Request where
+instance FromJSON Request where
