@@ -21,9 +21,7 @@ import Network.Wai.Middleware.RequestLogger ( logStdout )
 import MonadPixel                           ( Pixel, runPixel )
 
 -- Import Routes
-import API.Image.Routes                     ( GetImageByUUID
-                                            , GetTags
-                                            , PostTags
+import API.Image.Routes                     ( PostTags
                                             , DeleteTags
                                             , getImage
                                             , getImageByUUID
@@ -48,12 +46,12 @@ import API.User.Routes                      ( AuthenticateUser
 
 type ImageAPI =
   "image" :>
-    (    CreateImageRoute -- POST    /image/
-    :<|> FetchImagesRoute -- GET     /image/
-    :<|> GetImageByUUID   -- GET     /image/:uuid
-    :<|> GetTags          -- GET     /image/:uuid/tags
-    :<|> PostTags         -- POST    /image/:uuid/tags
-    :<|> DeleteTags       -- DELETE  /image/:uuid/tags
+    (    CreateImageRoute      -- POST    /image/
+    :<|> FetchImagesRoute      -- GET     /image/
+    :<|> FetchImageByUUIDRoute -- GET     /image/:uuid
+    :<|> FetchImageTagsRoute   -- GET     /image/:uuid/tags
+    :<|> PostTags              -- POST    /image/:uuid/tags
+    :<|> DeleteTags            -- DELETE  /image/:uuid/tags
     )
 
 type UserAPI =

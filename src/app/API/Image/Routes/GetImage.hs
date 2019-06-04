@@ -3,10 +3,10 @@ module API.Image.Routes.GetImage
   ) where
 
 import Protolude
-import MonadPixel                  ( Pixel )
-import Pixel                       ( Error(..) )
-import Pixel.API                   ( FetchImagesResponse(..), GalleryImage(..), CookieToken(..) )
-import Pixel.Model.Images as Pixel ( Image(..), ImageError(..), fetchImages )
+import MonadPixel         ( Pixel )
+import Pixel              ( Error(..) )
+import Pixel.API          ( FetchImagesResponse(..), GalleryImage(..), CookieToken(..) )
+import Pixel.Model.Images ( Image(..), ImageError(..), fetchImages )
 
 --------------------------------------------------------------------------------
 

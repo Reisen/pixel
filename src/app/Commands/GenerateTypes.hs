@@ -9,7 +9,6 @@ import Protolude
 import Commands.Types           ( Options (..), GenerateTypesOptions (..) )
 
 import API.Image.Routes         ( DeleteTagsRequest
-                                , GetTagsResponse
                                 , PostTagsRequest
                                 )
 import API.Image.Types          ( Image )
@@ -69,7 +68,7 @@ generateTypes (GenerateTypesOptions folder) = do
       , getTypeScriptDeclarations (Proxy @DeleteTagsRequest)
       , getTypeScriptDeclarations (Proxy @FetchImagesResponse)
       , getTypeScriptDeclarations (Proxy @GalleryImage)
-      , getTypeScriptDeclarations (Proxy @GetTagsResponse)
+      , getTypeScriptDeclarations (Proxy @FetchImageTagsResponse)
       , getTypeScriptDeclarations (Proxy @CreateImageRequest)
       , getTypeScriptDeclarations (Proxy @PostTagsRequest)
 
@@ -95,8 +94,8 @@ deriveTypeScript
   ''GalleryImage
 
 deriveTypeScript
-  (createOptions @GetTagsResponse)
-  ''GetTagsResponse
+  (createOptions @FetchImageTagsResponse)
+  ''FetchImageTagsResponse
 
 deriveTypeScript
   (createOptions @PostTagsRequest)
