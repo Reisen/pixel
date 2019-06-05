@@ -19,7 +19,7 @@ postTags
   -> Request
   -> Pixel NoContent
 
-postTags Nothing _ _       = throwError (ImageError MissingToken)
-postTags (Just _) uuid req = do
-  addTags uuid (req ^. tags)
+postTags Nothing _ _            = throwError (ImageError MissingToken)
+postTags (Just _) imageUUID req = do
+  addTags imageUUID (req ^. tags)
   pure NoContent

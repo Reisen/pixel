@@ -35,14 +35,14 @@ handleAuthenticateUser
   -> m (Maybe Token)
 
 handleAuthenticateUser AuthenticateDetails{..} = runMaybeT $ do
-  (uuid, user)    <- MaybeT $ findUserByEmail (Email _email)
-  currentPassword <- MaybeT $ pure (user ^. password)
+  (userUUID, user) <- MaybeT $ findUserByEmail (Email _email)
+  currentPassword  <- MaybeT $ pure (user ^. password)
   let passwordCheck = verifyPassword currentPassword _password
   let statusCheck   = user ^. state
   putText "End"
   MaybeT . pure $ case (passwordCheck, statusCheck) of
     (_,               Banned) -> Nothing
-    (VerifySucceeded, _     ) -> Just . Token . toText $ uuid
+    (VerifySucceeded, _     ) -> Just . Token . toText $ userUUID
     (_,               _     ) -> Nothing
 
 --------------------------------------------------------------------------------

@@ -35,13 +35,13 @@ convertImage
   -> Image
   -> GalleryImage
 
-convertImage uuid Image{..} = GalleryImage
+convertImage imageUUID Image{..} = GalleryImage
   { _dimensions = (0, 0)
   , _filename   = ""
   , _filesize   = 0
   , _path       = fold ["/static/images/", _hash]
   , _tags       = _tags
   , _thumb      = fold ["/static/thumbs/", _hash]
-  , _uuid       = uuid
+  , _uuid       = imageUUID
   }
 

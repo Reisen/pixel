@@ -7,11 +7,12 @@ import Pixel.Model.Users.Types.Password
 import Pixel.Model.Users.Types.User
 import Pixel.Model.Users.Types.Role
 
-import Pixel.API.AppendImageTags as AppendImageTags
-import Pixel.API.CreateImage     as CreateImage
-import Pixel.API.DeleteImageTags as DeleteImageTags
-import Pixel.API.FetchImages     as FetchImages
-import Pixel.API.FetchImageTags  as FetchImageTags
+import Pixel.API.AppendImageTags  as AppendImageTags
+import Pixel.API.CreateImage      as CreateImage
+import Pixel.API.DeleteImageTags  as DeleteImageTags
+import Pixel.API.FetchImages      as FetchImages
+import Pixel.API.FetchImageByUUID as FetchImageByUUID
+import Pixel.API.FetchImageTags   as FetchImageTags
 
 --------------------------------------------------------------------------------
 
@@ -32,6 +33,8 @@ makePrisms         ''VerifyPasswordResult
 
 makeFieldsNoPrefix ''AppendImageTags.Request
 makeFieldsNoPrefix ''CreateImage.Request
+makeFieldsNoPrefix ''CreateImage.Response
 makeFieldsNoPrefix ''DeleteImageTags.Request
-makeFieldsNoPrefix ''FetchImages.Response
+makeFieldsNoPrefix ''FetchImageByUUID.Response
 makeFieldsNoPrefix ''FetchImageTags.Response
+makeFieldsNoPrefix ''FetchImages.Response

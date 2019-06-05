@@ -17,8 +17,8 @@ getTags
   -> DigestText
   -> Pixel Response
 
-getTags Nothing _     = throwError (ImageError MissingToken)
-getTags (Just _) uuid =
-  fetchTags uuid >>= \case
+getTags Nothing _          = throwError (ImageError MissingToken)
+getTags (Just _) imageUUID =
+  fetchTags imageUUID >>= \case
     Nothing       -> throwError (ImageError InvalidUUID)
     Just response -> pure . Response $ response

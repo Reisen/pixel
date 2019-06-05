@@ -29,7 +29,7 @@ postImage Nothing _                              = throwError (ImageError Missin
 postImage (Just (CookieToken token)) Request{..} = do
   directory <- view configStaticLocation
   content   <- liftIO . B.readFile . toS $ _path
-  uuid      <- liftIO nextRandom
+  newUUID   <- liftIO nextRandom
   createdAt <- liftIO getCurrentTime
-  createImage $ ImageDetails content createdAt directory token _tags uuid
-  pure . Response . show $ uuid
+  createImage $ ImageDetails content createdAt directory token _tags newUUID
+  pure . Response . show $ newUUID

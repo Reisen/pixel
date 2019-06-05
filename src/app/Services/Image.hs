@@ -29,12 +29,12 @@ pixelSaveImage
   -> Image
   -> m ()
 
-pixelSaveImage uuid image = case image ^. uploader of
+pixelSaveImage imageUUID image = case image ^. uploader of
   Nothing       -> pure ()
   Just userUUID -> do
     backend <- view configConnection
     let create = createImage userUUID image
-    void $ runCommand backend uuid create
+    void $ runCommand backend imageUUID create
 
 
 pixelLoadImage
@@ -43,9 +43,9 @@ pixelLoadImage
   => UUID
   -> m (Maybe Image)
 
-pixelLoadImage uuid = do
+pixelLoadImage imageUUID = do
   backend <- view configConnection
-  image   <- loadLatest backend uuid
+  image   <- loadLatest backend imageUUID
   pure $ (^. value) <$> image
 
 
@@ -71,8 +71,8 @@ pixelLoadImages _limit = do
   pure . catMaybes $ imageRows <&> \(textUUID, imageHash, date, imageTags) ->
     case fromText textUUID of
       Nothing   -> Nothing
-      Just uuid -> Just
-        ( uuid
+      Just imageUUID -> Just
+        ( imageUUID
         , Image
           { _hash      = imageHash
           , _tags      = fromMaybe [] $ splitOn "," <$> imageTags
@@ -90,9 +90,9 @@ pixelAppendTags
   -> TagList
   -> m ()
 
-pixelAppendTags uuid imageTags = do
+pixelAppendTags imageUUID imageTags = do
   backend <- view configConnection
-  void . runCommand backend uuid $ addTags imageTags
+  void . runCommand backend imageUUID $ addTags imageTags
 
 
 -- Remove tags
@@ -103,6 +103,6 @@ pixelRemoveTags
   -> TagList
   -> m ()
 
-pixelRemoveTags uuid imageTags = do
+pixelRemoveTags imageUUID imageTags = do
   backend <- view configConnection
-  void . runCommand backend uuid $ removeTags imageTags
+  void . runCommand backend imageUUID $ removeTags imageTags

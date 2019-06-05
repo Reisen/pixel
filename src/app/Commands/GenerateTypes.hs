@@ -6,38 +6,38 @@ module Commands.GenerateTypes
   ) where
 
 import Protolude
-import Commands.Types           ( Options (..), GenerateTypesOptions (..) )
+import Commands.Types             ( Options (..), GenerateTypesOptions (..) )
 
-import API.Image.Types          ( Image )
-import API.User.Routes          ( AuthUserRequest, RegisterRequest )
-import API.User.Types           ( User, DangerousUser )
-import Data.Aeson.TypeScript.TH ( TSDeclaration
-                                , FormattingOptions(..)
-                                , deriveTypeScript
-                                , formatTSDeclaration
-                                , getTypeScriptDeclarations
-                                )
-import Data.Text as T           ( intercalate, pack )
-import Data.Text.IO             ( writeFile )
-import Options.Applicative      ( Parser
-                                , Mod
-                                , CommandFields
-                                , command
-                                , help
-                                , info
-                                , long
-                                , metavar
-                                , progDesc
-                                , strOption
-                                )
-import Pixel                    ( createOptions )
-import Pixel.API.AppendImageTags as AppendImageTags
-import Pixel.API.CreateImage     as CreateImage
-import Pixel.API.DeleteImageTags as DeleteImageTags
-import Pixel.API.FetchImages     as FetchImages
-import Pixel.API.FetchImageTags  as FetchImageTags
+import API.Image.Types            ( Image )
+import API.User.Routes            ( AuthUserRequest, RegisterRequest )
+import API.User.Types             ( User, DangerousUser )
+import Data.Aeson.TypeScript.TH   ( TSDeclaration
+                                  , FormattingOptions(..)
+                                  , deriveTypeScript
+                                  , formatTSDeclaration
+                                  , getTypeScriptDeclarations
+                                  )
+import Data.Text as T             ( intercalate, pack )
+import Data.Text.IO               ( writeFile )
+import Options.Applicative        ( Parser
+                                  , Mod
+                                  , CommandFields
+                                  , command
+                                  , help
+                                  , info
+                                  , long
+                                  , metavar
+                                  , progDesc
+                                  , strOption
+                                  )
+import Pixel                      ( createOptions )
+import Pixel.Model.Token          ( Token )
 
-import Pixel.Model.Token        ( Token )
+import qualified Pixel.API.AppendImageTags as AppendImageTags
+import qualified Pixel.API.CreateImage     as CreateImage
+import qualified Pixel.API.DeleteImageTags as DeleteImageTags
+import qualified Pixel.API.FetchImages     as FetchImages
+import qualified Pixel.API.FetchImageTags  as FetchImageTags
 
 --------------------------------------------------------------------------------
 
@@ -92,8 +92,8 @@ deriveTypeScript
   ''FetchImages.Response
 
 deriveTypeScript
-  (createOptions @GalleryImage)
-  ''GalleryImage
+  (createOptions @FetchImages.GalleryImage)
+  ''FetchImages.GalleryImage
 
 deriveTypeScript
   (createOptions @FetchImageTags.Response)

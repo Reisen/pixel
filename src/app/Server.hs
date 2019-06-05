@@ -9,30 +9,25 @@ import Protolude
 import Servant
 
 import Configuration                        ( Config, Config'(..) )
-import Network.HTTP.Types.Method          as Method
 import Network.Wai.Middleware.Cors          ( cors
-                                            , simpleCorsResourcePolicy
                                             , corsRequestHeaders
                                             , corsMethods
                                             , corsOrigins
+                                            , simpleCorsResourcePolicy
                                             )
 import Network.Wai.Middleware.RequestLogger ( logStdout )
 import MonadPixel                           ( Pixel, runPixel )
-import Pixel.API.AppendImageTags           as AppendImageTags
-import Pixel.API.CreateImage               as CreateImage
-import Pixel.API.DeleteImageTags           as DeleteImageTags
-import Pixel.API.FetchImageByUUID          as FetchImageByUUID
-import Pixel.API.FetchImageTags            as FetchImageTags
-import Pixel.API.FetchImages               as FetchImages
 
+import qualified API.Image.Routes           as Routes
+import qualified API.User.Routes            as Routes
+import qualified Network.HTTP.Types.Method  as Method
+import qualified Pixel.API.AppendImageTags  as AppendImageTags
+import qualified Pixel.API.CreateImage      as CreateImage
+import qualified Pixel.API.DeleteImageTags  as DeleteImageTags
+import qualified Pixel.API.FetchImageByUUID as FetchImageByUUID
+import qualified Pixel.API.FetchImageTags   as FetchImageTags
+import qualified Pixel.API.FetchImages      as FetchImages
 
--- Import Routes
-import API.Image.Routes                    as Routes
-import API.User.Routes                      ( AuthenticateUser
-                                            , RegisterUser
-                                            , postAuthenticateUser
-                                            , postRegisterUser
-                                            )
 
 --------------------------------------------------------------------------------
 
@@ -54,8 +49,8 @@ type ImageAPI =
 
 type UserAPI =
   "user" :>
-    (    AuthenticateUser -- POST /user/login
-    :<|> RegisterUser     -- POST /user
+    (    Routes.AuthenticateUser -- POST /user/login
+    :<|> Routes.RegisterUser     -- POST /user
     )
 
 type API =
@@ -89,8 +84,8 @@ implAPI =
       )
 
     userAPI =
-      (    postAuthenticateUser
-      :<|> postRegisterUser
+      (    Routes.postAuthenticateUser
+      :<|> Routes.postRegisterUser
       )
 
 --------------------------------------------------------------------------------

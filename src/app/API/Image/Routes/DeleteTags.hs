@@ -21,6 +21,6 @@ postDeleteTags
   -> Pixel NoContent
 
 postDeleteTags Nothing _ _ = throwError (ImageError MissingToken)
-postDeleteTags (Just _) uuid req = do
-  deleteTags uuid (req ^. tags)
+postDeleteTags (Just _) imageUUID req = do
+  deleteTags imageUUID (req ^. tags)
   pure NoContent

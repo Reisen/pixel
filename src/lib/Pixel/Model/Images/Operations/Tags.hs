@@ -21,8 +21,8 @@ fetchTags
 
 fetchTags uuidText =
   case fromText uuidText of
-    Nothing   -> pure Nothing
-    Just uuid -> loadImage uuid >>= \case
+    Nothing        -> pure Nothing
+    Just imageUUID -> loadImage imageUUID >>= \case
       Nothing    -> pure Nothing
       Just image -> pure . Just $ image ^. tags
 
@@ -37,8 +37,8 @@ addTags
 
 addTags uuidText newTags =
   case fromText uuidText of
-    Nothing   -> pure ()
-    Just uuid -> appendTags uuid newTags
+    Nothing        -> pure ()
+    Just imageUUID -> appendTags imageUUID newTags
 
 --------------------------------------------------------------------------------
 
@@ -50,5 +50,5 @@ deleteTags
   -> m ()
 
 deleteTags uuidText newTags = case fromText uuidText of
-  Nothing   -> pure ()
-  Just uuid -> removeTags uuid newTags
+  Nothing        -> pure ()
+  Just imageUUID -> removeTags imageUUID newTags

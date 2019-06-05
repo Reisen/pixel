@@ -16,11 +16,11 @@ getImageByUUID
   -> DigestText
   -> Pixel Response
 
-getImageByUUID Nothing _     = throwError (ImageError MissingToken)
-getImageByUUID (Just _) uuid =
-  handleImageRequest uuid >>= \case
+getImageByUUID Nothing _            = throwError (ImageError MissingToken)
+getImageByUUID (Just _) imageUUID =
+  handleImageRequest imageUUID >>= \case
     Nothing       -> throwError (ImageError InvalidUUID)
-    Just response -> pure $ convertImage uuid response
+    Just response -> pure $ convertImage imageUUID response
 
 --------------------------------------------------------------------------------
 
@@ -29,12 +29,12 @@ convertImage
   -> Image
   -> Response
 
-convertImage uuid Image{..} = Response
+convertImage imageUUID Image{..} = Response
   { _dimensions = (0, 0)
   , _filename   = ""
   , _filesize   = 0
   , _path       = fold ["/static/images/", _hash]
   , _tags       = _tags
   , _thumb      = fold ["/static/thumbs/", _hash]
-  , _uuid       = uuid
+  , _uuid       = imageUUID
   }
