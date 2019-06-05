@@ -1,4 +1,4 @@
-module Pixel.API.Users.Error
+module Pixel.Model.Users.Error
   ( AuthenticationFailedReason(..)
   , RegistrationFailedReason(..)
   , UserError(..)

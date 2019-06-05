@@ -1,4 +1,4 @@
-module API.Cookies
+module Pixel.API.Types
   ( CookieToken(..)
   ) where
 
@@ -14,6 +14,7 @@ import Web.Cookie         ( parseCookiesText )
 -- Servant doesn't really give an easy way to access specific cookies using its
 -- combinators. Instead, we wrap the `cookie` page `CookiesText` type and parse
 -- it ourself into a [(Text, Text)], then scan it for the cookie we care about.
+
 newtype CookieToken = CookieToken
   { cookieTokenToken :: Token
   } deriving (Show)

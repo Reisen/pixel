@@ -5,15 +5,14 @@ module API.User.Projections
 
 import Protolude
 import Text.InterpolatedString.QM
-
-import Data.UUID              ( UUID, toText )
-import Database.SQLite.Simple ( Query
-                              , Connection
-                              , execute_
-                              , execute
-                              , withTransaction
-                              )
-import Pixel.API.Users        ( User(..), Email(..), Password(..) )
+import Data.UUID                  ( UUID, toText )
+import Database.SQLite.Simple     ( Query
+                                  , Connection
+                                  , execute_
+                                  , execute
+                                  , withTransaction
+                                  )
+import Pixel.Model.Users          ( User(..), Email(..), Password(..) )
 
 --------------------------------------------------------------------------------
 
@@ -42,16 +41,16 @@ projectUsers
   -> m ()
 
 projectUsers conn uuid User{..} = liftIO $ withTransaction conn $ do
-  putText $ fold ["[P:User] ", show _userRegisteredAt, " ", show (emailText <$> _userEmail), ", Password: ", show _userPassword]
+  putText $ fold ["[P:User] ", show _registeredAt, " ", show (_emailText <$> _email), ", Password: ", show _password]
 
   -- Insert Users
   execute conn insertUserRow
     ( toText uuid
-    , emailText <$> _userEmail
-    , passwordText <$> _userPassword
-    , fromMaybe "" (toText <$> _userRole)
-    , (show _userState :: Text)
-    , _userRegisteredAt
+    , _emailText <$> _email
+    , _passwordText <$> _password
+    , fromMaybe "" (toText <$> _role)
+    , (show _state :: Text)
+    , _registeredAt
     )
 
 --------------------------------------------------------------------------------

@@ -9,15 +9,16 @@ module Services.Image
 --------------------------------------------------------------------------------
 
 import Protolude
+import Pixel.Lens
 import Control.Lens
 import Text.InterpolatedString.QM
-import API.Image.Commands            ( createImage, addTags, removeTags )
-import Configuration                 ( Config, configConnection, configReadSchema )
-import Data.UUID                     ( UUID, fromText )
-import Data.Text                     ( splitOn )
-import Database.SQLite.Simple        ( query_ )
-import Eventless                     ( runCommand, loadLatest, value )
-import Pixel.API.Images              ( Image(..), TagList, imageUploader )
+import API.Image.Commands         ( createImage, addTags, removeTags )
+import Configuration              ( Config, configConnection, configReadSchema )
+import Data.Text                  ( splitOn )
+import Data.UUID                  ( UUID, fromText )
+import Database.SQLite.Simple     ( query_ )
+import Eventless                  ( runCommand, loadLatest, value )
+import Pixel.Model.Images         ( Image(..), TagList )
 
 --------------------------------------------------------------------------------
 
@@ -28,12 +29,12 @@ pixelSaveImage
   -> Image
   -> m ()
 
-pixelSaveImage uuid image = case image ^. imageUploader of
+pixelSaveImage imageUUID image = case image ^. uploader of
   Nothing       -> pure ()
   Just userUUID -> do
     backend <- view configConnection
     let create = createImage userUUID image
-    void $ runCommand backend uuid create
+    void $ runCommand backend imageUUID create
 
 
 pixelLoadImage
@@ -42,9 +43,9 @@ pixelLoadImage
   => UUID
   -> m (Maybe Image)
 
-pixelLoadImage uuid = do
+pixelLoadImage imageUUID = do
   backend <- view configConnection
-  image   <- loadLatest backend uuid
+  image   <- loadLatest backend imageUUID
   pure $ (^. value) <$> image
 
 
@@ -55,8 +56,8 @@ pixelLoadImages
   -> m [(UUID, Image)]
 
 pixelLoadImages _limit = do
-  schema <- view configReadSchema
-  images <- liftIO $ query_ schema [qns|
+  schema    <- view configReadSchema
+  imageRows <- liftIO $ query_ schema [qns|
       SELECT    i.uuid
               , i.hash
               , i.created
@@ -67,17 +68,17 @@ pixelLoadImages _limit = do
       ORDER BY  i.created DESC
   |]
 
-  pure . catMaybes $ images <&> \(textUUID, imageHash, date, tags) ->
+  pure . catMaybes $ imageRows <&> \(textUUID, imageHash, date, imageTags) ->
     case fromText textUUID of
       Nothing   -> Nothing
-      Just uuid -> Just
-        ( uuid
+      Just imageUUID -> Just
+        ( imageUUID
         , Image
-          { _imageHash      = imageHash
-          , _imageTags      = fromMaybe [] $ splitOn "," <$> tags
-          , _imageUploader  = Nothing
-          , _imageCreatedAt = Just date
-          , _imageDeletedAt = Nothing
+          { _hash      = imageHash
+          , _tags      = fromMaybe [] $ splitOn "," <$> imageTags
+          , _uploader  = Nothing
+          , _createdAt = Just date
+          , _deletedAt = Nothing
           }
         )
 
@@ -89,9 +90,9 @@ pixelAppendTags
   -> TagList
   -> m ()
 
-pixelAppendTags uuid tags = do
+pixelAppendTags imageUUID imageTags = do
   backend <- view configConnection
-  void . runCommand backend uuid $ addTags tags
+  void . runCommand backend imageUUID $ addTags imageTags
 
 
 -- Remove tags
@@ -102,6 +103,6 @@ pixelRemoveTags
   -> TagList
   -> m ()
 
-pixelRemoveTags uuid tags = do
+pixelRemoveTags imageUUID imageTags = do
   backend <- view configConnection
-  void . runCommand backend uuid $ removeTags tags
+  void . runCommand backend imageUUID $ removeTags imageTags

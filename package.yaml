@@ -101,6 +101,7 @@ library:
         - aeson
         - argon2
         - attoparsec
+        - cookie
         - eventless
         - text-short
         - transformers

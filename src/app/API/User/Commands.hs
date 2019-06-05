@@ -3,15 +3,10 @@ module API.User.Commands
   ) where
 
 import Protolude
-
-import Data.Time       ( UTCTime )
-import Data.UUID       ( UUID )
-import Eventless       ( Command, emit )
-import Pixel.API.Users ( User(..)
-                       , UserEvent(..)
-                       , Email
-                       , Password
-                       )
+import Data.Time         ( UTCTime )
+import Data.UUID         ( UUID )
+import Eventless         ( Command, emit )
+import Pixel.Model.Users ( User(..), UserEvent(..), Email, Password )
 
 --------------------------------------------------------------------------------
 

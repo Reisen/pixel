@@ -4,9 +4,8 @@ module API.User.Types
   ) where
 
 import Protolude
-
-import Data.Aeson      ( ToJSON(..), FromJSON(..) )
-import Pixel           ( pixelParseJSON, pixelToEncoding, pixelToJSON )
+import Data.Aeson ( ToJSON(..), FromJSON(..) )
+import Pixel      ( pixelParseJSON, pixelToEncoding, pixelToJSON )
 
 --------------------------------------------------------------------------------
 

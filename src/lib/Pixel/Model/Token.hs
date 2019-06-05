@@ -1,4 +1,4 @@
-module Pixel.API.Token
+module Pixel.Model.Token
   ( Token(..)
   , tokenText
   ) where

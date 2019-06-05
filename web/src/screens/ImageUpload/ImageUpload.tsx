@@ -13,6 +13,7 @@ import Button                      from '../../components/Button';
 import TextInput                   from '../../components/TextInput';
 import NavigationBar               from '../../components/NavigationBar';
 import ImageInput                  from './components/ImageInput';
+import UploadGrid                  from './components/UploadGrid';
 import styles                      from './ImageUpload.module.css';
 
 
@@ -81,19 +82,24 @@ const Image = (props: Props) => {
     }
 
     // Handle Image Upload
-    const onImageUpload = () => {
+    const startUpload = async () => {
         if (ref.current && ref.current.files) {
-            const data = new FormData();
-            data.append('image', ref.current.files[0]);
-            tags.map(tag => {
-                data.append('tag', tag);
-                return null;
-            });
-
             setUploading(true);
-            uploadImage(data).then(() => {
-                props.history.push('/');
-            });
+
+            // Upload Each File
+            for(let i = 0; i < ref.current.files.length; ++i) {
+                // Create FormData containing the image and tags.
+                const data = new FormData();
+                data.append('image', ref.current.files[i]);
+                tags.map(tag => {
+                    data.append('tag', tag);
+                    return null;
+                });
+
+                await uploadImage(data)
+            }
+
+            props.history.push('/');
         }
     }
 
@@ -104,10 +110,10 @@ const Image = (props: Props) => {
 
             <div className={styles.Root}>
                 <div className={styles.TagManager}>
+                    <Button onClick={startUpload} >Start Upload</Button>
                     <TextInput placeholder="Enter Tags"/>
 
                     <h1 className="Title--underline">Tags</h1>
-                    <p>These tags will apply to every image.</p>
                     <Tag icon="tag" name="dog" value="" onIcon={() => {}}/>
                     <Tag icon="tag" name="glasses" value="" onIcon={() => {}}/>
                     <Tag icon="tag" name="too_cool_for_school" value="" onIcon={() => {}}/>
@@ -115,86 +121,11 @@ const Image = (props: Props) => {
                     <Tag icon="tag" name="admin" value="" onIcon={() => {}}/>
 
                     <h1 className="Title--underline">Tags (Selection)</h1>
-                    <p>These tags will apply to your current selection.</p>
                     <Tag icon="tag" name="hotdog" value="" onIcon={() => {}}/>
                     <Tag icon="tag" name="hotterdog" value="" onIcon={() => {}}/>
                 </div>
 
-                <div className={styles.UploadGrid}>
-                    <div className={styles.Slot}>
-                        <div className={styles.UploadSquare}>
-                            <span>
-                                <i className="icofont-upload"/><br/>
-                                Choose Files
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={`${styles.Upload} ${styles.Upload_selected}`}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-
-                    <div className={styles.Slot}>
-                        <div style={{backgroundImage: 'url(https://i.chzbgr.com/full/8820501760/h4A394CEE)'}} className={styles.Upload}>
-                        </div>
-                    </div>
-                </div>
-
-                {/*
-                <div className={styles.Tags}>
-                    <Button
-                        icon="upload"
-                        disabled={!image || uploading}
-                        onClick={onImageUpload}
-                    >
-                        { uploading ? 'Uploading...' : 'Upload' }
-                    </Button>
-
-                    <TextInput
-                        value={input}
-                        suggestion={suggestion && suggestion.trim()}
-                        onChange={onTagsChange}
-                        placeholder="Enter Tags Here"
-                        onKeyPress={onTagsKeyPress}
-                    />
-
-                    <div className={styles.TagList}>
-                        {
-                            tags.map((tag, k) =>
-                                <Tag key={k} icon="close-circled" name={tag} value="" onIcon={() => removeTag(k)}/>
-                            )
-                        }
-                    </div>
-                </div>
-
-                <div className={styles.Uploader}>
-                    <ImageInput
-                        ref={ref}
-                        onClick={() => ref.current && ref.current.click()}
-                        onChange={setImage} />
-                </div>
-                */}
+                <UploadGrid ref={ref} />
             </div>
         </div>
     );

@@ -9,35 +9,25 @@ import Protolude
 import Servant
 
 import Configuration                        ( Config, Config'(..) )
-import Network.HTTP.Types.Method            ( methodGet, methodPost, methodHead, methodDelete )
 import Network.Wai.Middleware.Cors          ( cors
-                                            , simpleCorsResourcePolicy
                                             , corsRequestHeaders
                                             , corsMethods
                                             , corsOrigins
+                                            , simpleCorsResourcePolicy
                                             )
 import Network.Wai.Middleware.RequestLogger ( logStdout )
 import MonadPixel                           ( Pixel, runPixel )
 
--- Import Routes
-import API.Image.Routes                     ( PostImage
-                                            , GetImage
-                                            , GetImageByUUID
-                                            , GetTags
-                                            , PostTags
-                                            , DeleteTags
-                                            , getImage
-                                            , getImageByUUID
-                                            , getTags
-                                            , postDeleteTags
-                                            , postImage
-                                            , postTags
-                                            )
-import API.User.Routes                      ( AuthenticateUser
-                                            , RegisterUser
-                                            , postAuthenticateUser
-                                            , postRegisterUser
-                                            )
+import qualified API.Image.Routes           as Routes
+import qualified API.User.Routes            as Routes
+import qualified Network.HTTP.Types.Method  as Method
+import qualified Pixel.API.AppendImageTags  as AppendImageTags
+import qualified Pixel.API.CreateImage      as CreateImage
+import qualified Pixel.API.DeleteImageTags  as DeleteImageTags
+import qualified Pixel.API.FetchImageByUUID as FetchImageByUUID
+import qualified Pixel.API.FetchImageTags   as FetchImageTags
+import qualified Pixel.API.FetchImages      as FetchImages
+
 
 --------------------------------------------------------------------------------
 
@@ -49,18 +39,18 @@ import API.User.Routes                      ( AuthenticateUser
 
 type ImageAPI =
   "image" :>
-    (    PostImage        -- POST    /image/
-    :<|> GetImage         -- GET     /image/
-    :<|> GetImageByUUID   -- GET     /image/:uuid
-    :<|> GetTags          -- GET     /image/:uuid/tags
-    :<|> PostTags         -- POST    /image/:uuid/tags
-    :<|> DeleteTags       -- DELETE  /image/:uuid/tags
+    (    CreateImage.Route      -- POST    /image/
+    :<|> FetchImages.Route      -- GET     /image/
+    :<|> FetchImageByUUID.Route -- GET     /image/:uuid
+    :<|> FetchImageTags.Route   -- GET     /image/:uuid/tags
+    :<|> AppendImageTags.Route  -- POST    /image/:uuid/tags
+    :<|> DeleteImageTags.Route  -- DELETE  /image/:uuid/tags
     )
 
 type UserAPI =
   "user" :>
-    (    AuthenticateUser -- POST /user/login
-    :<|> RegisterUser     -- POST /user
+    (    Routes.AuthenticateUser -- POST /user/login
+    :<|> Routes.RegisterUser     -- POST /user
     )
 
 type API =
@@ -85,17 +75,17 @@ implAPI =
 
   where
     imageAPI =
-      (    postImage
-      :<|> getImage
-      :<|> getImageByUUID
-      :<|> getTags
-      :<|> postTags
-      :<|> postDeleteTags
+      (    Routes.postImage
+      :<|> Routes.getImage
+      :<|> Routes.getImageByUUID
+      :<|> Routes.getTags
+      :<|> Routes.postTags
+      :<|> Routes.postDeleteTags
       )
 
     userAPI =
-      (    postAuthenticateUser
-      :<|> postRegisterUser
+      (    Routes.postAuthenticateUser
+      :<|> Routes.postRegisterUser
       )
 
 --------------------------------------------------------------------------------
@@ -119,9 +109,9 @@ server config@Config{..} =
             ( [toS _configClientAddress], True )
 
         , corsMethods =
-            [ methodGet
-            , methodPost
-            , methodHead
-            , methodDelete
+            [ Method.methodGet
+            , Method.methodPost
+            , Method.methodHead
+            , Method.methodDelete
             ]
         }

@@ -5,16 +5,15 @@ module API.Image.Projections
 
 import Protolude
 import Text.InterpolatedString.QM
-
-import Data.UUID              ( UUID, toText )
-import Database.SQLite.Simple ( Query
-                              , Connection
-                              , Only (..)
-                              , execute_
-                              , execute
-                              , withTransaction
-                              )
-import Pixel.API.Images       ( Image (..) )
+import Data.UUID                  ( UUID, toText )
+import Database.SQLite.Simple     ( Query
+                                  , Connection
+                                  , Only (..)
+                                  , execute_
+                                  , execute
+                                  , withTransaction
+                                  )
+import Pixel.Model.Images         ( Image (..) )
 
 --------------------------------------------------------------------------------
 
@@ -42,15 +41,15 @@ projectImages
   -> m ()
 
 projectImages conn uuid Image {..} = liftIO $ withTransaction conn $ do
-  putText $ fold ["[P:Image] ", show _imageCreatedAt, " ", _imageHash, ", Tags: ", show _imageTags]
+  putText $ fold ["[P:Image] ", show _createdAt, " ", _hash, ", Tags: ", show _tags]
 
   -- Insert Image Updates
-  execute conn upsertImageRow (toText uuid, _imageHash, _imageCreatedAt)
+  execute conn upsertImageRow (toText uuid, _hash, _createdAt)
 
   -- Recreate Tag Mapping
   execute conn clearAssociations (Only $ toText uuid)
 
-  for_ _imageTags $ \tag -> do
+  for_ _tags $ \tag -> do
     execute conn insertTagRow (tag, "tag" :: Text)
     execute conn insertAssociationRow (tag, toText uuid)
 

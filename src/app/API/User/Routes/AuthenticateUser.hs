@@ -6,12 +6,11 @@ module API.User.Routes.AuthenticateUser
 
 import Protolude
 import Servant
-
 import Data.Aeson          ( FromJSON(..) )
 import Data.Binary.Builder ( toLazyByteString )
 import Pixel               ( Error(..), pixelParseJSON )
-import Pixel.API.Token     ( Token(..) )
-import Pixel.API.Users     ( UserError(..)
+import Pixel.Model.Token   ( Token(..) )
+import Pixel.Model.Users   ( UserError(..)
                            , AuthenticationFailedReason(..)
                            , AuthenticateDetails(..)
                            , handleAuthenticateUser
@@ -24,6 +23,7 @@ import Web.Cookie          ( SetCookie(..), renderSetCookie, defaultSetCookie )
 -- Wrap up Token with a Set-Cookie header, this is so rather than storing the
 -- token in a JS accessible place we can secure the cookie with `Secure` and
 -- `HttpsOnly` to prevent XSS.
+
 type TokenInHeader = Headers
   '[ Header "Set-Cookie" Text
    ] NoContent
@@ -50,11 +50,7 @@ postAuthenticateUser
   -> Pixel TokenInHeader
 
 postAuthenticateUser AuthUserRequest{..} = do
-  mayToken <- handleAuthenticateUser $ AuthenticateDetails
-    { _adEmail    = _authUserRequestEmail
-    , _adPassword = _authUserRequestPassword
-    }
-
+  mayToken <- handleAuthenticateUser authRequest
   case mayToken of
     Nothing    -> throwError (UserError . AuthenticationFailed $ OtherAuthFailure "Unknown")
     Just token -> pure
@@ -68,3 +64,9 @@ postAuthenticateUser AuthUserRequest{..} = do
           , setCookiePath     = Just "/"
           , setCookieHttpOnly = True
           }
+
+  where
+    authRequest = AuthenticateDetails
+      { _email    = _authUserRequestEmail
+      , _password = _authUserRequestPassword
+      }

@@ -1,11 +1,11 @@
-module Pixel.API.Images.Operations.GetImage
+module Pixel.Model.Images.Operations.GetImage
   ( fetchImages
   ) where
 
 import Protolude
-import Data.UUID              ( UUID )
-import Pixel.API.Images.Types ( Image )
-import Pixel.Services.Image   ( MonadImage (..) )
+import Data.UUID                ( UUID )
+import Pixel.Model.Images.Types ( Image )
+import Pixel.Services.Image     ( MonadImage (..) )
 
 --------------------------------------------------------------------------------
 

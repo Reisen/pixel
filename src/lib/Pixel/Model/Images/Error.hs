@@ -1,4 +1,4 @@
-module Pixel.API.Images.Error ( ImageError(..) ) where
+module Pixel.Model.Images.Error ( ImageError(..) ) where
 
 import Protolude
 

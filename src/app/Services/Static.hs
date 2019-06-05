@@ -7,7 +7,7 @@ where
 
 import Protolude
 import Data.ByteString as B ( writeFile )
-import Pixel.API.Images     ( DigestText )
+import Pixel.Model.Images   ( DigestText )
 
 --------------------------------------------------------------------------------
 

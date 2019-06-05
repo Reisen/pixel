@@ -1,52 +1,40 @@
 module API.Image.Routes.GetImageByUUID
-  ( GetImageByUUID
-  , getImageByUUID
-  )
-where
-
---------------------------------------------------------------------------------
+  ( getImageByUUID
+  ) where
 
 import Protolude
-import Servant
-
-import API.Image.Types as API    ( Image(..) )
-import Pixel                     ( Error(..) )
-import Pixel.API.Token           ( Token )
-import Pixel.API.Images as Pixel ( Image(..), DigestText, ImageError(..), handleImageRequest )
-import MonadPixel                ( Pixel )
+import Pixel                      ( Error(..) )
+import Pixel.API                  ( CookieToken(..) )
+import Pixel.API.FetchImageByUUID ( Response(..) )
+import Pixel.Model.Images         ( Image(..), DigestText, ImageError(..), handleImageRequest )
+import MonadPixel                 ( Pixel )
 
 --------------------------------------------------------------------------------
 
--- We wrap up responses in an HTTP endpoint type, in order to abstract away
--- from the backend.
-type GetImageByUUID =
-  Header "Authorization" Token
-    :> Capture "uuid" Text
-    :> Get '[JSON] API.Image
+getImageByUUID
+  :: Maybe CookieToken
+  -> DigestText
+  -> Pixel Response
+
+getImageByUUID Nothing _            = throwError (ImageError MissingToken)
+getImageByUUID (Just _) imageUUID =
+  handleImageRequest imageUUID >>= \case
+    Nothing       -> throwError (ImageError InvalidUUID)
+    Just response -> pure $ convertImage imageUUID response
 
 --------------------------------------------------------------------------------
 
 convertImage
   :: DigestText
-  -> Pixel.Image
-  -> API.Image
+  -> Image
+  -> Response
 
-convertImage uuid Pixel.Image{..} = API.Image
-  { imagePath  = fold ["/static/images/", _imageHash]
-  , imageTags  = _imageTags
-  , imageThumb = fold ["/static/thumbs/", _imageHash]
-  , imageUUID  = uuid
+convertImage imageUUID Image{..} = Response
+  { _dimensions = (0, 0)
+  , _filename   = ""
+  , _filesize   = 0
+  , _path       = fold ["/static/images/", _hash]
+  , _tags       = _tags
+  , _thumb      = fold ["/static/thumbs/", _hash]
+  , _uuid       = imageUUID
   }
-
---------------------------------------------------------------------------------
-
-getImageByUUID
-  :: Maybe Token
-  -> DigestText
-  -> Pixel API.Image
-
-getImageByUUID Nothing _     = throwError (ImageError MissingToken)
-getImageByUUID (Just _) uuid =
-  handleImageRequest uuid >>= \case
-    Nothing       -> throwError (ImageError InvalidUUID)
-    Just response -> pure $ convertImage uuid response

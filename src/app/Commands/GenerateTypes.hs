@@ -6,38 +6,38 @@ module Commands.GenerateTypes
   ) where
 
 import Protolude
-import Commands.Types           ( Options (..), GenerateTypesOptions (..) )
+import Commands.Types             ( Options (..), GenerateTypesOptions (..) )
 
-import API.Image.Routes         ( DeleteTagsRequest
-                                , GetImageResponse
-                                , GetTagsResponse
-                                , PostImageRequest
-                                , PostTagsRequest
-                                )
-import API.Image.Types          ( Image )
-import API.User.Routes          ( AuthUserRequest, RegisterRequest )
-import API.User.Types           ( User, DangerousUser )
-import Data.Aeson.TypeScript.TH ( TSDeclaration
-                                , FormattingOptions(..)
-                                , deriveTypeScript
-                                , formatTSDeclaration
-                                , getTypeScriptDeclarations
-                                )
-import Data.Text as T           ( intercalate, pack )
-import Data.Text.IO             ( writeFile )
-import Options.Applicative      ( Parser
-                                , Mod
-                                , CommandFields
-                                , command
-                                , help
-                                , info
-                                , long
-                                , metavar
-                                , progDesc
-                                , strOption
-                                )
-import Pixel                    ( createOptions )
-import Pixel.API.Token          ( Token )
+import API.Image.Types            ( Image )
+import API.User.Routes            ( AuthUserRequest, RegisterRequest )
+import API.User.Types             ( User, DangerousUser )
+import Data.Aeson.TypeScript.TH   ( TSDeclaration
+                                  , FormattingOptions(..)
+                                  , deriveTypeScript
+                                  , formatTSDeclaration
+                                  , getTypeScriptDeclarations
+                                  )
+import Data.Text as T             ( intercalate, pack )
+import Data.Text.IO               ( writeFile )
+import Options.Applicative        ( Parser
+                                  , Mod
+                                  , CommandFields
+                                  , command
+                                  , help
+                                  , info
+                                  , long
+                                  , metavar
+                                  , progDesc
+                                  , strOption
+                                  )
+import Pixel                      ( createOptions )
+import Pixel.Model.Token          ( Token )
+
+import qualified Pixel.API.AppendImageTags as AppendImageTags
+import qualified Pixel.API.CreateImage     as CreateImage
+import qualified Pixel.API.DeleteImageTags as DeleteImageTags
+import qualified Pixel.API.FetchImages     as FetchImages
+import qualified Pixel.API.FetchImageTags  as FetchImageTags
 
 --------------------------------------------------------------------------------
 
@@ -67,11 +67,12 @@ generateTypes (GenerateTypesOptions folder) = do
 
       -- Image API Types
       , getTypeScriptDeclarations (Proxy @Image)
-      , getTypeScriptDeclarations (Proxy @DeleteTagsRequest)
-      , getTypeScriptDeclarations (Proxy @GetImageResponse)
-      , getTypeScriptDeclarations (Proxy @GetTagsResponse)
-      , getTypeScriptDeclarations (Proxy @PostImageRequest)
-      , getTypeScriptDeclarations (Proxy @PostTagsRequest)
+      , getTypeScriptDeclarations (Proxy @DeleteImageTags.Request)
+      , getTypeScriptDeclarations (Proxy @FetchImages.Response)
+      , getTypeScriptDeclarations (Proxy @FetchImages.GalleryImage)
+      , getTypeScriptDeclarations (Proxy @FetchImageTags.Response)
+      , getTypeScriptDeclarations (Proxy @CreateImage.Request)
+      , getTypeScriptDeclarations (Proxy @AppendImageTags.Request)
 
       -- User API Types
       , getTypeScriptDeclarations (Proxy @User)
@@ -83,24 +84,28 @@ generateTypes (GenerateTypesOptions folder) = do
 -- Generate TypeScript Instances
 
 deriveTypeScript
-  (createOptions @DeleteTagsRequest)
-  ''DeleteTagsRequest
+  (createOptions @DeleteImageTags.Request)
+  ''DeleteImageTags.Request
 
 deriveTypeScript
-  (createOptions @GetImageResponse)
-  ''GetImageResponse
+  (createOptions @FetchImages.Response)
+  ''FetchImages.Response
 
 deriveTypeScript
-  (createOptions @GetTagsResponse)
-  ''GetTagsResponse
+  (createOptions @FetchImages.GalleryImage)
+  ''FetchImages.GalleryImage
 
 deriveTypeScript
-  (createOptions @PostTagsRequest)
-  ''PostTagsRequest
+  (createOptions @FetchImageTags.Response)
+  ''FetchImageTags.Response
 
 deriveTypeScript
-  (createOptions @PostImageRequest)
-  ''PostImageRequest
+  (createOptions @AppendImageTags.Request)
+  ''AppendImageTags.Request
+
+deriveTypeScript
+  (createOptions @CreateImage.Request)
+  ''CreateImage.Request
 
 deriveTypeScript
   (createOptions @Image)

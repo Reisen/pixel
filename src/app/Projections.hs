@@ -5,7 +5,6 @@ module Projections
 
 import Protolude
 import Control.Lens
-
 import API.Image.Projections  ( setupImageProjections, projectImages )
 import API.User.Projections   ( setupUserProjections, projectUsers )
 import Data.Aeson             ( FromJSON, eitherDecode )

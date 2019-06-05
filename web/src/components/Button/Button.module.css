@@ -1,5 +1,6 @@
 .Root {
     border: 1px solid white;
+    background-color: white;
     color: #5588CC;
     cursor: pointer;
     font-size: 14px;
