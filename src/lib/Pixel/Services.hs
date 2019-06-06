@@ -1,7 +1,6 @@
 module Pixel.Services
   ( module Services
-  )
-where
+  ) where
 
 --------------------------------------------------------------------------------
 

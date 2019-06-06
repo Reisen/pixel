@@ -8,14 +8,10 @@ import Protolude
 import Servant
 import Data.Aeson          ( FromJSON(..) )
 import Data.Binary.Builder ( toLazyByteString )
+import MonadPixel          ( Pixel )
 import Pixel               ( Error(..), pixelParseJSON )
 import Pixel.Model.Token   ( Token(..) )
-import Pixel.Model.Users   ( UserError(..)
-                           , AuthenticationFailedReason(..)
-                           , AuthenticateDetails(..)
-                           , handleAuthenticateUser
-                           )
-import MonadPixel          ( Pixel )
+import Pixel.Operations    ( AuthenticateDetails(..), authenticateUser )
 import Web.Cookie          ( SetCookie(..), renderSetCookie, defaultSetCookie )
 
 --------------------------------------------------------------------------------
@@ -50,9 +46,9 @@ postAuthenticateUser
   -> Pixel TokenInHeader
 
 postAuthenticateUser AuthUserRequest{..} = do
-  mayToken <- handleAuthenticateUser authRequest
+  mayToken <- authenticateUser authRequest
   case mayToken of
-    Nothing    -> throwError (UserError . AuthenticationFailed $ OtherAuthFailure "Unknown")
+    Nothing    -> throwError UnknownError
     Just token -> pure
       . flip addHeader NoContent
       . toS

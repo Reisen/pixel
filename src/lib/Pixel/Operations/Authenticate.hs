@@ -1,8 +1,8 @@
-module Pixel.Model.Users.Operations.Authentication
+module Pixel.Operations.Authenticate
   ( AuthenticateDetails(..)
   , RegisterDetails(..)
-  , handleAuthenticateUser
-  , handleRegisterUser
+  , authenticateUser
+  , registerUser
   ) where
 
 import Protolude hiding                 ( state)
@@ -27,14 +27,14 @@ data AuthenticateDetails = AuthenticateDetails
   , _password :: !Text
   } deriving (Show)
 
-handleAuthenticateUser
+authenticateUser
   :: Monad m
   => MonadIO m
   => MonadUser m
   => AuthenticateDetails
   -> m (Maybe Token)
 
-handleAuthenticateUser AuthenticateDetails{..} = runMaybeT $ do
+authenticateUser AuthenticateDetails{..} = runMaybeT $ do
   (userUUID, user) <- MaybeT $ findUserByEmail (Email _email)
   currentPassword  <- MaybeT $ pure (user ^. password)
   let passwordCheck = verifyPassword currentPassword _password
@@ -55,16 +55,17 @@ data RegisterDetails = RegisterDetails
   , _salt      :: !Text
   } deriving (Show)
 
-handleRegisterUser
+registerUser
   :: Monad m
   => MonadUser m
   => RegisterDetails
   -> m ()
 
-handleRegisterUser RegisterDetails{..} = do
+registerUser RegisterDetails{..} = do
   let newEmail    = Email _email
   let mayPassword = makePassword _password _salt
   mayRole <- findRoleByName "Standard"
   case (mayPassword, mayRole) of
     (Just newPassword, Just defaultRole) -> createUser _uuid (fst defaultRole) _createdAt newEmail newPassword
     (_, _)                               -> pure ()
+

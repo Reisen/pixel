@@ -16,12 +16,10 @@ import Data.Time         ( getCurrentTime )
 import MonadPixel        ( Pixel )
 import Pixel             ( Error(..), pixelParseJSON )
 import Pixel.Model.Token ( Token(..) )
-import Pixel.Model.Users ( UserError(..)
+import Pixel.Operations  ( RegisterDetails(..)
                          , AuthenticateDetails(..)
-                         , RegisterDetails(..)
-                         , RegistrationFailedReason(..)
-                         , handleRegisterUser
-                         , handleAuthenticateUser
+                         , registerUser
+                         , authenticateUser
                          )
 import Web.Cookie        ( SetCookie(..), defaultSetCookie )
 
@@ -60,7 +58,7 @@ postRegisterUser RegisterRequest{..} = do
   uuid                   <- liftIO nextRandom
   createdAt              <- liftIO getCurrentTime
   hashSalt :: ByteString <- liftIO $ getRandomBytes 16
-  handleRegisterUser RegisterDetails
+  registerUser RegisterDetails
     { _uuid      = uuid
     , _createdAt = createdAt
     , _email     = _registerRequestEmail
@@ -69,15 +67,15 @@ postRegisterUser RegisterRequest{..} = do
     }
 
   -- Validate the user can authenticate.
-  mayToken <- handleAuthenticateUser $ AuthenticateDetails
+  mayToken <- authenticateUser $ AuthenticateDetails
     { _email    = _registerRequestEmail
     , _password = _registerRequestPassword
     }
 
   case mayToken of
-    Nothing            -> throwError (UserError . RegistrationFailed $ OtherRegistrationFailure "Unknown")
+    Nothing            -> throwError UnknownError
     Just (Token token) -> if token /= toText uuid
-      then throwError (UserError . RegistrationFailed $ AccountExists)
+      then throwError UnknownError
       else pure
         . flip addHeader NoContent
         $ defaultSetCookie

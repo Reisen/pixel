@@ -7,10 +7,7 @@ module Pixel.JSON
   , pixelParseJSON
   ) where
 
---------------------------------------------------------------------------------
-
 import           Protolude
-
 import           Data.String                    ( String )
 import qualified Data.Aeson                    as A
 import qualified Data.Aeson.Types              as A
