@@ -9,6 +9,7 @@ import Protolude
 import Commands.Types             ( Options (..), GenerateTypesOptions (..) )
 
 import API.User.Types             ( User, DangerousUser )
+import Data.Aeson                 ( defaultOptions )
 import Data.Aeson.TypeScript.TH   ( TSDeclaration
                                   , FormattingOptions(..)
                                   , deriveTypeScript
@@ -28,7 +29,6 @@ import Options.Applicative        ( Parser
                                   , progDesc
                                   , strOption
                                   )
-import Pixel                      ( createOptions )
 import Pixel.Model.Token          ( Token )
 
 import qualified Pixel.API.AppendImageTags  as AppendImageTags
@@ -83,49 +83,17 @@ generateTypes (GenerateTypesOptions folder) = do
 --------------------------------------------------------------------------------
 -- Generate TypeScript Instances
 
-deriveTypeScript
-  (createOptions @DeleteImageTags.Request)
-  ''DeleteImageTags.Request
-
-deriveTypeScript
-  (createOptions @FetchImages.Response)
-  ''FetchImages.Response
-
-deriveTypeScript
-  (createOptions @Types.APIImage)
-  ''Types.APIImage
-
-deriveTypeScript
-  (createOptions @FetchImageTags.Response)
-  ''FetchImageTags.Response
-
-deriveTypeScript
-  (createOptions @AppendImageTags.Request)
-  ''AppendImageTags.Request
-
-deriveTypeScript
-  (createOptions @CreateImage.Request)
-  ''CreateImage.Request
-
-deriveTypeScript
-  (createOptions @AuthenticateUser.Request)
-  ''AuthenticateUser.Request
-
-deriveTypeScript
-  (createOptions @RegisterUser.Request)
-  ''RegisterUser.Request
-
-deriveTypeScript
-  (createOptions @User)
-  ''User
-
-deriveTypeScript
-  (createOptions @DangerousUser)
-  ''DangerousUser
-
-deriveTypeScript
-  (createOptions @Token)
-  ''Token
+deriveTypeScript defaultOptions ''AppendImageTags.Request
+deriveTypeScript defaultOptions ''AuthenticateUser.Request
+deriveTypeScript defaultOptions ''CreateImage.Request
+deriveTypeScript defaultOptions ''DangerousUser
+deriveTypeScript defaultOptions ''DeleteImageTags.Request
+deriveTypeScript defaultOptions ''FetchImageTags.Response
+deriveTypeScript defaultOptions ''FetchImages.Response
+deriveTypeScript defaultOptions ''RegisterUser.Request
+deriveTypeScript defaultOptions ''Token
+deriveTypeScript defaultOptions ''Types.APIImage
+deriveTypeScript defaultOptions ''User
 
 --------------------------------------------------------------------------------
 -- Define primitives used for optparse

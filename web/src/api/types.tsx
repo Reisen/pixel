@@ -1,67 +1,71 @@
 export type Token = IToken;
 
 export interface IToken {
-    text: string;
+    _tokenText: string;
 }
 
-export type Image = IImage;
+export type APIImage = IAPIImage;
 
-export interface IImage {
-    path: string;
-    thumb: string;
-    tags: string[];
-    UUID: string;
+export interface IAPIImage {
+    _dimensions: [number, number];
+    _filename: string;
+    _filesize: number;
+    _path: string;
+    _tags: string[];
+    _thumb: string;
+    _uuid: string;
 }
 
-export type DeleteTagsRequest = IDeleteTagsRequest;
+export type Request = IRequest;
 
-export interface IDeleteTagsRequest {
-    tags: string[];
+export interface IRequest {
+    _tags: string[];
 }
 
-export type GetImageResponse = IGetImageResponse;
+export type Response = IResponse;
 
-export interface IGetImageResponse {
-    images: Image[];
+export interface IResponse {
+    _images: APIImage[];
 }
 
-export type GetTagsResponse = IGetTagsResponse;
+export type Response = IResponse;
 
-export interface IGetTagsResponse {
-    tags: string[];
+export interface IResponse {
+    _tags: string[];
 }
 
-export type PostImageRequest = IPostImageRequest;
+export type Request = IRequest;
 
-export interface IPostImageRequest {
-    path: string;
-    tags: string[];
+export interface IRequest {
+    _path: string;
+    _tags: string[];
 }
 
-export type PostTagsRequest = IPostTagsRequest;
+export type Request = IRequest;
 
-export interface IPostTagsRequest {
-    tags: string[];
+export interface IRequest {
+    _tags: string[];
 }
 
 export type User = IUser;
 
 export interface IUser {
-    username?: string;
-    email?: string;
-    role?: string;
+    _uuid?: string;
+    _username?: string;
+    _email?: string;
+    _role?: string;
 }
 
-export type AuthUserRequest = IAuthUserRequest;
+export type Request = IRequest;
 
-export interface IAuthUserRequest {
-    email: string;
-    password: string;
+export interface IRequest {
+    _email: string;
+    _password: string;
 }
 
-export type RegisterRequest = IRegisterRequest;
+export type Request = IRequest;
 
-export interface IRegisterRequest {
-    email: string;
-    password: string;
+export interface IRequest {
+    _email: string;
+    _password: string;
 }
