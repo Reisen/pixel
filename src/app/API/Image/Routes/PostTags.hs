@@ -9,14 +9,13 @@ import Servant
 import MonadPixel                ( Pixel )
 import Pixel                     ( Error(..), CookieToken(..) )
 import Pixel.API.AppendImageTags ( Request(..) )
-import Pixel.Model.Images        ( DigestText )
 import Pixel.Operations          ( appendImageTags )
 
 --------------------------------------------------------------------------------
 
 postTags
   :: Maybe CookieToken
-  -> DigestText
+  -> Text
   -> Request
   -> Pixel NoContent
 

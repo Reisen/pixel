@@ -7,7 +7,6 @@ where
 
 import Protolude
 import Data.ByteString as B ( writeFile )
-import Pixel.Model.Images   ( DigestText )
 
 --------------------------------------------------------------------------------
 
@@ -15,7 +14,7 @@ import Pixel.Model.Images   ( DigestText )
 pixelWriteStaticImage
   :: MonadIO m
   => Text
-  -> DigestText
+  -> Text
   -> ByteString
   -> m ()
 

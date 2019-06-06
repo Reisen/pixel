@@ -3,16 +3,14 @@ module Pixel.Operations.CreateImage
   , createImage
   ) where
 
---------------------------------------------------------------------------------
-
-import Protolude hiding         ( hash )
-import Crypto.Hash              ( hash, Digest, SHA3_224 )
-import Data.UUID                ( UUID, fromText )
-import Data.Time                ( UTCTime )
-import Pixel.Model.Token        ( Token (..) )
-import Pixel.Model.Images.Types ( Image (..), TagList )
-import Pixel.Services.Image     ( MonadImage (..) )
-import Pixel.Services.Static    ( MonadStatic (..) )
+import Protolude hiding      ( hash )
+import Crypto.Hash           ( hash, Digest, SHA3_224 )
+import Data.UUID             ( UUID, fromText )
+import Data.Time             ( UTCTime )
+import Pixel.Model.Token     ( Token (..) )
+import Pixel.Model.Images    ( Image (..) )
+import Pixel.Services.Image  ( MonadImage (..) )
+import Pixel.Services.Static ( MonadStatic (..) )
 
 --------------------------------------------------------------------------------
 
@@ -21,7 +19,7 @@ data ImageDetails = ImageDetails
   , _createdAt    :: !UTCTime    -- ^ Time of Upload
   , _directory    :: !Text       -- ^ Where do we store this image?
   , _token        :: !Token      -- ^ Token for user doing this request.
-  , _uploadedTags :: !TagList    -- ^ Tags to associate with this image.
+  , _uploadedTags :: ![Text]     -- ^ Tags to associate with this image.
   , _uuid         :: !UUID       -- ^ What UUID do we assign to this resouce?
   }
 

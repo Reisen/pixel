@@ -3,9 +3,9 @@ module Pixel.Operations.FindImages
   ) where
 
 import Protolude
-import Data.UUID                ( UUID )
-import Pixel.Model.Images.Types ( Image )
-import Pixel.Services.Image     ( MonadImage (..) )
+import Data.UUID            ( UUID )
+import Pixel.Model.Images   ( Image )
+import Pixel.Services.Image ( MonadImage (..) )
 
 --------------------------------------------------------------------------------
 

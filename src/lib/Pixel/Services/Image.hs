@@ -6,8 +6,8 @@ where
 --------------------------------------------------------------------------------
 
 import Protolude
-import Data.UUID                ( UUID )
-import Pixel.Model.Images.Types ( Image, TagList )
+import Data.UUID          ( UUID )
+import Pixel.Model.Images ( Image )
 
 --------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ class MonadImage m where
   loadImages :: Int -> m [(UUID, Image)]
 
   -- Append tags to a specific image UUID.
-  appendTags :: UUID -> TagList -> m ()
+  appendTags :: UUID -> [Text] -> m ()
 
   -- Remove tags from a specific image UUID.
-  removeTags :: UUID -> TagList -> m ()
+  removeTags :: UUID -> [Text] -> m ()

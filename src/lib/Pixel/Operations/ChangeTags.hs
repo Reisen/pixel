@@ -7,17 +7,16 @@ module Pixel.Operations.ChangeTags
 import Protolude
 import Pixel.Lens
 import Control.Lens
-import Data.UUID                ( fromText )
-import Pixel.Model.Images.Types ( TagList, DigestText )
-import Pixel.Services.Image     ( MonadImage(..) )
+import Data.UUID            ( fromText )
+import Pixel.Services.Image ( MonadImage(..) )
 
 --------------------------------------------------------------------------------
 
 findTagsByUUID
   :: Monad m
   => MonadImage m
-  => DigestText
-  -> m (Maybe TagList)
+  => Text
+  -> m (Maybe [Text])
 
 findTagsByUUID uuidText =
   case fromText uuidText of
@@ -31,8 +30,8 @@ findTagsByUUID uuidText =
 appendImageTags
   :: Monad m
   => MonadImage m
-  => DigestText
-  -> TagList
+  => Text
+  -> [Text]
   -> m ()
 
 appendImageTags uuidText newTags =
@@ -45,8 +44,8 @@ appendImageTags uuidText newTags =
 removeImageTags
   :: Monad m
   => MonadImage m
-  => DigestText
-  -> TagList
+  => Text
+  -> [Text]
   -> m ()
 
 removeImageTags uuidText newTags = case fromText uuidText of

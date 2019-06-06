@@ -9,7 +9,6 @@ import Pixel                     ( Error(..) )
 import Pixel.API                 ( CookieToken(..) )
 import Pixel.API.DeleteImageTags ( Request(..) )
 import Pixel.Lens
-import Pixel.Model.Images        ( DigestText )
 import Pixel.Operations          ( removeImageTags )
 import MonadPixel                ( Pixel )
 
@@ -17,7 +16,7 @@ import MonadPixel                ( Pixel )
 
 postDeleteTags
   :: Maybe CookieToken
-  -> DigestText
+  -> Text
   -> Request
   -> Pixel NoContent
 

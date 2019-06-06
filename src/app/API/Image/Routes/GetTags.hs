@@ -7,7 +7,6 @@ import Protolude
 import Pixel                    ( Error(..) )
 import Pixel.API                ( CookieToken(..) )
 import Pixel.API.FetchImageTags ( Response(..) )
-import Pixel.Model.Images       ( DigestText )
 import Pixel.Operations         ( findTagsByUUID )
 import MonadPixel               ( Pixel )
 
@@ -15,7 +14,7 @@ import MonadPixel               ( Pixel )
 
 getTags
   :: Maybe CookieToken
-  -> DigestText
+  -> Text
   -> Pixel Response
 
 getTags Nothing _          = throwError UnknownError

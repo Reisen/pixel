@@ -3,16 +3,16 @@ module Pixel.Operations.FindImageByUUID
   ) where
 
 import Protolude
-import Data.UUID                ( fromText )
-import Pixel.Model.Images.Types ( DigestText, Image )
-import Pixel.Services.Image     ( MonadImage (..) )
+import Data.UUID            ( fromText )
+import Pixel.Model.Images   ( Image )
+import Pixel.Services.Image ( MonadImage (..) )
 
 --------------------------------------------------------------------------------
 
 findImageByUUID
   :: Monad m
   => MonadImage m
-  => DigestText
+  => Text
   -> m (Maybe Image)
 
 findImageByUUID textUUID = case fromText textUUID of

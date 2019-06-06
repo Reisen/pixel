@@ -6,7 +6,7 @@ import Protolude
 import Pixel                      ( Error(..) )
 import Pixel.API                  ( CookieToken(..) )
 import Pixel.API.FetchImageByUUID ( Response(..) )
-import Pixel.Model.Images         ( Image(..), DigestText )
+import Pixel.Model.Images         ( Image(..) )
 import Pixel.Operations           ( findImageByUUID )
 import MonadPixel                 ( Pixel )
 
@@ -14,7 +14,7 @@ import MonadPixel                 ( Pixel )
 
 getImageByUUID
   :: Maybe CookieToken
-  -> DigestText
+  -> Text
   -> Pixel Response
 
 getImageByUUID Nothing _            = throwError UnknownError
@@ -26,7 +26,7 @@ getImageByUUID (Just _) imageUUID =
 --------------------------------------------------------------------------------
 
 convertImage
-  :: DigestText
+  :: Text
   -> Image
   -> Response
 

@@ -18,7 +18,7 @@ import Data.Text                  ( splitOn )
 import Data.UUID                  ( UUID, fromText )
 import Database.SQLite.Simple     ( query_ )
 import Eventless                  ( runCommand, loadLatest, value )
-import Pixel.Model.Images         ( Image(..), TagList )
+import Pixel.Model.Images         ( Image(..) )
 
 --------------------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ pixelAppendTags
   :: MonadIO m
   => MonadReader Config m
   => UUID
-  -> TagList
+  -> [Text]
   -> m ()
 
 pixelAppendTags imageUUID imageTags = do
@@ -100,7 +100,7 @@ pixelRemoveTags
   :: MonadIO m
   => MonadReader Config m
   => UUID
-  -> TagList
+  -> [Text]
   -> m ()
 
 pixelRemoveTags imageUUID imageTags = do
