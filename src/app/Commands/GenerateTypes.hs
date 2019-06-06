@@ -8,7 +8,6 @@ module Commands.GenerateTypes
 import Protolude
 import Commands.Types             ( Options (..), GenerateTypesOptions (..) )
 
-import API.Image.Types            ( Image )
 import API.User.Routes            ( AuthUserRequest, RegisterRequest )
 import API.User.Types             ( User, DangerousUser )
 import Data.Aeson.TypeScript.TH   ( TSDeclaration
@@ -38,6 +37,7 @@ import qualified Pixel.API.CreateImage     as CreateImage
 import qualified Pixel.API.DeleteImageTags as DeleteImageTags
 import qualified Pixel.API.FetchImages     as FetchImages
 import qualified Pixel.API.FetchImageTags  as FetchImageTags
+import qualified Pixel.API.Types           as Types
 
 --------------------------------------------------------------------------------
 
@@ -66,10 +66,9 @@ generateTypes (GenerateTypesOptions folder) = do
       [ getTypeScriptDeclarations (Proxy @Token)
 
       -- Image API Types
-      , getTypeScriptDeclarations (Proxy @Image)
+      , getTypeScriptDeclarations (Proxy @Types.APIImage)
       , getTypeScriptDeclarations (Proxy @DeleteImageTags.Request)
       , getTypeScriptDeclarations (Proxy @FetchImages.Response)
-      , getTypeScriptDeclarations (Proxy @FetchImages.GalleryImage)
       , getTypeScriptDeclarations (Proxy @FetchImageTags.Response)
       , getTypeScriptDeclarations (Proxy @CreateImage.Request)
       , getTypeScriptDeclarations (Proxy @AppendImageTags.Request)
@@ -92,8 +91,8 @@ deriveTypeScript
   ''FetchImages.Response
 
 deriveTypeScript
-  (createOptions @FetchImages.GalleryImage)
-  ''FetchImages.GalleryImage
+  (createOptions @Types.APIImage)
+  ''Types.APIImage
 
 deriveTypeScript
   (createOptions @FetchImageTags.Response)
@@ -106,10 +105,6 @@ deriveTypeScript
 deriveTypeScript
   (createOptions @CreateImage.Request)
   ''CreateImage.Request
-
-deriveTypeScript
-  (createOptions @Image)
-  ''Image
 
 deriveTypeScript
   (createOptions @AuthUserRequest)

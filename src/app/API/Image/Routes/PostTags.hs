@@ -9,7 +9,8 @@ import Servant
 import MonadPixel                ( Pixel )
 import Pixel                     ( Error(..), CookieToken(..) )
 import Pixel.API.AppendImageTags ( Request(..) )
-import Pixel.Model.Images        ( DigestText, ImageError(..), addTags )
+import Pixel.Model.Images        ( DigestText )
+import Pixel.Operations          ( appendImageTags )
 
 --------------------------------------------------------------------------------
 
@@ -19,7 +20,7 @@ postTags
   -> Request
   -> Pixel NoContent
 
-postTags Nothing _ _            = throwError (ImageError MissingToken)
+postTags Nothing _ _            = throwError UnknownError
 postTags (Just _) imageUUID req = do
-  addTags imageUUID (req ^. tags)
+  appendImageTags imageUUID (req ^. tags)
   pure NoContent

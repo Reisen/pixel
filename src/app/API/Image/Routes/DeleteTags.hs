@@ -9,7 +9,8 @@ import Pixel                     ( Error(..) )
 import Pixel.API                 ( CookieToken(..) )
 import Pixel.API.DeleteImageTags ( Request(..) )
 import Pixel.Lens
-import Pixel.Model.Images        ( ImageError(..), DigestText, deleteTags )
+import Pixel.Model.Images        ( DigestText )
+import Pixel.Operations          ( removeImageTags )
 import MonadPixel                ( Pixel )
 
 --------------------------------------------------------------------------------
@@ -20,7 +21,7 @@ postDeleteTags
   -> Request
   -> Pixel NoContent
 
-postDeleteTags Nothing _ _ = throwError (ImageError MissingToken)
+postDeleteTags Nothing _ _            = throwError UnknownError
 postDeleteTags (Just _) imageUUID req = do
-  deleteTags imageUUID (req ^. tags)
+  removeImageTags imageUUID (req ^. tags)
   pure NoContent

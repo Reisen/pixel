@@ -1,7 +1,7 @@
-module Pixel.Model.Images.Operations.Tags
-  ( fetchTags
-  , addTags
-  , deleteTags
+module Pixel.Operations.ChangeTags
+  ( appendImageTags
+  , findTagsByUUID
+  , removeImageTags
   ) where
 
 import Protolude
@@ -13,13 +13,13 @@ import Pixel.Services.Image     ( MonadImage(..) )
 
 --------------------------------------------------------------------------------
 
-fetchTags
+findTagsByUUID
   :: Monad m
   => MonadImage m
   => DigestText
   -> m (Maybe TagList)
 
-fetchTags uuidText =
+findTagsByUUID uuidText =
   case fromText uuidText of
     Nothing        -> pure Nothing
     Just imageUUID -> loadImage imageUUID >>= \case
@@ -28,27 +28,28 @@ fetchTags uuidText =
 
 --------------------------------------------------------------------------------
 
-addTags
+appendImageTags
   :: Monad m
   => MonadImage m
   => DigestText
   -> TagList
   -> m ()
 
-addTags uuidText newTags =
+appendImageTags uuidText newTags =
   case fromText uuidText of
     Nothing        -> pure ()
     Just imageUUID -> appendTags imageUUID newTags
 
 --------------------------------------------------------------------------------
 
-deleteTags
+removeImageTags
   :: Monad m
   => MonadImage m
   => DigestText
   -> TagList
   -> m ()
 
-deleteTags uuidText newTags = case fromText uuidText of
+removeImageTags uuidText newTags = case fromText uuidText of
   Nothing        -> pure ()
   Just imageUUID -> removeTags imageUUID newTags
+

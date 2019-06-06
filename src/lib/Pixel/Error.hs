@@ -19,4 +19,5 @@ data Error
   = AuthError  !AuthenticationError
   | ImageError !ImageError
   | UserError  !UserError
+  | UnknownError
   deriving Show

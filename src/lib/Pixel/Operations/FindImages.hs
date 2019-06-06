@@ -1,5 +1,5 @@
-module Pixel.Model.Images.Operations.GetImage
-  ( fetchImages
+module Pixel.Operations.FindImages
+  ( findImages
   ) where
 
 import Protolude
@@ -9,9 +9,9 @@ import Pixel.Services.Image     ( MonadImage (..) )
 
 --------------------------------------------------------------------------------
 
-fetchImages
+findImages
   :: Monad m
   => MonadImage m
   => m [(UUID, Image)]
 
-fetchImages = loadImages 10
+findImages = loadImages 10

@@ -1,5 +1,5 @@
-module Pixel.Model.Images.Operations.GetImageByUUID
-  ( handleImageRequest
+module Pixel.Operations.FindImageByUUID
+  ( findImageByUUID
   ) where
 
 import Protolude
@@ -9,15 +9,15 @@ import Pixel.Services.Image     ( MonadImage (..) )
 
 --------------------------------------------------------------------------------
 
-handleImageRequest
+findImageByUUID
   :: Monad m
   => MonadImage m
   => DigestText
   -> m (Maybe Image)
 
-handleImageRequest textUUID =
-  case fromText textUUID of
-    Nothing   -> pure Nothing
-    Just uuid -> loadImage uuid >>= \case
-      Nothing    -> pure Nothing
-      Just image -> pure (Just image)
+findImageByUUID textUUID = case fromText textUUID of
+  Nothing   -> pure Nothing
+  Just uuid -> loadImage uuid >>= \case
+    Nothing    -> pure Nothing
+    Just image -> pure (Just image)
+

@@ -7,7 +7,8 @@ import Protolude
 import Pixel                    ( Error(..) )
 import Pixel.API                ( CookieToken(..) )
 import Pixel.API.FetchImageTags ( Response(..) )
-import Pixel.Model.Images       ( DigestText, ImageError(..), fetchTags )
+import Pixel.Model.Images       ( DigestText )
+import Pixel.Operations         ( findTagsByUUID )
 import MonadPixel               ( Pixel )
 
 --------------------------------------------------------------------------------
@@ -17,8 +18,8 @@ getTags
   -> DigestText
   -> Pixel Response
 
-getTags Nothing _          = throwError (ImageError MissingToken)
+getTags Nothing _          = throwError UnknownError
 getTags (Just _) imageUUID =
-  fetchTags imageUUID >>= \case
-    Nothing       -> throwError (ImageError InvalidUUID)
+  findTagsByUUID imageUUID >>= \case
+    Nothing       -> throwError UnknownError
     Just response -> pure . Response $ response
