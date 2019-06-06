@@ -8,7 +8,6 @@ module Commands.GenerateTypes
 import Protolude
 import Commands.Types             ( Options (..), GenerateTypesOptions (..) )
 
-import API.User.Routes            ( AuthUserRequest, RegisterRequest )
 import API.User.Types             ( User, DangerousUser )
 import Data.Aeson.TypeScript.TH   ( TSDeclaration
                                   , FormattingOptions(..)
@@ -32,12 +31,14 @@ import Options.Applicative        ( Parser
 import Pixel                      ( createOptions )
 import Pixel.Model.Token          ( Token )
 
-import qualified Pixel.API.AppendImageTags as AppendImageTags
-import qualified Pixel.API.CreateImage     as CreateImage
-import qualified Pixel.API.DeleteImageTags as DeleteImageTags
-import qualified Pixel.API.FetchImages     as FetchImages
-import qualified Pixel.API.FetchImageTags  as FetchImageTags
-import qualified Pixel.API.Types           as Types
+import qualified Pixel.API.AppendImageTags  as AppendImageTags
+import qualified Pixel.API.AuthenticateUser as AuthenticateUser
+import qualified Pixel.API.CreateImage      as CreateImage
+import qualified Pixel.API.DeleteImageTags  as DeleteImageTags
+import qualified Pixel.API.FetchImageTags   as FetchImageTags
+import qualified Pixel.API.FetchImages      as FetchImages
+import qualified Pixel.API.RegisterUser     as RegisterUser
+import qualified Pixel.API.Types            as Types
 
 --------------------------------------------------------------------------------
 
@@ -75,8 +76,8 @@ generateTypes (GenerateTypesOptions folder) = do
 
       -- User API Types
       , getTypeScriptDeclarations (Proxy @User)
-      , getTypeScriptDeclarations (Proxy @AuthUserRequest)
-      , getTypeScriptDeclarations (Proxy @RegisterRequest)
+      , getTypeScriptDeclarations (Proxy @AuthenticateUser.Request)
+      , getTypeScriptDeclarations (Proxy @RegisterUser.Request)
       ]
 
 --------------------------------------------------------------------------------
@@ -107,12 +108,12 @@ deriveTypeScript
   ''CreateImage.Request
 
 deriveTypeScript
-  (createOptions @AuthUserRequest)
-  ''AuthUserRequest
+  (createOptions @AuthenticateUser.Request)
+  ''AuthenticateUser.Request
 
 deriveTypeScript
-  (createOptions @RegisterRequest)
-  ''RegisterRequest
+  (createOptions @RegisterUser.Request)
+  ''RegisterUser.Request
 
 deriveTypeScript
   (createOptions @User)
