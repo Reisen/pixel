@@ -6,10 +6,9 @@ module Commands.GenerateTypes
   ) where
 
 import Protolude
-import Commands.Types             ( Options (..), GenerateTypesOptions (..) )
+import Commands.Types             ( Options(..), GenerateTypesOptions(..), named )
 
 import API.User.Types             ( User, DangerousUser )
-import Data.Aeson                 ( defaultOptions )
 import Data.Aeson.TypeScript.TH   ( TSDeclaration
                                   , FormattingOptions(..)
                                   , deriveTypeScript
@@ -53,11 +52,14 @@ formatExports declarations =
     .   formatTSDeclaration (FormattingOptions 4)
     <$> declarations
 
--- Here we take all exposed API types, including all
--- Route, Request/Response, and HTTP level types, and generate a TypeSCript
--- .d.ts file for use in the front-end.
+--------------------------------------------------------------------------------
+
+-- Here we take all exposed API types, including all Route, Request/Response,
+-- and HTTP level types, and generate a TypeSCript .d.ts file for use in the
+-- front-end.
 --
 -- This keeps our front-end and back-end in sync as much as possible.
+
 generateTypes :: GenerateTypesOptions -> IO ()
 generateTypes (GenerateTypesOptions folder) = do
   putText $ "Creating " <> (show $ length definitions) <> " definitions."
@@ -83,17 +85,17 @@ generateTypes (GenerateTypesOptions folder) = do
 --------------------------------------------------------------------------------
 -- Generate TypeScript Instances
 
-deriveTypeScript defaultOptions ''AppendImageTags.Request
-deriveTypeScript defaultOptions ''AuthenticateUser.Request
-deriveTypeScript defaultOptions ''CreateImage.Request
-deriveTypeScript defaultOptions ''DangerousUser
-deriveTypeScript defaultOptions ''DeleteImageTags.Request
-deriveTypeScript defaultOptions ''FetchImageTags.Response
-deriveTypeScript defaultOptions ''FetchImages.Response
-deriveTypeScript defaultOptions ''RegisterUser.Request
-deriveTypeScript defaultOptions ''Token
-deriveTypeScript defaultOptions ''Types.APIImage
-deriveTypeScript defaultOptions ''User
+deriveTypeScript (named "AppendRequest") ''AppendImageTags.Request
+deriveTypeScript (named "Authenticate")  ''AuthenticateUser.Request
+deriveTypeScript (named "CreateRequest") ''CreateImage.Request
+deriveTypeScript (named "User")          ''DangerousUser
+deriveTypeScript (named "X")             ''DeleteImageTags.Request
+deriveTypeScript (named "X")             ''FetchImageTags.Response
+deriveTypeScript (named "X")             ''FetchImages.Response
+deriveTypeScript (named "X")             ''RegisterUser.Request
+deriveTypeScript (named "X")             ''Token
+deriveTypeScript (named "X")             ''Types.APIImage
+deriveTypeScript (named "X")             ''User
 
 --------------------------------------------------------------------------------
 -- Define primitives used for optparse

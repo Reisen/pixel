@@ -1,71 +1,71 @@
 export type Token = IToken;
 
 export interface IToken {
-    _tokenText: string;
+    tokenText: string;
 }
 
 export type APIImage = IAPIImage;
 
 export interface IAPIImage {
-    _dimensions: [number, number];
-    _filename: string;
-    _filesize: number;
-    _path: string;
-    _tags: string[];
-    _thumb: string;
-    _uuid: string;
+    dimensions: [number, number];
+    filename: string;
+    filesize: number;
+    path: string;
+    tags: string[];
+    thumb: string;
+    uuid: string;
 }
 
 export type Request = IRequest;
 
 export interface IRequest {
-    _tags: string[];
+    tags: string[];
 }
 
 export type Response = IResponse;
 
 export interface IResponse {
-    _images: APIImage[];
+    images: APIImage[];
 }
 
 export type Response = IResponse;
 
 export interface IResponse {
-    _tags: string[];
+    tags: string[];
 }
 
 export type Request = IRequest;
 
 export interface IRequest {
-    _path: string;
-    _tags: string[];
+    path: string;
+    tags: string[];
 }
 
 export type Request = IRequest;
 
 export interface IRequest {
-    _tags: string[];
+    tags: string[];
 }
 
 export type User = IUser;
 
 export interface IUser {
-    _uuid?: string;
-    _username?: string;
-    _email?: string;
-    _role?: string;
+    uuid?: string;
+    username?: string;
+    email?: string;
+    role?: string;
 }
 
 export type Request = IRequest;
 
 export interface IRequest {
-    _email: string;
-    _password: string;
+    email: string;
+    password: string;
 }
 
 export type Request = IRequest;
 
 export interface IRequest {
-    _email: string;
-    _password: string;
+    email: string;
+    password: string;
 }
