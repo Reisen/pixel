@@ -1,12 +1,19 @@
 {-# OPTIONS -fno-warn-orphans #-}
 
+-- We use this module to automatically generate types for consumption in the front-end
+-- using the aeson-typescript module. This module is fantastic, with the one exception
+-- that you have zero control over the output type name. What this means is that for
+-- all our types that are named Request/Response we're going to generate clashes in
+-- the output. This module produces our types and also offers a workaround for that
+-- limitation.
+
 module Commands.GenerateTypes
   ( commandGenerateTypes
   , generateTypes
   ) where
 
 import Protolude
-import Commands.Types             ( Options(..), GenerateTypesOptions(..), named )
+import Commands.Types             ( Options(..), GenerateTypesOptions(..), apiOptions )
 
 import API.User.Types             ( User, DangerousUser )
 import Data.Aeson.TypeScript.TH   ( TSDeclaration
@@ -41,6 +48,10 @@ import qualified Pixel.API.Types            as Types
 
 --------------------------------------------------------------------------------
 
+-- Hack 1:
+-- aeson-typescript doesn't export our types by default, new version of TS don't
+-- like modules very miuch so we'll hand prefix our declarations here.
+
 formatExports
   :: [TSDeclaration]
   -> Text
@@ -49,7 +60,7 @@ formatExports declarations =
   T.intercalate "\n\n"
     $   ("export " <>)
     .   pack
-    .   formatTSDeclaration (FormattingOptions 4)
+    .   formatTSDeclaration (FormattingOptions 4 (const "DIIICKS") (const "FUUUUCK"))
     <$> declarations
 
 --------------------------------------------------------------------------------
@@ -85,17 +96,17 @@ generateTypes (GenerateTypesOptions folder) = do
 --------------------------------------------------------------------------------
 -- Generate TypeScript Instances
 
-deriveTypeScript (named "AppendRequest") ''AppendImageTags.Request
-deriveTypeScript (named "Authenticate")  ''AuthenticateUser.Request
-deriveTypeScript (named "CreateRequest") ''CreateImage.Request
-deriveTypeScript (named "User")          ''DangerousUser
-deriveTypeScript (named "X")             ''DeleteImageTags.Request
-deriveTypeScript (named "X")             ''FetchImageTags.Response
-deriveTypeScript (named "X")             ''FetchImages.Response
-deriveTypeScript (named "X")             ''RegisterUser.Request
-deriveTypeScript (named "X")             ''Token
-deriveTypeScript (named "X")             ''Types.APIImage
-deriveTypeScript (named "X")             ''User
+deriveTypeScript apiOptions ''AppendImageTags.Request
+deriveTypeScript apiOptions ''AuthenticateUser.Request
+deriveTypeScript apiOptions ''CreateImage.Request
+deriveTypeScript apiOptions ''DangerousUser
+deriveTypeScript apiOptions ''DeleteImageTags.Request
+deriveTypeScript apiOptions ''FetchImageTags.Response
+deriveTypeScript apiOptions ''FetchImages.Response
+deriveTypeScript apiOptions ''RegisterUser.Request
+deriveTypeScript apiOptions ''Token
+deriveTypeScript apiOptions ''Types.APIImage
+deriveTypeScript apiOptions ''User
 
 --------------------------------------------------------------------------------
 -- Define primitives used for optparse

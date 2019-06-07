@@ -3,7 +3,7 @@ module Commands.Types
   , RunOptions (..)
   , RunProjectionsOptions (..)
   , GenerateTypesOptions (..)
-  , named
+  , apiOptions
   ) where
 
 --------------------------------------------------------------------------------
@@ -40,8 +40,7 @@ data GenerateTypesOptions = GenerateTypesOptions
 -- To get around this, we'll hand-name the output types with a helper function
 -- to generate options:
 
-named :: Text -> Aeson.Options
-named name = defaultOptions
-  { constructorTagModifier = toS . const name
-  , fieldLabelModifier     = dropWhile (=='_')
+apiOptions :: Aeson.Options
+apiOptions = defaultOptions
+  { fieldLabelModifier = dropWhile (=='_')
   }

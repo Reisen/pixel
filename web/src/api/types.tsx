@@ -1,12 +1,12 @@
-export type Token = IToken;
+export type FUUUUCK = IToken;
 
-export interface IToken {
+export interface IDIIICKS {
     tokenText: string;
 }
 
-export type APIImage = IAPIImage;
+export type FUUUUCK = IAPIImage;
 
-export interface IAPIImage {
+export interface IDIIICKS {
     dimensions: [number, number];
     filename: string;
     filesize: number;
@@ -16,56 +16,56 @@ export interface IAPIImage {
     uuid: string;
 }
 
-export type Request = IRequest;
+export type FUUUUCK = IRequest;
 
-export interface IRequest {
+export interface IDIIICKS {
     tags: string[];
 }
 
-export type Response = IResponse;
+export type FUUUUCK = IResponse;
 
-export interface IResponse {
+export interface IDIIICKS {
     images: APIImage[];
 }
 
-export type Response = IResponse;
+export type FUUUUCK = IResponse;
 
-export interface IResponse {
+export interface IDIIICKS {
     tags: string[];
 }
 
-export type Request = IRequest;
+export type FUUUUCK = IRequest;
 
-export interface IRequest {
+export interface IDIIICKS {
     path: string;
     tags: string[];
 }
 
-export type Request = IRequest;
+export type FUUUUCK = IRequest;
 
-export interface IRequest {
+export interface IDIIICKS {
     tags: string[];
 }
 
-export type User = IUser;
+export type FUUUUCK = IUser;
 
-export interface IUser {
+export interface IDIIICKS {
     uuid?: string;
     username?: string;
     email?: string;
     role?: string;
 }
 
-export type Request = IRequest;
+export type FUUUUCK = IRequest;
 
-export interface IRequest {
+export interface IDIIICKS {
     email: string;
     password: string;
 }
 
-export type Request = IRequest;
+export type FUUUUCK = IRequest;
 
-export interface IRequest {
+export interface IDIIICKS {
     email: string;
     password: string;
 }
