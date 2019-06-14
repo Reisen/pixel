@@ -49,14 +49,13 @@ jobs:
         # Build Dependencies
         - stage: build
           script:
-            - stack --fast --no-terminal --install-ghc test --only-dependencies
-            - stack --fast --no-terminal test
+            - stack --no-terminal --install-ghc test --fast --only-dependencies
+            - stack --no-terminal test --fast
 
         # Build Docker Releases for Master
         - stage: deploy
           if: branch = master AND type = push
           script:
-            - stack build
             - docker login -u $DOCKER_USER -p $DOCKER_PASS
             - docker build -f Dockerfile.quick -t reisern/pixel:latest .
             - docker push reisern/pixel:latest
