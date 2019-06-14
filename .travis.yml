@@ -60,8 +60,8 @@ jobs:
 
             - mv .stack-work /tmp/.stack-work
             - mv $HOME/.stack /tmp/.stack
-            - tar --mtime='1970-01-01' --sort=name -zcf /tmp/stack.tar.gz /tmp/.stack
-            - tar --mtime='1970-01-01' --sort=name -zcf /tmp/stack-work.tar.gz /tmp/.stack-work
+            - tar --mtime='1970-01-01' -zcf /tmp/stack.tar.gz /tmp/.stack
+            - tar --mtime='1970-01-01' -zcf /tmp/stack-work.tar.gz /tmp/.stack-work
 
         # Build Docker Releases for Master
         - stage: deploy
