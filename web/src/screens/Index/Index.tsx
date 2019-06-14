@@ -9,7 +9,7 @@ import React, { useEffect }    from 'react';
 import { connect }             from 'react-redux';
 import { match }               from 'react-router-dom';
 import { History }             from 'history'
-import { Image as image }      from '../../api/types';
+import { image }               from '../../types/image';
 import { State }               from '../../store';
 import { ScalingMode }         from '../../store/images/types';
 import { User }                from '../../store/users/types';

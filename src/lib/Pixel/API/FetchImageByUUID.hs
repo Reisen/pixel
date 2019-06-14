@@ -6,7 +6,7 @@ module Pixel.API.FetchImageByUUID
 import Protolude
 import Servant
 import Data.Aeson      ( ToJSON(..), FromJSON(..) )
-import Pixel.API.Types ( CookieToken )
+import Pixel.API.Types ( CookieToken, APIImage )
 
 --------------------------------------------------------------------------------
 
@@ -18,13 +18,7 @@ type Route =
 --------------------------------------------------------------------------------
 
 data Response = Response
-  { _dimensions :: (Int, Int)
-  , _filename   :: !Text
-  , _filesize   :: !Int
-  , _path       :: !Text
-  , _tags       :: ![Text]
-  , _thumb      :: !Text
-  , _uuid       :: !Text
+  { _image :: APIImage
   } deriving (Show, Generic)
 
 --------------------------------------------------------------------------------

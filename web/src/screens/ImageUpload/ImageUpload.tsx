@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { connect }                 from 'react-redux';
-import { Image as image }          from '../../api/types';
+import { History }                 from 'history';
 import { State }                   from '../../store';
 import { getImages }               from '../../store/images';
 import { logoutUser }              from '../../store/users';
-import { uploadImage }             from '../../api/images';
-import { History }                 from 'history'
+import { uploadImage }             from '../../Api';
+import { image }                   from '../../types/image';
 
 // Components
 import Tag                         from '../../components/Tag';
@@ -96,7 +96,7 @@ const Image = (props: Props) => {
                     return null;
                 });
 
-                await uploadImage(data)
+                await uploadImage(data, null)
             }
 
             props.history.push('/');

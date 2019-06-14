@@ -3,22 +3,22 @@
 // about the project during registration. This means the screens are more
 // dissimilar than just a pair of forms.
 
-import React            from 'react';
-// import { User as user } from '../../api/types';
-import { connect }      from 'react-redux';
-import { State }        from '../../store';
-import { History }      from 'history'
-import { loginUser }    from '../../store/users';
+import React             from 'react';
+import { connect }       from 'react-redux';
+import { State }         from '../../store';
+import { History }       from 'history'
+import { loginUser }     from '../../store/users';
+import { AxiosResponse } from 'axios';
 
 // Components
-import NavigationBar    from '../../components/NavigationBar';
-import TextInput        from '../../components/TextInput';
-import Button           from '../../components/Button';
-import styles           from './UserLogin.module.css';
+import NavigationBar     from '../../components/NavigationBar';
+import TextInput         from '../../components/TextInput';
+import Button            from '../../components/Button';
+import styles            from './UserLogin.module.css';
 
 
 interface Props {
-    loginUser: (email: string, password: string) => Promise<Response>;
+    loginUser: (email: string, password: string) => Promise<AxiosResponse>;
     username:  string;
     history:   History;
 }
@@ -37,12 +37,8 @@ const UserLogin = (props: Props) => {
     // Handle Registration Clicks
     const handleLogin = async () => {
         setWaiting(true);
-        const result = await props.loginUser(email, password)
-        if (result.ok) props.history.push('/');
-        else {
-            setWaiting(false);
-            setError('Registration Failed');
-        }
+        await props.loginUser(email, password);
+        props.history.push('/');
     };
 
     return (

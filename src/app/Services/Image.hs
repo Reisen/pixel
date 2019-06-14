@@ -29,11 +29,11 @@ pixelSaveImage
   -> Image
   -> m ()
 
-pixelSaveImage imageUUID image = case image ^. uploader of
+pixelSaveImage imageUUID img = case img ^. uploader of
   Nothing       -> pure ()
   Just userUUID -> do
     backend <- view configConnection
-    let create = createImage userUUID image
+    let create = createImage userUUID img
     void $ runCommand backend imageUUID create
 
 
@@ -45,8 +45,8 @@ pixelLoadImage
 
 pixelLoadImage imageUUID = do
   backend <- view configConnection
-  image   <- loadLatest backend imageUUID
-  pure $ (^. value) <$> image
+  img     <- loadLatest backend imageUUID
+  pure $ (^. value) <$> img
 
 
 pixelLoadImages

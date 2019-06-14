@@ -4,7 +4,7 @@ module API.Image.Routes.GetImageByUUID
 
 import Protolude
 import Pixel                      ( Error(..) )
-import Pixel.API                  ( CookieToken(..) )
+import Pixel.API                  ( APIImage(..), CookieToken(..) )
 import Pixel.API.FetchImageByUUID ( Response(..) )
 import Pixel.Model.Images         ( Image(..) )
 import Pixel.Operations           ( findImageByUUID )
@@ -31,11 +31,13 @@ convertImage
   -> Response
 
 convertImage imageUUID Image{..} = Response
-  { _dimensions = (0, 0)
-  , _filename   = ""
-  , _filesize   = 0
-  , _path       = fold ["/static/images/", _hash]
-  , _tags       = _tags
-  , _thumb      = fold ["/static/thumbs/", _hash]
-  , _uuid       = imageUUID
+  { _image = APIImage
+    { _dimensions = (0, 0)
+    , _filename   = ""
+    , _filesize   = 0
+    , _path       = fold ["/static/images/", _hash]
+    , _tags       = _tags
+    , _thumb      = fold ["/static/thumbs/", _hash]
+    , _uuid       = imageUUID
+    }
   }

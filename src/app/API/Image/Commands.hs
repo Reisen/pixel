@@ -42,9 +42,9 @@ addTags
   -> Command Image m
 
 addTags newtags = loadSnapshot @(Maybe Image) >>= \case
-  Nothing    -> pure ()
-  Just image -> for_ newtags $ \tag ->
-    unless (elem tag $ image ^. tags)
+  Nothing  -> pure ()
+  Just img -> for_ newtags $ \tag ->
+    unless (elem tag $ img ^. tags)
       $ emit (TagAppended tag)
 
 --------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ removeTags
   -> Command Image m
 
 removeTags newtags = loadSnapshot @(Maybe Image) >>= \case
-  Nothing    -> pure ()
-  Just image -> for_ newtags $ \tag ->
-    when (elem tag $ image ^. tags)
+  Nothing  -> pure ()
+  Just img -> for_ newtags $ \tag ->
+    when (elem tag $ img ^. tags)
       $ emit (TagRemoved tag)

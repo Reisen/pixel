@@ -1,8 +1,12 @@
 import 'whatwg-fetch';
-import Cookies                          from 'universal-cookie';
-import { Dispatch }                     from 'redux';
-import { createAction }                 from 'redux-actions';
-import { apiRegisterUser, apiAuthUser } from '../../api/users';
+import Cookies                     from 'universal-cookie';
+import { AxiosResponse }           from 'axios';
+import { Dispatch }                from 'redux';
+import { createAction }            from 'redux-actions';
+import {
+    registerUser as apiRegisterUser,
+    loginUser    as apiLoginUser,
+}                                  from '../../Api';
 
 export const setUsername   = createAction('SET_USERNAME');
 export const clearUsername = createAction('CLEAR_USERNAME');
@@ -15,7 +19,7 @@ export const clearUsername = createAction('CLEAR_USERNAME');
 // easily opt in to specific error states.
 export const registerUser =
     (email: string, password: string) =>
-        async (dispatch: Dispatch): Promise<Response> => {
+        async (dispatch: Dispatch): Promise<AxiosResponse> => {
             const response = await apiRegisterUser({ email, password });
             dispatch(setUsername(email));
             return response;
@@ -25,8 +29,8 @@ export const registerUser =
 // username with the result.
 export const loginUser =
     (email: string, password: string) =>
-        async (dispatch: Dispatch): Promise<Response> => {
-            const response = await apiAuthUser({ email, password });
+        async (dispatch: Dispatch): Promise<AxiosResponse> => {
+            const response = await apiLoginUser({ email, password });
             dispatch(setUsername(email));
             return response;
         };

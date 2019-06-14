@@ -22,8 +22,8 @@ findTagsByUUID uuidText =
   case fromText uuidText of
     Nothing        -> pure Nothing
     Just imageUUID -> loadImage imageUUID >>= \case
-      Nothing    -> pure Nothing
-      Just image -> pure . Just $ image ^. tags
+      Nothing  -> pure Nothing
+      Just img -> pure . Just $ img ^. tags
 
 --------------------------------------------------------------------------------
 
@@ -36,8 +36,8 @@ appendImageTags
 
 appendImageTags uuidText newTags =
   case fromText uuidText of
-    Nothing        -> pure ()
-    Just imageUUID -> appendTags imageUUID newTags
+    Nothing      -> pure ()
+    Just imgUUID -> appendTags imgUUID newTags
 
 --------------------------------------------------------------------------------
 
@@ -49,6 +49,6 @@ removeImageTags
   -> m ()
 
 removeImageTags uuidText newTags = case fromText uuidText of
-  Nothing        -> pure ()
-  Just imageUUID -> removeTags imageUUID newTags
+  Nothing      -> pure ()
+  Just imgUUID -> removeTags imgUUID newTags
 

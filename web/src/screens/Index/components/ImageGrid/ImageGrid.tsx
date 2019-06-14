@@ -1,11 +1,11 @@
-import React              from 'react';
-import Cookies            from 'universal-cookie';
-import { Link }           from 'react-router-dom';
-import { Image as image } from '../../../../api/types';
-import { ScalingMode }    from '../../../../store/images/types';
+import React           from 'react';
+import Cookies         from 'universal-cookie';
+import { Link }        from 'react-router-dom';
+import { image }       from '../../../../types/image';
+import { ScalingMode } from '../../../../store/images/types';
 
-import Image              from '../Image';
-import styles             from './ImageGrid.module.css';
+import Image           from '../Image';
+import styles          from './ImageGrid.module.css';
 
 
 // HACK, BIG HACK
@@ -26,7 +26,7 @@ interface Props {
 // Render images that have actually got valid paths.
 const renderValidImages = (slice: image[], props: Props) =>
     slice.map((image, k) =>
-        <Link key={image.UUID} to={`/i/${image.UUID}`}>
+        <Link key={image.uuid} to={`/i/${image.uuid}`}>
             <Image
                 contain={props.scalingMode === 'contain'}
                 path={`${findApiBase()}/${image.path}`}
