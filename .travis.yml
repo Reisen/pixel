@@ -11,8 +11,7 @@ language: generic
 # ------------------------------------------------------------------------------
 cache:
   directories:
-    - /tmp/stack-work.tar.gz
-    - /tmp/stack.tar.gz
+    - /tmp/cache
     - /tmp/.stack
     - /tmp/.stack-work
 
@@ -51,8 +50,8 @@ jobs:
         # Build Dependencies
         - stage: build
           script:
-            - tar -C / -zxf /tmp/stack.tar.gz
-            - tar -C / -zxf /tmp/stack-work.tar.gz
+            - tar -C / -zxf /tmp/cache/stack.tar.gz
+            - tar -C / -zxf /tmp/cache/stack-work.tar.gz
             - mv /tmp/.stack-work .stack-work
             - mv /tmp/.stack $HOME/.stack
 
@@ -79,5 +78,5 @@ jobs:
 
             - mv .stack-work /tmp/.stack-work
             - mv $HOME/.stack /tmp/.stack
-            - tar --mtime='1970-01-01' --sort=name -zcf /tmp/stack.tar.gz /tmp/.stack
-            - tar --mtime='1970-01-01' --sort=name -zcf /tmp/stack-work.tar.gz /tmp/.stack-work
+            - tar --mtime='1970-01-01' --sort=name -zcf /tmp/cache/stack.tar.gz /tmp/.stack
+            - tar --mtime='1970-01-01' --sort=name -zcf /tmp/cache/stack-work.tar.gz /tmp/.stack-work
