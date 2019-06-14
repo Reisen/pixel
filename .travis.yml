@@ -49,8 +49,8 @@ jobs:
         # Build Dependencies
         - stage: build
           script:
-            - stack --no-terminal --install-ghc test --only-dependencies
-            - stack --no-terminal test
+            - stack --no-terminal --install-ghc test --fast --only-dependencies
+            - stack --no-terminal test --fast
 
         # Build Docker Releases for Master
         - stage: deploy
