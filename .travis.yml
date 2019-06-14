@@ -13,8 +13,6 @@ cache:
   directories:
     - /tmp/.stack-work
     - /tmp/.stack
-    - $HOME/.stack
-    - .stack-work/
 
 
 # We need APT for libgmp, which is a required library by GHC in order to implement
