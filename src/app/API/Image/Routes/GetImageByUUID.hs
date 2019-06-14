@@ -4,37 +4,40 @@ module API.Image.Routes.GetImageByUUID
 
 import Protolude
 import Pixel                      ( Error(..) )
-import Pixel.API                  ( CookieToken(..) )
+import Pixel.API                  ( APIImage(..), CookieToken(..) )
 import Pixel.API.FetchImageByUUID ( Response(..) )
-import Pixel.Model.Images         ( Image(..), DigestText, ImageError(..), handleImageRequest )
+import Pixel.Model.Images         ( Image(..) )
+import Pixel.Operations           ( findImageByUUID )
 import MonadPixel                 ( Pixel )
 
 --------------------------------------------------------------------------------
 
 getImageByUUID
   :: Maybe CookieToken
-  -> DigestText
+  -> Text
   -> Pixel Response
 
-getImageByUUID Nothing _            = throwError (ImageError MissingToken)
+getImageByUUID Nothing _            = throwError UnknownError
 getImageByUUID (Just _) imageUUID =
-  handleImageRequest imageUUID >>= \case
-    Nothing       -> throwError (ImageError InvalidUUID)
+  findImageByUUID imageUUID >>= \case
+    Nothing       -> throwError UnknownError
     Just response -> pure $ convertImage imageUUID response
 
 --------------------------------------------------------------------------------
 
 convertImage
-  :: DigestText
+  :: Text
   -> Image
   -> Response
 
 convertImage imageUUID Image{..} = Response
-  { _dimensions = (0, 0)
-  , _filename   = ""
-  , _filesize   = 0
-  , _path       = fold ["/static/images/", _hash]
-  , _tags       = _tags
-  , _thumb      = fold ["/static/thumbs/", _hash]
-  , _uuid       = imageUUID
+  { _image = APIImage
+    { _dimensions = (0, 0)
+    , _filename   = ""
+    , _filesize   = 0
+    , _path       = fold ["/static/images/", _hash]
+    , _tags       = _tags
+    , _thumb      = fold ["/static/thumbs/", _hash]
+    , _uuid       = imageUUID
+    }
   }

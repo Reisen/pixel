@@ -1,18 +1,16 @@
-module Pixel.Model.Images.Operations.PostImage
+module Pixel.Operations.CreateImage
   ( ImageDetails(..)
-  , digestImage
   , createImage
-  , processImage
   ) where
 
-import Protolude hiding         ( hash )
-import Crypto.Hash              ( hash, Digest, SHA3_224 )
-import Data.UUID                ( UUID, fromText )
-import Data.Time                ( UTCTime )
-import Pixel.Model.Token        ( Token (..) )
-import Pixel.Model.Images.Types ( Image (..), TagList )
-import Pixel.Services.Image     ( MonadImage (..) )
-import Pixel.Services.Static    ( MonadStatic (..) )
+import Protolude hiding      ( hash )
+import Crypto.Hash           ( hash, Digest, SHA3_224 )
+import Data.UUID             ( UUID, fromText )
+import Data.Time             ( UTCTime )
+import Pixel.Model.Token     ( Token (..) )
+import Pixel.Model.Images    ( Image (..) )
+import Pixel.Services.Image  ( MonadImage (..) )
+import Pixel.Services.Static ( MonadStatic (..) )
 
 --------------------------------------------------------------------------------
 
@@ -21,7 +19,7 @@ data ImageDetails = ImageDetails
   , _createdAt    :: !UTCTime    -- ^ Time of Upload
   , _directory    :: !Text       -- ^ Where do we store this image?
   , _token        :: !Token      -- ^ Token for user doing this request.
-  , _uploadedTags :: !TagList    -- ^ Tags to associate with this image.
+  , _uploadedTags :: ![Text]     -- ^ Tags to associate with this image.
   , _uuid         :: !UUID       -- ^ What UUID do we assign to this resouce?
   }
 
@@ -39,11 +37,18 @@ createImage
   -> m ()
 
 createImage ImageDetails{..} = do
-  let digest = digestImage _content
-  let image  = processImage _createdAt _uploadedTags _token _content
-  writeStaticImage _directory digest _content
+  writeStaticImage _directory (_hash image) _content
   saveImage _uuid image
   pure ()
+
+  where
+    image = Image
+      { _hash      = digestImage _content
+      , _tags      = _uploadedTags
+      , _uploader  = fromText . _tokenText $ _token
+      , _createdAt = Just _createdAt
+      , _deletedAt = Nothing
+      }
 
 --------------------------------------------------------------------------------
 
@@ -53,13 +58,3 @@ createImage ImageDetails{..} = do
 
 digestImage :: ByteString -> Text
 digestImage = show . (hash :: ByteString -> Digest SHA3_224)
-
--- | Given all uploaded data, produce a valid API image type.
-processImage :: UTCTime -> [Text] -> Token -> ByteString -> Image
-processImage createdAt newTags token content = Image
-  { _hash      = digestImage content
-  , _tags      = newTags
-  , _uploader  = fromText . _tokenText $ token
-  , _createdAt = Just createdAt
-  , _deletedAt = Nothing
-  }

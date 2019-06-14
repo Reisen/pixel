@@ -1,9 +1,9 @@
-import React, { useState }        from 'react';
-import { uploadTags, deleteTags } from '../../api/images';
+import React, { useState }                from 'react';
+import { postImageTags, deleteImageTags } from '../../Api';
 
-import Tag                        from '../../components/Tag';
-import TextInput                  from '../../components/TextInput';
-import styles                     from './TagPanel.module.css';
+import Tag                                from '../../components/Tag';
+import TextInput                          from '../../components/TextInput';
+import styles                             from './TagPanel.module.css';
 
 
 interface Props {
@@ -21,11 +21,11 @@ const TagPanel = (props: Props) => {
 
     const toggleEditMode = () => {
         if (props.uuid && adds.length > 0) {
-            uploadTags(props.uuid, { tags: [...adds] });
+            postImageTags(props.uuid, { tags: [...adds] }, null);
         }
 
         if (props.uuid && deletes.length > 0) {
-            deleteTags(props.uuid, { tags: [...deletes] });
+            deleteImageTags(props.uuid, { tags: [...deletes] }, null);
         }
 
         // Clear State, Switch Modes.

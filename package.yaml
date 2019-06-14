@@ -94,6 +94,7 @@ executables:
             - optparse-applicative
             - pixel
             - qm-interpolated-string
+            - servant-js
 
 library:
     source-dirs: src/lib

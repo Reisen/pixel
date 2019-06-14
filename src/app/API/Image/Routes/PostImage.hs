@@ -12,7 +12,7 @@ import Data.Time             ( getCurrentTime )
 import Pixel                 ( Error(..) )
 import Pixel.API             ( CookieToken(..) )
 import Pixel.API.CreateImage ( Request(..), Response(..) )
-import Pixel.Model.Images    ( ImageError(..), ImageDetails(..), createImage )
+import Pixel.Operations      ( ImageDetails(..), createImage )
 
 --------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ postImage
   -> Request
   -> Pixel Response
 
-postImage Nothing _                              = throwError (ImageError MissingToken)
+postImage Nothing _                              = throwError UnknownError
 postImage (Just (CookieToken token)) Request{..} = do
   directory <- view configStaticLocation
   content   <- liftIO . B.readFile . toS $ _path

@@ -1,8 +1,9 @@
 export interface image {
-    createdAt:  string;
-    hash:       string;
-    resolution: string;
-    tags:       string[];
-    uploader:   string;
-    path:       string;
+    dimensions: [number, number],
+    filename:   string,
+    filesize:   number,
+    path:       string,
+    tags:       string[],
+    thumb:      string,
+    uuid:       string,
 }

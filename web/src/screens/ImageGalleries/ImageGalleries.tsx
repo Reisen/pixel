@@ -13,16 +13,17 @@ import styles               from './ImageGalleries.module.css';
 
 
 const onlyImage: image = {
-    createdAt: '01/01/1999',
-    hash: 'asd98u23',
+    dimensions: [1600, 1200],
     path: 'https://i.imgur.com/aG7C0Zx.jpg',
-    resolution: '800x600',
     tags: [
         "cartoon",
         "example",
         "apple"
     ],
-    uploader: 'Reisen',
+    uuid: "AAA",
+    thumb: "",
+    filesize: 0,
+    filename: "foo.jpg",
 };
 
 interface Props {

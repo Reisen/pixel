@@ -6,8 +6,9 @@ import Protolude
 import MonadPixel            ( Pixel )
 import Pixel                 ( Error(..) )
 import Pixel.API             ( CookieToken(..) )
-import Pixel.API.FetchImages ( Response(..), GalleryImage(..) )
-import Pixel.Model.Images    ( Image(..), ImageError(..), fetchImages )
+import Pixel.API.FetchImages ( Response(..), APIImage(..) )
+import Pixel.Model.Images    ( Image(..) )
+import Pixel.Operations      ( findImages )
 
 --------------------------------------------------------------------------------
 
@@ -20,22 +21,21 @@ getImage
   :: Maybe CookieToken
   -> Pixel Response
 
-getImage Nothing                    = throwError (ImageError MissingToken)
-getImage (Just (CookieToken token)) = do
-  putText (show token)
-  images <- fetchImages
-  pure Response
-    { _images = uncurry convertImage . first show <$> images
-    }
+getImage = \case
+  Nothing -> throwError UnknownError
+  Just _  -> do
+    images <- findImages
+    pure . Response $ uncurry convertImage . first show <$> images
+
 
 --------------------------------------------------------------------------------
 
 convertImage
   :: Text
   -> Image
-  -> GalleryImage
+  -> APIImage
 
-convertImage imageUUID Image{..} = GalleryImage
+convertImage imageUUID Image{..} = APIImage
   { _dimensions = (0, 0)
   , _filename   = ""
   , _filesize   = 0

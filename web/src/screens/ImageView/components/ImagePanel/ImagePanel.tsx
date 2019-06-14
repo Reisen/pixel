@@ -1,7 +1,7 @@
-import React              from 'react';
-import Cookies            from 'universal-cookie';
-import styles             from './ImagePanel.module.css';
-import { Image as image } from '../../../../api/types';
+import React     from 'react';
+import Cookies   from 'universal-cookie';
+import styles    from './ImagePanel.module.css';
+import { image } from '../../../../types/image';
 
 
 // HACK, BIG HACK

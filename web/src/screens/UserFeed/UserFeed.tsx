@@ -3,20 +3,20 @@
 // about the project during registration. This means the screens are more
 // dissimilar than just a pair of forms.
 
-import React            from 'react';
-// import { User as user } from '../../api/types';
-import { connect }      from 'react-redux';
-import { State }        from '../../store';
-import { History }      from 'history'
-import { registerUser } from '../../store/users';
+import React             from 'react';
+import { connect }       from 'react-redux';
+import { State }         from '../../store';
+import { History }       from 'history'
+import { registerUser }  from '../../store/users';
+import { AxiosResponse } from 'axios';
 
 // Components
-import NavigationBar    from '../../components/NavigationBar';
-import styles           from './UserFeed.module.css';
+import NavigationBar     from '../../components/NavigationBar';
+import styles            from './UserFeed.module.css';
 
 
 interface Props {
-    registerUser: (email: string, password: string) => Promise<Response>;
+    registerUser: (email: string, password: string) => Promise<AxiosResponse>;
     username:     string;
     history:      History;
 }

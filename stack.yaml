@@ -10,3 +10,5 @@ extra-deps:
       commit: 35f305ea994c34598e99ca5155d52033a03a053a
     - github: IreneKnapp/direct-sqlite
       commit: 8e3da41c46b5de19942cc7bf421c3deb5117ba7a
+    - github: Reisen/aeson-typescript
+      commit: 9482e92a222df3594e8669b5e7d814db1d7209ef

@@ -1,5 +1,5 @@
 module Commands.Types
-  ( Options (..)
+  ( Commands.Types.Options (..)
   , RunOptions (..)
   , RunProjectionsOptions (..)
   , GenerateTypesOptions (..)
@@ -7,7 +7,7 @@ module Commands.Types
 
 --------------------------------------------------------------------------------
 
-import           Protolude
+import Protolude
 
 --------------------------------------------------------------------------------
 
