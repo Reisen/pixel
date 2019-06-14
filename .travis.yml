@@ -11,6 +11,8 @@ language: generic
 # ------------------------------------------------------------------------------
 cache:
   directories:
+    - /tmp/.stack-work
+    - /tmp/.stack
     - $HOME/.stack
     - .stack-work/
 
@@ -49,13 +51,21 @@ jobs:
         # Build Dependencies
         - stage: build
           script:
+            - mv /tmp/.stack-work .stack-work
+            - mv /tmp/.stack $HOME/.stack
             - stack --no-terminal --install-ghc test --fast --only-dependencies
             - stack --no-terminal test --fast
+            - mv .stack-work /tmp/.stack-work
+            - mv $HOME/.stack /tmp/.stack
 
         # Build Docker Releases for Master
         - stage: deploy
           if: branch = master AND type = push
           script:
+            - mv /tmp/.stack-work .stack-work
+            - mv /tmp/.stack $HOME/.stack
             - docker login -u $DOCKER_USER -p $DOCKER_PASS
             - docker build -f Dockerfile.quick -t reisern/pixel:latest .
             - docker push reisern/pixel:latest
+            - mv .stack-work /tmp/.stack-work
+            - mv $HOME/.stack /tmp/.stack
