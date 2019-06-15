@@ -50,8 +50,8 @@ jobs:
         # Build Dependencies
         - stage: build
           script:
-            - file /tmp/cache/stack.tar.gz && tar -C / -zxf /tmp/cache/stack.tar.gz
-            - file /tmp/cache/stack-work.tar.gz && tar -C / -zxf /tmp/cache/stack-work.tar.gz
+            - if [ -f /tmp/cache/stack.tar.gz ];      then tar -C / -zxf /tmp/cache/stack.tar.gz; fi
+            - if [ -f /tmp/cache/stack-work.tar.gz ]; then tar -C / -zxf /tmp/cache/stack-work.tar.gz; fi
             - mv /tmp/.stack-work .stack-work
             - mv /tmp/.stack $HOME/.stack
 
@@ -67,8 +67,8 @@ jobs:
         - stage: deploy
           if: branch = master AND type = push
           script:
-            - file /tmp/cache/stack.tar.gz && tar -C / -zxf /tmp/cache/stack.tar.gz
-            - file /tmp/cache/stack-work.tar.gz && tar -C / -zxf /tmp/cache/stack-work.tar.gz
+            - if [ -f /tmp/cache/stack.tar.gz ];      then tar -C / -zxf /tmp/cache/stack.tar.gz; fi
+            - if [ -f /tmp/cache/stack-work.tar.gz ]; then tar -C / -zxf /tmp/cache/stack-work.tar.gz; fi
             - mv /tmp/.stack-work .stack-work
             - mv /tmp/.stack $HOME/.stack
 
