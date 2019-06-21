@@ -49,6 +49,7 @@ implAPI =
     userAPI =
       (    Routes.postAuthenticateUser
       :<|> Routes.postRegisterUser
+      :<|> Routes.postUpdatePassword
       )
 
 --------------------------------------------------------------------------------

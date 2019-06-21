@@ -13,7 +13,6 @@ import Data.UUID                        ( UUID )
 import Eventless                        ( Events, Project (..) )
 import Pixel.Model.Users.Types.Email    ( Email )
 import Pixel.Model.Users.Types.Password ( Password )
-import Pixel.JSON                       ( pixelToJSON, pixelToEncoding, pixelParseJSON )
 
 --------------------------------------------------------------------------------
 
@@ -68,19 +67,9 @@ instance Default User where
 --------------------------------------------------------------------------------
 
 instance ToJSON User where
-  toJSON     = pixelToJSON
-  toEncoding = pixelToEncoding
-
 instance ToJSON UserState where
-  toJSON     = pixelToJSON
-  toEncoding = pixelToEncoding
-
 instance FromJSON User where
-  parseJSON  = pixelParseJSON
-
 instance FromJSON UserState where
-  parseJSON  = pixelParseJSON
-
 instance ToJSON UserEvent where
 instance FromJSON UserEvent where
 

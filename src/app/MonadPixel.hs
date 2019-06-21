@@ -25,6 +25,7 @@ import Services.User   ( pixelCreateUser
                        , pixelFindRoleByName
                        , pixelFindUserByUUID
                        , pixelFindUserByEmail
+                       , pixelUpdatePassword
                        )
 
 --------------------------------------------------------------------------------
@@ -81,7 +82,7 @@ instance MonadUser Pixel where
   findRoleByName  = pixelFindRoleByName
   findUserByEmail = pixelFindUserByEmail
   findUserByUUID  = pixelFindUserByUUID
-
+  updatePassword  = pixelUpdatePassword
 --------------------------------------------------------------------------------
 
 -- This is our Monad Transformer runner, note that we unwrap to Handler and not

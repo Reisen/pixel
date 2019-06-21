@@ -2,3 +2,5 @@
 .terraform/
 imageless.cabal
 *~
+*.db
+pixel.cabal

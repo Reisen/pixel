@@ -6,14 +6,15 @@ module Pixel.API
 import Servant
 import Pixel.API.Types                      as API
 
-import qualified Pixel.API.AppendImageTags  as AppendImageTags
-import qualified Pixel.API.AuthenticateUser as AuthenticateUser
-import qualified Pixel.API.CreateImage      as CreateImage
-import qualified Pixel.API.DeleteImageTags  as DeleteImageTags
-import qualified Pixel.API.FetchImageByUUID as FetchImageByUUID
-import qualified Pixel.API.FetchImageTags   as FetchImageTags
-import qualified Pixel.API.FetchImages      as FetchImages
-import qualified Pixel.API.RegisterUser     as RegisterUser
+import qualified Pixel.API.AppendImageTags    as AppendImageTags
+import qualified Pixel.API.AuthenticateUser   as AuthenticateUser
+import qualified Pixel.API.CreateImage        as CreateImage
+import qualified Pixel.API.DeleteImageTags    as DeleteImageTags
+import qualified Pixel.API.FetchImageByUUID   as FetchImageByUUID
+import qualified Pixel.API.FetchImageTags     as FetchImageTags
+import qualified Pixel.API.FetchImages        as FetchImages
+import qualified Pixel.API.RegisterUser       as RegisterUser
+import qualified Pixel.API.UpdatePasswordUser as UpdatePasswordUser
 
 --------------------------------------------------------------------------------
 
@@ -35,8 +36,9 @@ type ImageAPI =
 
 type UserAPI =
   "user" :>
-    (    AuthenticateUser.Route  -- POST /user/login
-    :<|> RegisterUser.Route      -- POST /user
+    (    AuthenticateUser.Route   -- POST /user/login
+    :<|> RegisterUser.Route       -- POST /user
+    :<|> UpdatePasswordUser.Route -- POST /user/:uuid/password
     )
 
 type API =

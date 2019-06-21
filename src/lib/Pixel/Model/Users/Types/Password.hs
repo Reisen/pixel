@@ -18,7 +18,7 @@ import Pixel.JSON      ( pixelToJSON, pixelToEncoding, pixelParseJSON )
 -- of validation through construction.
 newtype Password = UnsafeMkPassword_
   { _passwordText :: Text
-  } deriving (Show, Generic, Typeable, Data)
+  } deriving (Show, Generic, Typeable, Data, Eq)
 
 -- Used to distinguish between a legitimate failure, and a need to rehash from
 -- an outdated hash.

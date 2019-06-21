@@ -3,13 +3,14 @@ module Services.User
   , pixelFindRoleByName
   , pixelFindUserByUUID
   , pixelFindUserByEmail
+  , pixelUpdatePassword
   ) where
 
 import Protolude
 import Control.Lens
 import Text.InterpolatedString.QM
 
-import API.User.Commands      ( createUser )
+import API.User.Commands      ( createUser, changePassword )
 import Configuration          ( Config, configConnection, configReadSchema )
 import Data.Default.Class     ( def )
 import Data.Text              ( splitOn )
@@ -20,6 +21,18 @@ import Eventless              ( runCommand )
 import Pixel.Model.Users      ( User(..), Role(..), Email(..), Password(..), makePermission )
 
 --------------------------------------------------------------------------------
+
+pixelUpdatePassword
+  :: MonadIO m
+  => MonadReader Config m
+  => UUID
+  -> Password
+  -> m ()
+
+pixelUpdatePassword uuid password = do
+  backend <- view configConnection
+  let create = changePassword password
+  void $ runCommand backend uuid create
 
 pixelCreateUser
   :: MonadIO m
