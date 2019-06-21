@@ -18,13 +18,14 @@ import Pixel.Model.Users.Types.Password ( verifyPassword
 --------------------------------------------------------------------------------
 
 data UpdatePasswordDetails = UpdatePasswordDetails 
-  { _uuid            :: UUID
-  , _currentPassword :: Text
-  , _newPassword     :: Text
-  , _salt            :: Text
+  { _uuid            :: !UUID
+  , _currentPassword :: !Text
+  , _newPassword     :: !Text
+  , _salt            :: !Text
   }
 
 --------------------------------------------------------------------------------
+
 updateUserPassword
   :: Monad m
   => Applicative m
@@ -33,17 +34,14 @@ updateUserPassword
   -> m ()                  
 
 updateUserPassword UpdatePasswordDetails{..} = do
-  mayUser <- findUserByUUID _uuid
-  case mayUser of
-    Nothing -> pure ()
-    Just user -> case (_password user) of
-      Just pwd -> 
-        case verifyPassword pwd _currentPassword of
-         VerifySucceeded -> case makePassword _newPassword _salt of
-           Nothing -> pure ()
-           Just password -> do
-             updatePassword _uuid password
-             pure ()
-         _ -> pure ()
-      Nothing -> pure () 
+  mayPassword <- (map $ flip verifyPassword _currentPassword) 
+    <$> (>>= _password) 
+    <$> findUserByUUID _uuid
+
+  case mayPassword of
+    Just VerifySucceeded -> case makePassword _newPassword _salt of
+      Nothing       -> pure ()
+      Just password -> pure () <* updatePassword _uuid password
+    _ -> pure ()
+  
 --------------------------------------------------------------------------------

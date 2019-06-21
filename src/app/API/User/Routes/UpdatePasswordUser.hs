@@ -1,6 +1,5 @@
 module API.User.Routes.UpdatePasswordUser
-  (
-      postUpdatePassword
+  ( postUpdatePassword
   ) where
 
 import Protolude hiding             ( hash )
@@ -27,13 +26,10 @@ postUpdatePassword (Just (CookieToken token)) Request{..} = do
   hashSalt :: ByteString <- liftIO $ getRandomBytes 16
   let mayUUID = fromText . _tokenText $ token
   case mayUUID of
-    Just uuid -> do
-      updateUserPassword UpdatePasswordDetails 
-        {
-          _uuid            = uuid
-        , _currentPassword = _currentPassword
-        , _newPassword     = _newPassword
-        , _salt            = show (hash hashSalt :: Digest SHA3_224)
-        }
-      pure NoContent
+    Just uuid -> pure NoContent <* updateUserPassword UpdatePasswordDetails 
+      { _uuid            = uuid
+      , _currentPassword = _currentPassword
+      , _newPassword     = _newPassword
+      , _salt            = show (hash hashSalt :: Digest SHA3_224)
+      }
     Nothing -> pure NoContent
