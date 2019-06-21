@@ -106,5 +106,11 @@ insertUserRow :: Query
 insertUserRow = [qns|
   INSERT INTO users ( uuid , email , password , avatar , role , status , registered )
   VALUES            ( ?    , ?     , ?        , ''     , ?    , ?      , ?          )
-  ON CONFLICT DO NOTHING;
+  ON CONFLICT(email) DO UPDATE SET
+    password   = excluded.password,
+    avatar     = excluded.avatar,
+    role       = excluded.role,
+    status     = excluded.status,
+    registered = excluded.registered
+  WHERE uuid = excluded.uuid;
 |]

@@ -1,5 +1,6 @@
 module API.User.Commands
   ( createUser
+  , changePassword
   ) where
 
 import Protolude
@@ -23,3 +24,11 @@ createUser roleUUID email password createdAt = do
   emit (PasswordChanged password)
   emit (RoleChanged roleUUID)
   emit (CreatedAt createdAt)
+
+changePassword
+  :: Monad m
+  => Password
+  -> Command User m
+
+changePassword password = do
+  emit (PasswordChanged password)

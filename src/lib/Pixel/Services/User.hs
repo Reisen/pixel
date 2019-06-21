@@ -15,3 +15,4 @@ class MonadUser m where
   findRoleByName  :: Text -> m (Maybe (UUID, Role))
   findUserByUUID  :: UUID -> m (Maybe User)
   findUserByEmail :: Email -> m (Maybe (UUID, User))
+  updatePassword  :: UUID -> Password -> m ()
