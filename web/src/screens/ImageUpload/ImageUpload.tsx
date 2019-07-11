@@ -3,7 +3,8 @@ import { connect }                 from 'react-redux';
 import { History }                 from 'history';
 import { State }                   from '../../store';
 import { getImages }               from '../../store/images';
-import { logoutUser }              from '../../store/users';
+import { getUser, logoutUser }     from '../../store/users';
+import { User }                    from '../../store/users/types';
 import { uploadImage }             from '../../Api';
 import { image }                   from '../../types/image';
 
@@ -20,7 +21,7 @@ import styles                      from './ImageUpload.module.css';
 interface Props {
     images:     image[];
     logoutUser: () => void;
-    username:   string;
+    user:       User;
     history:    History;
 }
 
@@ -83,20 +84,33 @@ const Image = (props: Props) => {
 
     // Handle Image Upload
     const startUpload = async () => {
+        console.log('Starting Upload');
         if (ref.current && ref.current.files) {
+            console.log('Uploading...');
             setUploading(true);
+            console.log('File Count:', ref.current.files.length);
 
             // Upload Each File
             for(let i = 0; i < ref.current.files.length; ++i) {
+                console.log('Uploading...', i);
                 // Create FormData containing the image and tags.
                 const data = new FormData();
-                data.append('image', ref.current.files[i]);
-                tags.map(tag => {
-                    data.append('tag', tag);
-                    return null;
-                });
+                try {
+                    console.log('Accessing File...')
+                    data.append('image', ref.current.files[i]);
+                    console.log('Appending Tags...')
+                    tags.map(tag => {
+                        data.append('tag', tag);
+                        return null;
+                    });
 
-                await uploadImage(data, null)
+                    console.log('Sending...')
+
+                    uploadImage(data, null)
+                    console.log('Sent');
+                } catch (e) {
+                    console.log(e);
+                }
             }
 
             props.history.push('/');
@@ -105,10 +119,14 @@ const Image = (props: Props) => {
 
     // Render Time!
     return (
-        <div className="Page">
-            <NavigationBar links={headerLinks} username={props.username} />
+        <div className={styles.Root}>
+            <NavigationBar
+                links={headerLinks}
+                username={props.user.username}
+                onLogout={props.logoutUser}
+            />
 
-            <div className={styles.Root}>
+            <div className={styles.Container}>
                 <div className={styles.TagManager}>
                     <Button onClick={startUpload} >Start Upload</Button>
                     <TextInput placeholder="Enter Tags"/>
@@ -133,7 +151,7 @@ const Image = (props: Props) => {
 
 const mapState = (state: State) => ({
     images:   getImages(state.images),
-    username: state.user.username
+    user:     getUser(state.user),
 });
 
 const mapDispatch = {

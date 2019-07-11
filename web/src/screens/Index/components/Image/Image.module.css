@@ -7,8 +7,6 @@
     cursor: pointer;
     display: inline-block;
     position: relative;
-    border-left: 2px solid white;
-    border-bottom: 2px solid white;
 }
 
 .Resolution {

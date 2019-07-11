@@ -1,5 +1,6 @@
 import React, { useState }  from 'react';
 
+import TextInput            from '../TextInput';
 import IconButton           from '../IconButton';
 import styles               from './SearchSideBar.module.css';
 
@@ -27,9 +28,7 @@ const SearchSideBar = (props: Props) => {
 
     return (
         <div className={styles.Root}>
-            <div className={styles.Buttons}>
-                { pannelButtons }
-            </div>
+            <TextInput placeholder="Search Tags" />
 
             { current && current.elem }
         </div>

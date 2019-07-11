@@ -1,10 +1,14 @@
 .Root {
-    width: 1200px;
-    margin: 40px auto;
+    height: 100%;
+	display: grid;
+	grid-template-columns: 56px auto;
+}
+
+.Container {
     display: grid;
-    grid-template-columns: repeat(32, 1fr);
-    grid-template-rows: repeat(16, 40px);
-    grid-gap: 16px;
+	height: 100%;
+	overflow-y: scroll;
+	grid-template-columns: 240px auto;
 }
 
 .TagManager {

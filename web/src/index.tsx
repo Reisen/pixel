@@ -50,7 +50,7 @@ const App = () => (
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
         <Router>
-            <div className="dark">
+            <React.Fragment>
                 <Route exact path="/"                  component={Index} />
 
                 {/* User Routes */}
@@ -64,7 +64,7 @@ const App = () => (
                 <Route exact path="/my/images/:page"   component={Index} />
                 <Route exact path="/i/:uuid"           component={ImageView} />
                 <Route       path="/i/:uuid/galleries" component={ImageGalleries} />
-            </div>
+            </React.Fragment>
         </Router>
         </PersistGate>
     </Provider>

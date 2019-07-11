@@ -1,4 +1,12 @@
-.PanelContainer {
-    margin: 40px auto;
-    width: 1200px;
+.Root {
+    height: 100%;
+	display: grid;
+	grid-template-columns: 56px auto;
+}
+
+.Container {
+    display: grid;
+	height: 100%;
+	overflow-y: scroll;
+	grid-template-columns: 240px auto;
 }

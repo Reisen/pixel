@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const postApiImage = function(body, headerCookie)
 {
-  return axios({ url: '/api/image'
+  return axios({ url: 'http://localhost:3001/api/image'
     , method: 'post'
     , data: body
     , responseType: 'json'
@@ -14,7 +14,7 @@ export const postApiImage = function(body, headerCookie)
 
 export const getApiImage = function(headerCookie)
 {
-  return axios({ url: '/api/image'
+  return axios({ url: 'http://localhost:3001/api/image'
     , method: 'get'
     , withCredentials: true
     });
@@ -24,7 +24,7 @@ export const getApiImage = function(headerCookie)
 
 export const getApiImageByUuid = function(uuid, headerAuthorization)
 {
-  return axios({ url: '/api/image/' + encodeURIComponent(uuid) + ''
+  return axios({ url: 'http://localhost:3001/api/image/' + encodeURIComponent(uuid) + ''
     , method: 'get'
     , withCredentials: true
     });
@@ -34,7 +34,7 @@ export const getApiImageByUuid = function(uuid, headerAuthorization)
 
 export const getApiImageByUuidTags = function(uuid, headerAuthorization)
 {
-  return axios({ url: '/api/image/' + encodeURIComponent(uuid) + '/tags'
+  return axios({ url: 'http://localhost:3001/api/image/' + encodeURIComponent(uuid) + '/tags'
     , method: 'get'
     , withCredentials: true
     });
@@ -44,7 +44,7 @@ export const getApiImageByUuidTags = function(uuid, headerAuthorization)
 
 export const postApiImageByUuidTags = function(uuid, body, headerCookie)
 {
-  return axios({ url: '/api/image/' + encodeURIComponent(uuid) + '/tags'
+  return axios({ url: 'http://localhost:3001/api/image/' + encodeURIComponent(uuid) + '/tags'
     , method: 'post'
     , data: body
     , responseType: 'json'
@@ -56,7 +56,7 @@ export const postApiImageByUuidTags = function(uuid, body, headerCookie)
 
 export const deleteApiImageByUuidTags = function(uuid, body, headerCookie)
 {
-  return axios({ url: '/api/image/' + encodeURIComponent(uuid) + '/tags'
+  return axios({ url: 'http://localhost:3001/api/image/' + encodeURIComponent(uuid) + '/tags'
     , method: 'delete'
     , data: body
     , responseType: 'json'
@@ -68,7 +68,7 @@ export const deleteApiImageByUuidTags = function(uuid, body, headerCookie)
 
 export const postApiUserLogin = function(body)
 {
-  return axios({ url: '/api/user/login'
+  return axios({ url: 'http://localhost:3001/api/user/login'
     , method: 'post'
     , data: body
     , responseType: 'json'
@@ -80,7 +80,7 @@ export const postApiUserLogin = function(body)
 
 export const postApiUser = function(body)
 {
-  return axios({ url: '/api/user'
+  return axios({ url: 'http://localhost:3001/api/user'
     , method: 'post'
     , data: body
     , responseType: 'json'

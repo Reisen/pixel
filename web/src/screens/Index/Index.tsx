@@ -108,20 +108,17 @@ const Index = (props: Props) => {
     // when a new search is made.
     const { fetchImages } = props
     useEffect(() => { fetchImages() }, [fetchImages]);
-
     return (
-        <div className="Page">
+        <div className={styles.Root}>
             <NavigationBar
                 links={headerLinks}
                 username={props.user.username}
                 onLogout={props.logoutUser}
             />
 
-            <div className={styles.PanelContainer}>
+            <div className={styles.Container}>
                 <SearchSideBar initialPanel="Tag List">
-                    {
-                        panels(tags)
-                    }
+                    {}
                 </SearchSideBar>
 
                 <ImageGrid
@@ -131,14 +128,6 @@ const Index = (props: Props) => {
                     images={slice}
                     rows={rows}
                     cols={cols}
-                />
-
-                <Pager
-                    page={pageNumber}
-                    pageCount={5}
-                    scalingMode={props.galleryScalingMode}
-                    setPage={changePage}
-                    setScalingMode={props.setGalleryScaling}
                 />
             </div>
         </div>

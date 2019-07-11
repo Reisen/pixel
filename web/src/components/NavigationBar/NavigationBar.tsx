@@ -34,30 +34,19 @@ const NavigationBar = (props: Props) => {
     return (
         <React.Fragment>
             <div className={styles.NavigationBar}>
-                <div className={styles.InnerRoot}>
-                    <Link className={styles.Logo} to="/">PIXEL</Link>
+                <Link className={styles.Logo} to="/">P</Link>
 
-                    <div className={styles.RightNavigation}>
-                        <Link to="/my/upload" className={styles.UploadLink}>
-                            Upload Images
-                        </Link>
+                <Link to="/" className={styles.Button}>
+					<span>
+						<i className="icofont-home"></i>
+					</span>
+				</Link>
 
-                        { props.username  && <LoggedInFragment /> }
-                        { !props.username && <LoggedOutFragment /> }
-                    </div>
-                </div>
-            </div>
-
-            <div className={styles.SubNavigationBar}>
-                <div className={styles.InnerRoot}>
-                    <div className={styles.LeftNavigation}>
-                        {
-                            props.links.map(link =>
-                                <Link key={link.name} to={link.path}>{link.name}</Link>
-                            )
-                        }
-                    </div>
-                </div>
+                <Link to="/my/upload" className={styles.Button}>
+					<span>
+						<i className="icofont-cloud-upload"></i>
+					</span>
+				</Link>
             </div>
         </React.Fragment>
     );

@@ -1,49 +1,48 @@
 .NavigationBar {
-    line-height: 64px;
-    margin: 0 auto;
-    width: 100%;
     background-color: white;
+    grid-column: 1 / 2;
+	border-right: 1px solid #CCF;
+	display: flex;
+	flex-direction: column;
+	justify-items: right;
 }
 
-.SubNavigationBar {
-    border-bottom: 1px solid #DDF;
-    background-color: white;
-    line-height: 42px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-.InnerRoot {
-    width: 1200px;
-    margin: 0 auto;
-}
-
-.Logo {
-    letter-spacing: 8px;
+a.Logo {
     font-size: 32px;
     font-weight: normal;
     color: #5588CC;
+    line-height: 56px;
     vertical-align: middle;
     font-family: 'Baumans';
+    text-align: center;
+    display: block;
+    width: 100%;
 }
 
-.LeftNavigation a {
-    margin-right: 32px;
-    font-size: 15px;
+.Button {
+	height: 56px;
+	display: block;
+	position: relative;
+	border: 1px solid white;
 }
 
-.RightNavigation {
-    display: inline-block;
-    float: right;
+.Button:hover {
+	border-top: 1px solid #CCDDFF;
+	border-bottom: 1px solid #CCDDFF;
+	cursor: pointer;
 }
 
-.RightNavigation a {
-    margin-left: 16px;
-    font-size: 15px;
-}
-
-.UploadLink {
-    background-color: #5588CC;
-    color: white;
-    padding: 8px;
+.Button span {
+    width: 20px;
+	height: 20px;
+	display: block;
+	text-align: center;
+	margin: auto;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	color: #336699;
+	font-size: 20px;
 }

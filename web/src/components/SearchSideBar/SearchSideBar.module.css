@@ -1,6 +1,5 @@
 .Root {
-    width: 240px;
-    float: left;
+    padding: 16px;
 }
 
 .Root h1 {

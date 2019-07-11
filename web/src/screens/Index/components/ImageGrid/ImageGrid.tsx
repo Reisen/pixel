@@ -26,14 +26,12 @@ interface Props {
 // Render images that have actually got valid paths.
 const renderValidImages = (slice: image[], props: Props) =>
     slice.map((image, k) =>
-        <Link key={image.uuid} to={`/i/${image.uuid}`}>
-            <Image
-                contain={props.scalingMode === 'contain'}
-                path={`${findApiBase()}/${image.path}`}
-                resolution="800x600"
-                width={944 / props.cols}
-            />
-        </Link>
+        <Image
+            contain={props.scalingMode === 'contain'}
+            path={`${image.path}`}
+            resolution="800x600"
+            width={944 / props.cols}
+        />
     );
 
 

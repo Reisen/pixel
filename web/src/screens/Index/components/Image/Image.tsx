@@ -18,9 +18,7 @@ const classes = (props: Props) => classnames({
 
 const Image = (props: Props) => {
     const styleOverrides = {
-        backgroundImage: `url(${props.path})`,
-        height: `${props.width}px`,
-        width: `${props.width}px`,
+        backgroundImage: `url(${props.path})`
     };
 
     return (

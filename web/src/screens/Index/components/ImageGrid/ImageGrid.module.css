@@ -1,14 +1,18 @@
 .ImageGrid {
-    float: right;
-    width: 944px;
-    font-size: 0px;
+    padding: 16px 0px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 200px;
+    grid-gap: 8px;
+}
+
+.ImageGrid a {
+    display: block;
 }
 
 .OhNo {
     text-align: center;
     line-height: 240px;
-    width: 944px;
-    float: right;
     color: #336699;
     padding-top: 80px;
 }
