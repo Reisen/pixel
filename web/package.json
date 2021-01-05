@@ -17,7 +17,7 @@
     "@types/redux-thunk": "^2.1.0",
     "@types/universal-cookie": "^2.2.0",
     "@types/whatwg-fetch": "^0.0.33",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "normalize.css": "^8.0.1",
     "ramda": "^0.26.1",
